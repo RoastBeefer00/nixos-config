@@ -7,7 +7,7 @@
 {
   imports = [
     # Include the results of the hardware scan.
-    ./hardware-configuration.nix	
+    ./hardware-configuration.nix
     # <home-manager/nixos>
   ];
 
@@ -151,7 +151,7 @@
   # };
 
   programs.direnv.enable = true;
-  programs.nix-ld.enable = true;
+  # programs.nix-ld.enable = true;
   programs.zsh.enable = true;
 
   users.defaultUserShell = pkgs.zsh;
