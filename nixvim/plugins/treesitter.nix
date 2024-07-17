@@ -12,46 +12,46 @@
     plugins.treesitter = {
       enable = true;
 
-      grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
-        bash
-        c
-        css
-        dockerfile
-        git_config
-        git_rebase
-        gitattributes
-        gitcommit
-        gitignore
-        gleam
-        go
-        gomod
-        gosum
-        hcl
-        html
-        javascript
-        json
-        jsonc
-        lua
-        make
-        markdown
-        meson
-        ninja
-        nix
-        python
-        rasi
-        readline
-        regex
-        rust
-        ssh-config
-        svelte
-        templ
-        terraform
-        toml
-        typescript
-        vim
-        vimdoc
-        xml
-        yaml
+      # grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
+      settings.ensure_installed = [
+        "bash"
+        "c"
+        "css"
+        "dockerfile"
+        "git_config"
+        "git_rebase"
+        "gitattributes"
+        "gitcommit"
+        "gitignore"
+        "gleam"
+        "go"
+        "gomod"
+        "gosum"
+        "hcl"
+        "html"
+        "javascript"
+        "json"
+        "jsonc"
+        "lua"
+        "make"
+        "markdown"
+        "meson"
+        "ninja"
+        "nix"
+        "python"
+        "rasi"
+        "readline"
+        "regex"
+        "rust"
+        "svelte"
+        "templ"
+        "terraform"
+        "toml"
+        "typescript"
+        "vim"
+        "vimdoc"
+        "xml"
+        "yaml"
       ];
 
       # TODO: Figure out how to do this
