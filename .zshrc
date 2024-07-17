@@ -1,5 +1,7 @@
 source $HOME/.zsh_profile
 
+export PATH="$PATH:$HOME/.cargo/bin"
+
 function vim() {
     if [ -z "$@" ]; then
         nvim .
@@ -22,8 +24,6 @@ function new_branch() {
 # Wasmer
 export WASMER_DIR="/home/roastbeefer/.wasmer"
 [ -s "$WASMER_DIR/wasmer.sh" ] && source "$WASMER_DIR/wasmer.sh"
-
-eval $(thefuck --alias)
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/home/roastbeefer/google-cloud-sdk/path.zsh.inc' ]; then . '/home/roastbeefer/google-cloud-sdk/path.zsh.inc'; fi

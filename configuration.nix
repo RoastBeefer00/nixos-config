@@ -16,11 +16,16 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  #networking.wireless.enable = true; # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+  boot.kernelModules = [ "uinput" ];
+  services.udev.extraRules = ''
+    KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"
+  '';
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -76,13 +81,6 @@
     #media-session.enable = true;
   };
 
-  hardware.nvidia = {
-    modesetting.enable = true;
-    open = true;
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-  };
-  services.xserver.videoDrivers = [ "nvidia" ];
   hardware.enableRedistributableFirmware = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -96,6 +94,8 @@
       "networkmanager"
       "wheel"
       "docker"
+      "input"
+      "uinput"
     ];
     packages = with pkgs; [ ];
   };
@@ -119,16 +119,23 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    git
+    brightnessctl
     cargo
     clang-tools
     curl
     devenv
-    gcc
-    go
+    fd
     fira-code-nerdfont
+    gcc
+    git
+    go
+    kmonad
     meson
+    networkmanagerapplet
     nodejs
+    ripgrep
+    rofi-power-menu
+    pokemon-colorscripts-mac
     vim
     wayland-protocols
     wayland-utils

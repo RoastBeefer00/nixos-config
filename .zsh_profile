@@ -1,0 +1,5 @@
+pokemon-colorscripts -r
+
+export PATH="$PATH:$HOME/.local/scripts"
+
+bindkey -s ^f "wez-sess\n"

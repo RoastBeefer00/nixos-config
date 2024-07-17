@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# shell functions
+function wopen-tab() {
+  printf "\033]1337;SetUserVar=%s=%s\007" hacky-user-command $(printf '{"cmd":"open-tab","title":"%s"}' $1 | base64)
+}
+
+if [[ $# -eq 1 ]]; then
+    project=$1
+else
+    project=$(find ~/projects ~/.config /etc -mindepth 1 -maxdepth 1 -type d | sk)
+fi
+
+if [[ -z $project ]]; then
+    exit 0
+fi
+
+[ -z "$project" ] && exit 0
+
+workspace=$(basename "$project")
+workspace_dir="$project"
+
+if wezterm cli list | awk '{ print $4 }' | grep -iq "$workspace"; then
+    wopen-tab $workspace
+else
+    wezterm cli spawn --new-window --cwd "$workspace_dir" --workspace "$workspace"
+    wopen-tab $workspace
+fi

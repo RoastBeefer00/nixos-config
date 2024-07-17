@@ -21,6 +21,13 @@
       # Set to true if you have a Nerd Font installed and selected in the terminal
       have_nerd_font = true;
     };
+
+    filetype = {
+      extension = {
+        templ = "templ";
+      };
+    };
+
     opts = {
       # Show line numbers
       expandtab = true;
@@ -97,7 +104,7 @@
       {
         mode = "v";
         key = "J";
-        action = ">+1<CR>gv=gv";
+        action = ":m '>+1<CR>gv=gv";
         options = {
           desc = "Move line down";
         };
@@ -105,7 +112,7 @@
       {
         mode = "v";
         key = "K";
-        action = "<-2<CR>gv=gv";
+        action = ":m '<-2<CR>gv=gv";
         options = {
           desc = "Move line up";
         };

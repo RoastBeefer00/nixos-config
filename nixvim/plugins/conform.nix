@@ -13,8 +13,9 @@
     extraPackages = with pkgs; [
       # Used to format Lua code
       stylua
-      gosimports
+      gotools
       gofumpt
+      golines
       prettierd
       nixfmt-rfc-style
     ];
@@ -40,13 +41,18 @@
         lua = [ "stylua" ];
         # Conform can also run multiple formatters sequentially
         # python = [ "isort "black" ];
-        go = [ "goimports" "gofmt" ];
+        go = [
+          "goimports"
+          "gofumpt"
+          "golines"
+        ];
 
         nix = [ "nixfmt" ];
+        rust = [ "rustfmt" ];
         #
         # You can use a sublist to tell conform to run *until* a formatter
         # is found
-        javascript = [ [ "prettierd" "prettier" ] ];
+        javascript = [ [ "prettierd" ] ];
       };
     };
 
