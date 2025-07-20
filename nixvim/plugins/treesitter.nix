@@ -13,17 +13,6 @@
       enable = true;
 
       # TODO: Don't think I need this as nixGrammars is true which should atuo install these???
-      ensureInstalled = [
-        "bash"
-        "c"
-        "diff"
-        "html"
-        "lua"
-        "luadoc"
-        "markdown"
-        "vim"
-        "vimdoc"
-      ];
 
       # TODO: Figure out how to do this
       #highlight = {
@@ -37,7 +26,29 @@
       #  ];
       #};
 
-      indent = true;
+      settings = {
+        indent.enable = true;
+        auto_install = true;
+        highlight = {
+	  additional_vim_regex_highlighting = false;
+	  enable = true;
+	};
+        ensureInstalled = [
+          "bash"
+          "c"
+          "css"
+          "diff"
+          "html"
+          "javascript"
+          "lua"
+          "luadoc"
+          "markdown"
+          "svelte"
+          "typescript"
+          "vim"
+          "vimdoc"
+        ];
+      };
       #indent = {
       #enable = true;
       # TODO: Figure out how to do this

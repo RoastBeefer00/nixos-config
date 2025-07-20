@@ -25,9 +25,9 @@
       enable = true;
     };
 
-    plugins.codeium-nvim = {
-      enable = true;
-    };
+    # plugins.codeium-nvim = {
+    #   enable = true;
+    # };
 
     # `friendly-snippets` contains a variety of premade snippets
     #    See the README about individual language/framework/plugin snippets:
@@ -130,7 +130,7 @@
           #  into multiple repos for maintenance purposes.
           { name = "nvim_lsp"; }
           { name = "path"; }
-          { name = "codeium"; }
+          # { name = "codeium"; }
         ];
       };
     };

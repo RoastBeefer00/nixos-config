@@ -60,7 +60,7 @@
               tooltip = true;
               format = "{}";
               restart-interval = 300;
-              exec = "/home/roastbeefer/.local/scripts/weather";
+              exec = "weather";
             };
             tray = {
               icon-size = 13;

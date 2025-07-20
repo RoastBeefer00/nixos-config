@@ -93,7 +93,7 @@
     "tooltip": true,
     "format": "{}",
     "restart-interval": 300,
-    "exec": "/usr/local/bin/weather"
+    "exec": "weather"
     // "return-type" : "json"
   },
   "tray": {

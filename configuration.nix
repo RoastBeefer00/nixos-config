@@ -2,7 +2,12 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  waybar-weather,
+  ...
+}:
 
 {
   imports = [
@@ -46,6 +51,15 @@
   # Enable the X11 windowing system.
   # You can disable this if you're only using the Wayland session.
   services.xserver.enable = true;
+  # services.geoclue2.enable = true;
+  # location.provider = "geoclue2";
+  # location.longitude = 32.3;
+  # location.latitude = -106.8;
+
+  # services.redshift = {
+  #   enable = true;
+  #   package = pkgs.unstable.redshift;
+  # };
 
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
@@ -61,7 +75,7 @@
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -118,26 +132,42 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    git
-    cargo
-    clang-tools
-    curl
-    devenv
-    gcc
-    go
-    fira-code-nerdfont
-    meson
-    nodejs
-    vim
-    wayland-protocols
-    wayland-utils
-    wl-clipboard
-    wlroots
-    xdg-desktop-portal-gtk
-    xdg-desktop-portal-hyprland
-    xwayland
-  ];
+  environment.systemPackages =
+    with pkgs;
+    [
+      git
+      clang-tools
+      curl
+      devenv
+      gammastep
+      gcc
+      google-chrome
+      nerd-fonts.fira-code
+      meson
+      pavucontrol
+      vim
+      skim
+      wayland-protocols
+      wayland-utils
+      wl-clipboard
+      wlroots
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-hyprland
+      xwayland
+    ]
+    ++ [
+      waybar-weather.packages.${pkgs.system}.default
+    ];
+
+  systemd.user.services.gammastep = {
+    description = "Gammastep colour temperature adjuster";
+    wantedBy = [ "graphical-session.target" ];
+    partOf = [ "graphical-session.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.gammastep}/bin/gammastep -l 32.3:-106.8";
+      Restart = "on-failure";
+    };
+  };
 
   programs.steam = {
     enable = true;
@@ -152,9 +182,10 @@
 
   programs.direnv.enable = true;
   # programs.nix-ld.enable = true;
-  programs.zsh.enable = true;
+  # programs.zsh.enable = true;
+  programs.fish.enable = true;
 
-  users.defaultUserShell = pkgs.zsh;
+  users.defaultUserShell = pkgs.fish;
 
   programs.hyprland = {
     enable = true;
@@ -187,5 +218,5 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.05"; # Did you read the comment?
+  system.stateVersion = "25.05"; # Did you read the comment?
 }

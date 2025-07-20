@@ -10,8 +10,26 @@
     # Dependencies
     #
     # https://nix-community.github.io/nixvim/plugins/cmp-nvim-lsp.html
-    plugins.cmp-nvim-lsp = {
+    # plugins.cmp-nvim-lsp = {
+    #   enable = true;
+    # };
+    plugins.blink-cmp = {
       enable = true;
+      settings = {
+        completion = {
+          documentation = {
+            auto_show = false;
+          };
+        };
+        sources = {
+          default = [
+            "lsp"
+            "path"
+            "snippets"
+            "buffer"
+          ];
+        };
+      };
     };
 
     # Useful status updates for LSP.
@@ -20,12 +38,13 @@
       enable = true;
     };
 
-    # https://nix-community.github.io/nixvim/NeovimOptions/index.html?highlight=extraplugi#extraplugins 
+    # https://nix-community.github.io/nixvim/NeovimOptions/index.html?highlight=extraplugi#extraplugins
     extraPlugins = with pkgs.vimPlugins; [
       # NOTE: This is how you would ad a vim plugin that is not implemented in Nixvim, also see extraConfigLuaPre below
       # `neodev` configure Lua LSP for your Neovim config, runtime and plugins
       # used for completion, annotations, and signatures of Neovim apis
       neodev-nvim
+      friendly-snippets
     ];
 
     # https://nix-community.github.io/nixvim/NeovimOptions/index.html?highlight=extraplugi#extraconfigluapre
@@ -119,9 +138,9 @@
             "templ"
             "svelte"
           ];
-          rootDir = ''
-            require 'lspconfig'.util.root_pattern('tailwind.config.js', 'tailwind.config.ts', 'postcss.config.js', 'postcss.config.ts', 'package.json') 
-          '';
+          # rootMarkers = ''
+          #   require 'lspconfig'.util.root_pattern('tailwind.config.js', 'tailwind.config.ts', 'postcss.config.js', 'postcss.config.ts', 'package.json')
+          # '';
           extraOptions = {
             init_options = {
               userLanguages = {
@@ -146,7 +165,7 @@
         pyright = {
           enable = true;
         };
-        rust-analyzer = {
+        rust_analyzer = {
           enable = true;
           installCargo = false;
           installRustc = false;
@@ -157,13 +176,13 @@
         #    `https://nix-community.github.io/nixvim/plugins/typescript-tools/index.html?highlight=typescript-tools#pluginstypescript-toolspackage`
         #
         # But for many setups the LSP (`tsserver`) will work just fine
-        tsserver = {
+        ts_ls = {
           enable = true;
         };
         templ = {
           enable = true;
         };
-        nil-ls = {
+        nil_ls = {
           enable = true;
         };
         terraformls = {
@@ -173,7 +192,7 @@
           enable = true;
         };
 
-        lua-ls = {
+        lua_ls = {
           enable = true;
 
           # cmd = {

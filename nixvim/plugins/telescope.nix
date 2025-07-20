@@ -9,6 +9,13 @@
   programs.nixvim = {
     # Fuzzy Finder (files, lsp, etc)
     # https://nix-community.github.io/nixvim/plugins/telescope/index.html
+    # extraPlugins = with pkgs.vimPlugins; [
+    #   telescope-lsp-handlers-nvim
+    # ];
+    # extraConfigLuaPre = ''
+    #    require'telescope-lsp-handlers'.setup()
+    #    vim.keymap.set('n', '<leader>fr', function() require('telescope.builtin').lsp_references() end, { noremap = true, silent = true })
+    # '';
     plugins.telescope = {
       # Telescope is a fuzzy finder that comes with a lot of different things that
       # it can fuzzy find! It's more than just a "file finder", it can search
@@ -42,74 +49,74 @@
       # You can put your default mappings / updates / etc. in here
       #  See `:help telescope.builtin`
       keymaps = {
-        "<leader>sh" = {
+        "<leader>fh" = {
           mode = "n";
           action = "help_tags";
           options = {
-            desc = "[S]earch [H]elp";
+            desc = "[F]ind [H]elp";
           };
         };
-        "<leader>sk" = {
+        "<leader>fk" = {
           mode = "n";
           action = "keymaps";
           options = {
-            desc = "[S]earch [K]eymaps";
+            desc = "[F]ind [K]eymaps";
           };
         };
-        "<leader>sf" = {
+        "<leader>ff" = {
           mode = "n";
           action = "find_files";
           options = {
-            desc = "[S]earch [F]iles";
+            desc = "[F]ind [F]iles";
           };
         };
-        "<leader>sc" = {
+        "<leader>fc" = {
           mode = "n";
           action = "git_files";
           options = {
-            desc = "[S]earch [C]ommitted Git Files";
+            desc = "[F]ind [C]ommitted Git Files";
           };
         };
-        "<leader>ss" = {
+        "<leader>fs" = {
           mode = "n";
           action = "builtin";
           options = {
-            desc = "[S]earch [S]elect Telescope";
+            desc = "[F]ind [S]elect Telescope";
           };
         };
-        "<leader>sw" = {
+        "<leader>fw" = {
           mode = "n";
           action = "grep_string";
           options = {
-            desc = "[S]earch current [W]ord";
+            desc = "[F]ind current [W]ord";
           };
         };
-        "<leader>sg" = {
+        "<leader>fg" = {
           mode = "n";
           action = "live_grep";
           options = {
-            desc = "[S]earch by [G]rep";
+            desc = "[F]ind by [G]rep";
           };
         };
-        "<leader>sd" = {
+        "<leader>fd" = {
           mode = "n";
           action = "diagnostics";
           options = {
-            desc = "[S]earch [D]iagnostics";
+            desc = "[F]ind [D]iagnostics";
           };
         };
-        "<leader>sr" = {
+        "<leader>fr" = {
           mode = "n";
           action = "resume";
           options = {
-            desc = "[S]earch [R]esume";
+            desc = "[F]ind [R]esume";
           };
         };
-        "<leader>s" = {
+        "<leader>f" = {
           mode = "n";
           action = "oldfiles";
           options = {
-            desc = "[S]earch Recent Files ('.' for repeat)";
+            desc = "[F]ind Recent Files ('.' for repeat)";
           };
         };
         "<leader><leader>" = {
@@ -148,7 +155,7 @@
       }
       {
         mode = "n";
-        key = "<leader>s/";
+        key = "<leader>f/";
         # It's also possible to pass additional configuration options.
         #  See `:help telescope.builtin.live_grep()` for information about particular keys
         action.__raw = ''
@@ -160,13 +167,13 @@
           end
         '';
         options = {
-          desc = "[S]earch [/] in Open Files";
+          desc = "[F]ind [/] in Open Files";
         };
       }
       # Shortcut for searching your Neovim configuration files
       {
         mode = "n";
-        key = "<leader>sn";
+        key = "<leader>fn";
         action.__raw = ''
           function()
             require('telescope.builtin').find_files {
@@ -175,7 +182,7 @@
           end
         '';
         options = {
-          desc = "[S]earch [N]eovim files";
+          desc = "[F]ind [N]eovim files";
         };
       }
     ];
