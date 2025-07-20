@@ -6,11 +6,11 @@
     home-manager.url = "github:nix-community/home-manager";
     waybar-weather.url = "github:RoastBeefer00/waybar-weather-rust";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    nixvim = {
-      url = "github:nix-community/nixvim";
-      # If using a stable channel you can use `url = "github:nix-community/nixvim/nixos-<version>"`
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # nixvim = {
+    #   url = "github:nix-community/nixvim";
+    #   # If using a stable channel you can use `url = "github:nix-community/nixvim/nixos-<version>"`
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
     tree-sitter-rstml.url = "github:rayliwell/tree-sitter-rstml/flake";
   };
 
@@ -18,7 +18,7 @@
     inputs@{
       nixpkgs,
       home-manager,
-      nixvim,
+      # nixvim,
       tree-sitter-rstml,
       waybar-weather,
       ...
@@ -32,7 +32,7 @@
             inherit waybar-weather;
           };
           modules = [
-            nixvim.nixosModules.nixvim
+            # nixvim.nixosModules.nixvim
             # ./nixvim
             ./configuration.nix
             ./hardware-configuration.nix
