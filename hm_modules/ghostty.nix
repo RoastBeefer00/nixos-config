@@ -6,7 +6,7 @@
     enable = true;
     
     settings = {
-      theme = "tokyonight";
+      theme = "TokyoNight";
       window-decoration = true;
       window-padding-x = 4;
       window-padding-y = 4;

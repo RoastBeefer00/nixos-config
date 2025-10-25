@@ -154,6 +154,7 @@
       xdg-desktop-portal-gtk
       xdg-desktop-portal-hyprland
       xwayland
+      xwayland-satellite
     ]
     ++ [
       waybar-weather.packages.${pkgs.system}.default
@@ -190,6 +191,9 @@
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
+  };
+  programs.niri = {
+    enable = true;
   };
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
   environment.sessionVariables.MOZ_ENABLE_WAYLAND = "1";

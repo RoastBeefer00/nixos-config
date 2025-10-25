@@ -1,0 +1,191 @@
+// Niri configuration converted from Hyprland
+// Place this at ~/.config/niri/config.kdl
+
+// Monitor configuration
+output "DP-1" {
+    mode "3440x1440@144"
+    position x=0 y=0
+    scale 1.0
+}
+
+// Startup applications
+spawn-at-startup "waybar"
+spawn-at-startup "mako"
+spawn-at-startup "swaybg" "-i" "/home/roastbeefer/Pictures/waves.jpg"
+spawn-at-startup "/usr/lib/polkit-kde-authentication-agent-1"
+spawn-at-startup "redshift" "-l" "32.3:-106.8"
+
+// Input configuration
+input {
+    keyboard {
+        xkb {
+            layout "us"
+        }
+    }
+    
+    touchpad {
+        natural-scroll false
+    }
+    
+    mouse {
+        // Natural mouse speed (0 = no modification)
+    }
+}
+
+// Layout configuration
+layout {
+    gaps 10
+    center-focused-column "never"
+    
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+    
+    default-column-width { proportion 0.5; }
+    
+    focus-ring {
+        width 4
+        active-color 156 207 216 // rgb(9ccfd8)
+        inactive-color 89 89 89 // rgba(595959aa) approximation
+    }
+    
+    border {
+        width 4
+        active-color 156 207 216
+        inactive-color 89 89 89
+    }
+}
+
+// Decoration and appearance
+prefer-no-csd
+
+animations {
+    slowdown 1.0
+    
+    window-open {
+        duration-ms 200
+        curve "ease-out-expo"
+    }
+    
+    window-close {
+        duration-ms 150
+        curve "ease-out-quad"
+    }
+    
+    window-movement {
+        duration-ms 200
+        curve "ease-out-cubic"
+    }
+    
+    workspace-switch {
+        duration-ms 200
+        curve "ease-out-cubic"
+    }
+}
+
+window-rule {
+    match app-id="^onboard$"
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#".*\.exe$"#
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"^steam_app_.*$"#
+    open-floating true
+}
+
+window-rule {
+    match app-id="^steam_proton$"
+    open-floating true
+}
+
+// Keybindings (ALT as modifier)
+binds {
+    // Use Alt instead of Super/Mod
+    Mod+Q { close-window; }
+    Mod+Shift+F { fullscreen-window; }
+    Mod+M { maximize-column; }
+    Mod+Shift+Q { quit; }
+    Mod+T { spawn "thunar"; }
+    Mod+F { spawn "google-chrome-stable"; }
+    Mod+V { toggle-window-floating; }
+    Mod+Space { spawn "rofi" "-show" "drun"; }
+    Mod+X { consume-or-expel-window-left; }
+    Mod+Return { spawn "ghostty"; }
+    Mod+S { spawn "rofi" "-show" "power-menu" "-modi" "power-menu:rofi-power-menu"; }
+    Mod+P { spawn "hyprshot" "-m" "region" "--clipboard-only"; }
+    
+    // Audio controls
+    XF86AudioRaiseVolume { spawn "pactl" "--" "set-sink-volume" "0" "+5%"; }
+    XF86AudioLowerVolume { spawn "pactl" "--" "set-sink-volume" "0" "-5%"; }
+    XF86AudioMute { spawn "pactl" "--" "set-sink-mute" "0" "toggle"; }
+    
+    // Brightness controls
+    XF86MonBrightnessUp { spawn "light" "-A" "10"; }
+    XF86MonBrightnessDown { spawn "light" "-U" "10"; }
+    
+    // Focus movement with arrow keys
+    Mod+Left { focus-column-left; }
+    Mod+Right { focus-column-right; }
+    Mod+Up { focus-window-up; }
+    Mod+Down { focus-window-down; }
+    
+    // Focus movement with vim keys
+    Mod+H { focus-column-left; }
+    Mod+L { focus-column-right; }
+    Mod+K { focus-window-up; }
+    Mod+J { focus-window-down; }
+    
+    // Move window with vim keys
+    Mod+Shift+H { move-column-left; }
+    Mod+Shift+L { move-column-right; }
+    Mod+Shift+K { move-window-up; }
+    Mod+Shift+J { move-window-down; }
+    
+    // Workspace switching
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+    Mod+6 { focus-workspace 6; }
+    Mod+7 { focus-workspace 7; }
+    Mod+8 { focus-workspace 8; }
+    Mod+9 { focus-workspace 9; }
+    Mod+0 { focus-workspace 10; }
+    
+    // Move window to workspace
+    Mod+Shift+1 { move-column-to-workspace 1; }
+    Mod+Shift+2 { move-column-to-workspace 2; }
+    Mod+Shift+3 { move-column-to-workspace 3; }
+    Mod+Shift+4 { move-column-to-workspace 4; }
+    Mod+Shift+5 { move-column-to-workspace 5; }
+    Mod+Shift+6 { move-column-to-workspace 6; }
+    Mod+Shift+7 { move-column-to-workspace 7; }
+    Mod+Shift+8 { move-column-to-workspace 8; }
+    Mod+Shift+9 { move-column-to-workspace 9; }
+    Mod+Shift+0 { move-column-to-workspace 10; }
+    
+    // Workspace scrolling
+    Mod+WheelScrollDown { focus-workspace-down; }
+    Mod+WheelScrollUp { focus-workspace-up; }
+    
+    // Window resizing
+    Mod+Shift+Right { set-column-width "+5%"; }
+    Mod+Shift+Left { set-column-width "-5%"; }
+}
+
+// Cursor configuration
+cursor {
+    xcursor-theme "default"
+    xcursor-size 24
+}
+
+// Screenshot configuration (if using built-in)
+screenshot-path "~/Pictures/Screenshots/screenshot-%Y-%m-%d-%H-%M-%S.png"

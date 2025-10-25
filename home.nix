@@ -1,11 +1,11 @@
-{ pkgs, ... }:
+{ pkgs, niri, ... }:
 {
-
   imports = [
     # ./nixvim
     ./hm_modules/btop.nix
     ./hm_modules/hyprland.nix
     ./hm_modules/mako.nix
+    ./hm_modules/niri.nix
     ./hm_modules/fish.nix
     ./hm_modules/ghostty.nix
     ./hm_modules/rofi.nix
@@ -32,7 +32,7 @@
     opencode
     ripgrep
     runelite
-    rofi-wayland
+    rofi
     rofi-power-menu
     skim
     swaybg

@@ -1,10 +1,47 @@
 { config, pkgs, ... }:
 
 {
+  # 1. CONSOLIDATED ENVIRONMENT VARIABLES
+  # These are now set globally and applied to Fish by Home Manager.
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    BUN_INSTALL = "$HOME/.bun";
+    WASMER_DIR = "$HOME/.wasmer";
+  };
+
+  # 2. CONSOLIDATED PATH ADDITIONS
+  # These are applied correctly as Fish paths by Home Manager.
+  home.sessionPath = [
+    "$HOME/.local/scripts"
+    "$HOME/.cargo/bin"
+    # Note: BUN_INSTALL is already available as an environment variable
+    "$HOME/.bun/bin"
+    "/opt/flutter/bin"
+  ];
+
+  # Install required packages
+  home.packages = with pkgs; [
+    eza          # Modern replacement for ls
+    # neovim     # Editor
+    git          # Version control
+    starship     # Shell prompt
+    atuin        # Shell history
+    # mise       # Runtime version manager
+    # Add other packages as needed
+  ];
+
   # Enable Fish shell
   programs.fish = {
     enable = true;
     
+    # 3. DEDICATED KEY BINDING
+    # Use the structured 'bindings' option for non-standard key combos.
+    binds = {
+      # Binds Ctrl+F to execute the tmux sessionizer script.
+      # Home Manager automatically translates "\cf" or "ctrl-f" into the correct Fish bind syntax.
+      "ctrl-f".command = "$HOME/.local/scripts/tmux-sessionizer";
+    };
+
     # Shell aliases (abbreviations in Fish)
     shellAbbrs = {
       ll = "eza -la";
@@ -21,9 +58,9 @@
     functions = {
       vim = ''
         if test -z $argv
-            nvim .
+          nvim .
         else
-            nvim $argv
+          nvim $argv
         end
       '';
       
@@ -41,34 +78,21 @@
       fish_greeting = '''';
     };
     
-    # Shell initialization
+    # 4. CLEANED SHELL INITIALIZATION
+    # Removed redundant `set -x` and path additions, keeping only necessary external sources/initializers.
     shellInit = ''
-      # Environment variables
-      set -x EDITOR nvim
-      set -x BUN_INSTALL "$HOME/.bun"
-      set -x WASMER_DIR "$HOME/.wasmer"
-      
-      # Key bindings
-      bind ctrl-f "$HOME/.local/scripts/tmux-sessionizer"
-      
-      # Path additions
-      set -x PATH "$HOME/.local/scripts:$PATH"
-      set -x PATH "$HOME/.cargo/bin:$PATH"
-      set -x PATH "$BUN_INSTALL/bin:$PATH"
-      set -x PATH "/opt/flutter/bin:$PATH"
-      
       # Source external configurations if they exist
-      if test -e "$WASMER_DIR/wasmer.sh"
-          source "$WASMER_DIR/wasmer.sh"
+      if test -e "$WASMER_DIR/wasmer.fish"
+          source "$WASMER_DIR/wasmer.fish"
       end
       
       if test -e "$HOME/tmp/google-cloud-sdk/path.fish.inc"
           source "$HOME/tmp/google-cloud-sdk/path.fish.inc"
       end
       
-      if test -e "$HOME/tmp/google-cloud-sdk/completion.fish.inc"
-          source "$HOME/tmp/google-cloud-sdk/completion.fish.inc"
-      end
+      # if test -e "$HOME/tmp/google-cloud-sdk/completion.fish.inc"
+      #     source "$HOME/tmp/google-cloud-sdk/completion.fish.inc"
+      # end
       
       # Initialize external tools
       atuin init fish --disable-up-arrow | source
@@ -77,26 +101,17 @@
     '';
   };
   
-  # Install required packages
-  home.packages = with pkgs; [
-    eza          # Modern replacement for ls
-    # neovim       # Editor
-    git          # Version control
-    starship     # Shell prompt
-    atuin        # Shell history
-    # mise         # Runtime version manager
-    # Add other packages as needed
-  ];
-  
-  # Configure Starship prompt
-  programs.starship = {
-    enable = true;
-    # Add custom starship configuration here if needed
-    enableFishIntegration = true;
-  };
-  
   # Configure Atuin
   programs.atuin = {
+    enable = true;
+    enableFishIntegration = true;
+    # Atuin settings (left empty as the Starship settings were moved)
+    settings = {};
+  };
+  
+  # 5. CORRECTED STARSHIP CONFIGURATION
+  # All prompt module settings were moved from programs.atuin.settings to here.
+  programs.starship = {
     enable = true;
     enableFishIntegration = true;
     settings = {
@@ -406,19 +421,4 @@
       };
     };
   };
-  
-  # Environment variables that should be set globally
-  home.sessionVariables = {
-    EDITOR = "nvim";
-    BUN_INSTALL = "$HOME/.bun";
-    WASMER_DIR = "$HOME/.wasmer";
-  };
-  
-  # Add paths to session path
-  home.sessionPath = [
-    "$HOME/.local/scripts"
-    "$HOME/.cargo/bin"
-    "$HOME/.bun/bin"
-    "/opt/flutter/bin"
-  ];
 }
