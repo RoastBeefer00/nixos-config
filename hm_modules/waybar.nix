@@ -13,7 +13,7 @@
             gtk-layer-shell = true;
             height = 0;
             modules-left = [
-              "hyprland/workspaces"
+              "niri/workspaces"
               "custom/divider"
               "custom/weather"
               "custom/divider"
@@ -21,7 +21,7 @@
               "custom/divider"
               "memory"
             ];
-            modules-center = [ "hyprland/window" ];
+            modules-center = [ "niri/window" ];
             modules-right = [
               "tray"
               "pulseaudio"

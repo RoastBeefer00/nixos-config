@@ -1,6 +1,7 @@
 { pkgs, niri, ... }:
 {
   imports = [
+    ./hm_modules/common.nix
     # ./nixvim
     ./hm_modules/btop.nix
     ./hm_modules/hyprland.nix
@@ -43,5 +44,5 @@
     # pkgs.zsh-powerlevel10k
   ];
 
-  home.stateVersion = "25.05";
+  home.stateVersion = "25.11";
 }
