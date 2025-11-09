@@ -12,7 +12,7 @@
       window-padding-x = 4;
       window-padding-y = 4;
       font-family = "JetBrainsMono Nerd Font Propo";
-      font-size = 14;
+      font-size = 20;
       confirm-close-surface = false;
     };
   };

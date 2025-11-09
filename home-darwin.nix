@@ -9,6 +9,7 @@
   # imports = [ ./home-common.nix ];
   imports = [
     ./hm_modules/common.nix
+    ./hm_modules/aerospace.nix
   ];
 
   # macOS-specific packages and configuration
@@ -18,17 +19,6 @@
   ];
 
   launchd.agents = {
-    aerospace = {
-      enable = true;
-      config = {
-        ProgramArguments = [
-          "${pkgs.aerospace}/bin/aerospace"
-        ];
-        RunAtLoad = true;
-        KeepAlive = true; # Restart if it crashes
-        ProcessType = "Interactive"; # Important for window managers
-      };
-    };
     jankyborders = {
       enable = true;
       config = {
