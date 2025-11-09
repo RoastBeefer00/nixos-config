@@ -1,46 +1,48 @@
 {
-  description = "NixOS configuration";
+  description = "NixOS and macOS configuration";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+
+    nix-darwin.url = "github:LnL7/nix-darwin";
+    nix-darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
+
     niri.url = "github:sodiboo/niri-flake";
     home-manager.url = "github:nix-community/home-manager";
     waybar-weather.url = "github:RoastBeefer00/waybar-weather-rust";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    # nixvim = {
-    #   url = "github:nix-community/nixvim";
-    #   # If using a stable channel you can use `url = "github:nix-community/nixvim/nixos-<version>"`
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    rmatrix.url = "github:RoastBeefer00/rmatrix";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs-darwin";
     tree-sitter-rstml.url = "github:rayliwell/tree-sitter-rstml/flake";
   };
 
   outputs =
     inputs@{
       nixpkgs,
+      nixpkgs-darwin,
+      nix-darwin,
       home-manager,
       niri,
-      # nixvim,
       tree-sitter-rstml,
       waybar-weather,
+      rmatrix,
       ...
     }:
     {
+      # NixOS configuration
       nixosConfigurations = {
         nixos = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { 
-            inherit tree-sitter-rstml; 
+          specialArgs = {
+            inherit tree-sitter-rstml;
             inherit waybar-weather;
             inherit niri;
           };
           modules = [
-            # nixvim.nixosModules.nixvim
-            # ./nixvim
             ./configuration.nix
             ./hardware-configuration.nix
             {
-                nixpkgs.overlays = [ niri.overlays.niri ];
+              nixpkgs.overlays = [ niri.overlays.niri ];
             }
             niri.nixosModules.niri
             {
@@ -54,10 +56,35 @@
               home-manager.users.roastbeefer = import ./home.nix;
               home-manager.extraSpecialArgs = {
                 inherit niri;
+                isNixOS = true;
+                isDarwin = false;
               };
+            }
+          ];
+        };
+      };
 
-              # Optionally, use home-manager.extraSpecialArgs to pass
-              # arguments to home.nix-
+      # macOS nix-darwin configuration
+      darwinConfigurations = {
+        "Jakes-MacBook-Air" = nix-darwin.lib.darwinSystem {
+          system = "aarch64-darwin"; # or x86_64-darwin
+          specialArgs = {
+            inherit rmatrix;
+          };
+          modules = [
+            ./darwin-configuration.nix
+
+            # Integrate home-manager
+            home-manager.darwinModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.roastbeefer = import ./home-darwin.nix;
+              home-manager.extraSpecialArgs = {
+                inherit tree-sitter-rstml;
+                isNixOS = false;
+                isDarwin = true;
+              };
             }
           ];
         };

@@ -1,12 +1,13 @@
-{ config, pkgs, ... }:
+{ config, pkgs, isNixOS ? false, isDarwin ? false, ... }:
 
 {
   # Configure Ghostty terminal
   programs.ghostty = {
     enable = true;
+    package = if isNixOS then pkgs.ghostty else null;
     
     settings = {
-      theme = "TokyoNight";
+      theme = "Catppuccin Mocha";
       window-decoration = true;
       window-padding-x = 4;
       window-padding-y = 4;
@@ -19,7 +20,7 @@
   # Install the font if not already available system-wide
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
-    ghostty
+    # ghostty
     # Install JetBrains Mono Nerd Font
     # (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
     nerd-fonts.jetbrains-mono
