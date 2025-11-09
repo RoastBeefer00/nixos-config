@@ -7,6 +7,7 @@
   # System packages (available to all users)
   environment.systemPackages = with pkgs; [
     aerospace
+    discord
     ghostty-bin
     git
     google-chrome
