@@ -15,6 +15,7 @@
   # macOS-specific packages and configuration
   home.packages = with pkgs; [
     cowsay
+    google-cloud-sdk
     lolcat
   ];
 
