@@ -114,6 +114,17 @@
     packages = with pkgs; [ ];
   };
 
+  systemd.tmpfiles.rules = [
+  "d /srv/media 0775 roastbeefer users - -"
+  "d /srv/media/movies 0775 roastbeefer users - -"
+  "d /srv/media/tvshows 0775 roastbeefer users - -"
+  "d /srv/media/downloads 0775 roastbeefer users - -"
+  "d /srv/media/downloads/incomplete 0775 roastbeefer users - -"
+  "d /srv/media/downloads/complete 0775 roastbeefer users - -"
+];
+
+  virtualisation.docker.enable = true;
+
   nix.settings.trusted-users = [
     "root"
     "@wheel"
@@ -211,7 +222,7 @@
   # services.openssh.enable = true;
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 8080 ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
