@@ -17,6 +17,7 @@
     cowsay
     google-cloud-sdk
     lolcat
+    lazygit
   ];
 
   launchd.agents = {
