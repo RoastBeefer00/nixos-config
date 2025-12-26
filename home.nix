@@ -11,6 +11,7 @@
     ./hm_modules/ghostty.nix
     ./hm_modules/rofi.nix
     ./hm_modules/tmux.nix
+    ./hm_modules/jellyfin.nix
     # ./hm_modules/nixvim.nix
     ./hm_modules/waybar.nix
     ./hm_modules/wezterm.nix
