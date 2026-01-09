@@ -14,6 +14,8 @@
     EDITOR = "nvim";
     BUN_INSTALL = "$HOME/.bun";
     WASMER_DIR = "$HOME/.wasmer";
+    SKIM_DEFAULT_OPTIONS = "$SKIM_DEFAULT_OPTIONS --color=fg:#cdd6f4,bg:#1e1e2e,matched:#313244,matched_bg:#f2cdcd,current:#cdd6f4,current_bg:#45475a,current_match:#1e1e2e,current_match_bg:#f5e0dc,spinner:#a6e3a1,info:#cba6f7,prompt:#89b4fa,cursor:#f38ba8,selected:#eba0ac,header:#94e2d5,border:#6c7086";
+    HELIX_RUNTIME = "$HOME/projects/helix/runtime";
   };
 
   # 2. CONSOLIDATED PATH ADDITIONS
@@ -44,34 +46,29 @@
 
     # 3. DEDICATED KEY BINDING
     # Use the structured 'bindings' option for non-standard key combos.
-    binds = {
-      # Binds Ctrl+F to execute the tmux sessionizer script.
-      # Home Manager automatically translates "\cf" or "ctrl-f" into the correct Fish bind syntax.
-      "ctrl-f".command = "$HOME/.local/scripts/tmux-sessionizer";
-    };
+    # binds = {
+    #   # Binds Ctrl+F to execute the tmux sessionizer script.
+    #   # Home Manager automatically translates "\cf" or "ctrl-f" into the correct Fish bind syntax.
+    #   "ctrl-f".command = "$HOME/.local/scripts/tmux-sessionizer";
+    # };
 
     # Shell aliases (abbreviations in Fish)
-    shellAbbrs =
-      {
-        ll = "eza -la";
-        ls = "eza -a";
-        tree = "eza --tree";
-        g = "git";
-        gst = "git status";
-        gco = "git checkout";
-        gb = "git branch";
-        gl = "git pull";
-      }
-        // lib.optionalAttrs
-        isNixOS
-        {
-          rebuild = "sudo nixos-rebuild switch --flake ~/projects/nixos-config#nixos";
-        }
-        // lib.optionalAttrs
-        isDarwin
-        {
-          rebuild = "sudo darwin-rebuild switch --flake ~/projects/nixos-config";
-        };
+    shellAbbrs = {
+      ll = "eza -la";
+      ls = "eza -a";
+      tree = "eza --tree";
+      g = "git";
+      gst = "git status";
+      gco = "git checkout";
+      gb = "git branch";
+      gl = "git pull";
+    }
+    // lib.optionalAttrs isNixOS {
+      rebuild = "sudo nixos-rebuild switch --flake ~/projects/nixos-config#nixos";
+    }
+    // lib.optionalAttrs isDarwin {
+      rebuild = "sudo darwin-rebuild switch --flake ~/projects/nixos-config";
+    };
 
     # Custom functions
     functions = {
@@ -100,6 +97,15 @@
     # 4. CLEANED SHELL INITIALIZATION
     # Removed redundant `set -x` and path additions, keeping only necessary external sources/initializers.
     shellInit = ''
+      # Enable vi mode
+      fish_vi_key_bindings
+
+      # Set cursor shapes for different vi modes (optional)
+      set fish_cursor_default block
+      set fish_cursor_insert line
+      set fish_cursor_replace_one underscore
+      set fish_cursor_visual block
+
       # Source external configurations if they exist
       if test -e "$WASMER_DIR/wasmer.fish"
           source "$WASMER_DIR/wasmer.fish"
@@ -109,10 +115,12 @@
           source "$HOME/tmp/google-cloud-sdk/path.fish.inc"
       end
 
-      # if test -e "$HOME/tmp/google-cloud-sdk/completion.fish.inc"
-      #     source "$HOME/tmp/google-cloud-sdk/completion.fish.inc"
-      # end
-
+      if test -e "$HOME/tmp/google-cloud-sdk/completion.fish.inc"
+          source "$HOME/tmp/google-cloud-sdk/completion.fish.inc"
+      end
+    '';
+    interactiveShellInit = ''
+      bind \cf "$HOME/.local/scripts/tmux-sessionizer"
       # Initialize external tools
       atuin init fish --disable-up-arrow | source
       starship init fish | source

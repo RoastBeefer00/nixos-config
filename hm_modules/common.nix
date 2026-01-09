@@ -21,6 +21,7 @@
     bat
     direnv
     devenv
+    fastfetch
     fd
     fzf
     git

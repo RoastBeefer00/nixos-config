@@ -150,6 +150,7 @@
       clang-tools
       curl
       devenv
+      discord
       gammastep
       gcc
       google-chrome
