@@ -91,7 +91,7 @@
         git push --set-upstream origin $argv
       '';
 
-      fish_greeting = '''';
+      fish_greeting = "";
     };
 
     # 4. CLEANED SHELL INITIALIZATION
@@ -120,7 +120,8 @@
       end
     '';
     interactiveShellInit = ''
-      bind \cf "$HOME/.local/scripts/tmux-sessionizer"
+      bind -M insert \cf '$HOME/.local/scripts/tmux-sessionizer'
+      bind -M normal \cf '$HOME/.local/scripts/tmux-sessionizer'
       # Initialize external tools
       atuin init fish --disable-up-arrow | source
       starship init fish | source

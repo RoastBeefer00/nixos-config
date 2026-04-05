@@ -22,6 +22,7 @@
     direnv
     devenv
     fastfetch
+    flutter_rust_bridge_codegen
     fd
     fzf
     git
