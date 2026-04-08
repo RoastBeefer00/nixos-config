@@ -31,7 +31,6 @@
     hyprshot
     lazygit
     mako
-    opencode
     ripgrep
     runelite
     rofi
