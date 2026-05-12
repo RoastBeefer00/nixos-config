@@ -19,6 +19,10 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelParams = [
+    "nvidia-drm.modeset=1"
+    "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
+  ];
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -94,6 +98,8 @@
     modesetting.enable = true;
     open = true;
     nvidiaSettings = true;
+    powerManagement.enable = true;
+    powerManagement.finegrained = false;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
   services.xserver.videoDrivers = [ "nvidia" ];
@@ -115,13 +121,13 @@
   };
 
   systemd.tmpfiles.rules = [
-  "d /srv/media 0775 roastbeefer users - -"
-  "d /srv/media/movies 0775 roastbeefer users - -"
-  "d /srv/media/tvshows 0775 roastbeefer users - -"
-  "d /srv/media/downloads 0775 roastbeefer users - -"
-  "d /srv/media/downloads/incomplete 0775 roastbeefer users - -"
-  "d /srv/media/downloads/complete 0775 roastbeefer users - -"
-];
+    "d /srv/media 0775 roastbeefer users - -"
+    "d /srv/media/movies 0775 roastbeefer users - -"
+    "d /srv/media/tvshows 0775 roastbeefer users - -"
+    "d /srv/media/downloads 0775 roastbeefer users - -"
+    "d /srv/media/downloads/incomplete 0775 roastbeefer users - -"
+    "d /srv/media/downloads/complete 0775 roastbeefer users - -"
+  ];
 
   virtualisation.docker.enable = true;
 
@@ -156,6 +162,15 @@
       google-chrome
       nerd-fonts.fira-code
       meson
+      # obs-studio
+      (wrapOBS {
+        plugins = with obs-studio-plugins; [
+          wlrobs
+          obs-pipewire-audio-capture
+          obs-vaapi
+          obs-vkcapture
+        ];
+      })
       pavucontrol
       vim
       skim
@@ -163,6 +178,8 @@
       wayland-utils
       wl-clipboard
       wlroots
+      xdg-desktop-portal-wlr
+      kdePackages.xdg-desktop-portal-kde
       xdg-desktop-portal-gtk
       xdg-desktop-portal-hyprland
       xwayland
@@ -171,6 +188,26 @@
     ++ [
       waybar-weather.packages.${pkgs.system}.default
     ];
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = [
+      pkgs.xdg-desktop-portal-wlr
+      pkgs.kdePackages.xdg-desktop-portal-kde
+    ];
+    # config = {
+    #   common = {
+    #     default = [ "kde" ];
+    #   };
+    #   kde = {
+    #     default = [
+    #       "kde"
+    #       # "gtk"
+    #     ];
+    #     "org.freedesktop.impl.portal.ScreenCast" = [ "kde" ];
+    #   };
+    # };
+  };
 
   systemd.user.services.gammastep = {
     description = "Gammastep colour temperature adjuster";
@@ -209,6 +246,12 @@
   };
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
   environment.sessionVariables.MOZ_ENABLE_WAYLAND = "1";
+  environment.sessionVariables = {
+    GBM_BACKEND = "nvidia-drm";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    # LIBVA_DRIVER_NAME = "nvidia";
+    WLR_NO_HARDWARE_CURSORS = "1";
+  };
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
