@@ -18,23 +18,34 @@
 
   # Shared packages that work on both systems
   home.packages = with pkgs; [
+    # Add other cross-platform packages
     bat
-    direnv
+    claude-code
     devenv
+
     fastfetch
-    flutter_rust_bridge_codegen
     fd
+    flutter_rust_bridge_codegen
     fzf
     git
     ripgrep
     skim
-    # Add other cross-platform packages
   ];
 
   home.file = {
     ".local/scripts/tmux-sessionizer" = {
       source = ../scripts/tmux-sessionizer;
       executable = true;
+    };
+  };
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+    config = {
+      global = {
+        hide_env_diff = true;
+      };
     };
   };
 
