@@ -18,6 +18,7 @@
     google-cloud-sdk
     lolcat
     lazygit
+    tableplus
   ];
 
   launchd.agents = {
