@@ -6,8 +6,15 @@
   config,
   pkgs,
   waybar-weather,
+  activeTheme,
   ...
 }:
+let
+  schemeFor = {
+    catppuccin = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
+    tokyonight = "${pkgs.base16-schemes}/share/themes/tokyo-night-dark.yaml";
+  };
+in
 
 {
   imports = [
@@ -277,5 +284,24 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  stylix = {
+    enable = true;
+    base16Scheme = schemeFor.${activeTheme};
+    # Placeholder image — swaybg in niri.nix manages the real wallpaper
+    image = pkgs.nixos-artwork.wallpapers.simple-dark-gray;
+    fonts = {
+      monospace = {
+        package = pkgs.nerd-fonts.jetbrains-mono;
+        name = "JetBrainsMono Nerd Font Propo";
+      };
+      sansSerif = {
+        package = pkgs.nerd-fonts.fira-code;
+        name = "FiraCode Nerd Font";
+      };
+      sizes.terminal = 13;
+    };
+    targets.swaybg.enable = false;
+  };
+
   system.stateVersion = "25.05"; # Did you read the comment?
 }

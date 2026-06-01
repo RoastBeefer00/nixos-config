@@ -59,15 +59,15 @@
         focus-ring = {
           enable = true;
           width = 2;
-          active.color = "#9ccfd8";
-          inactive.color = "#595959aa";
+          active.color = "#${config.lib.stylix.colors.base0D}";
+          inactive.color = "#${config.lib.stylix.colors.base03}aa";
         };
-        
+
         border = {
           enable = true;
           width = 2;
-          active.color = "#9ccfd8";
-          inactive.color = "#595959aa";
+          active.color = "#${config.lib.stylix.colors.base0D}";
+          inactive.color = "#${config.lib.stylix.colors.base03}aa";
         };
       };
 

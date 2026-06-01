@@ -1,4 +1,4 @@
-{ pkgs, tree-sitter-rstml, ... }:
+{ pkgs, tree-sitter-rstml, activeTheme, ... }:
 {
   imports = [ ./plugins ];
 
@@ -8,9 +8,16 @@
     defaultEditor = true;
     # viAlias = true;
     # vimAlias = true;
-    colorschemes.tokyonight = {
-      enable = true;
-      settings.style = "night";
+    colorschemes = if activeTheme == "catppuccin" then {
+      catppuccin = {
+        enable = true;
+        settings.flavour = "mocha";
+      };
+    } else {
+      tokyonight = {
+        enable = true;
+        settings.style = "night";
+      };
     };
     # plugins.lightline.enable = true;
     globals = {

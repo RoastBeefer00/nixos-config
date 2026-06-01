@@ -10,6 +10,7 @@
 
     niri.url = "github:sodiboo/niri-flake";
     home-manager.url = "github:nix-community/home-manager";
+    stylix.url = "github:danth/stylix";
     waybar-weather.url = "github:RoastBeefer00/waybar-weather-rust";
     rmatrix.url = "github:RoastBeefer00/rmatrix";
     home-manager.inputs.nixpkgs.follows = "nixpkgs-darwin";
@@ -28,15 +29,22 @@
       rmatrix,
       ...
     }:
+    let
+      # Change this to "tokyonight" to switch the system theme
+      activeTheme = "tokyonight";
+    in
     {
       # NixOS configuration
       nixosConfigurations = {
         nixos = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = {
-            inherit tree-sitter-rstml;
-            inherit waybar-weather;
-            inherit niri;
+            inherit
+              tree-sitter-rstml
+              waybar-weather
+              niri
+              activeTheme
+              ;
           };
           modules = [
             ./configuration.nix
@@ -48,6 +56,7 @@
             {
               programs.niri.package = nixpkgs.legacyPackages.x86_64-linux.niri;
             }
+            inputs.stylix.nixosModules.stylix
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
@@ -55,7 +64,7 @@
               home-manager.backupFileExtension = "backup";
               home-manager.users.roastbeefer = import ./home.nix;
               home-manager.extraSpecialArgs = {
-                inherit niri;
+                inherit niri activeTheme;
                 isNixOS = true;
                 isDarwin = false;
               };

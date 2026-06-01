@@ -7,7 +7,7 @@
     package = if isNixOS then pkgs.ghostty else null;
     
     settings = {
-      theme = "Catppuccin Mocha";
+      # theme handled by Stylix
       window-decoration = true;
       window-padding-x = 4;
       window-padding-y = 4;

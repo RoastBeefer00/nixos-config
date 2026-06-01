@@ -2,6 +2,7 @@
 {
   imports = [
     ./hm_modules/common.nix
+    ./hm_modules/stylix.nix
     # ./nixvim
     ./hm_modules/btop.nix
     ./hm_modules/hyprland.nix

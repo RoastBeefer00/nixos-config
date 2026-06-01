@@ -1,12 +1,8 @@
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 {
   programs.btop = {
     enable = true;
-    settings = {
-      color_theme = "${config.xdg.configHome}/btop/themes/catppuccin_mocha.theme";
-    };
     extraConfig = builtins.readFile ../btop/btop.conf;
+    # color_theme handled by Stylix
   };
-  
-  xdg.configFile."btop/themes/catppuccin_mocha.theme".source = ../btop/themes/catppuccin_mocha.theme;
 }

@@ -1,8 +1,65 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 {
-      programs.waybar = {
-        enable = true;
-        style = builtins.readFile ../waybar/style.css;
+  programs.waybar = {
+    enable = true;
+    style = ''
+      * {
+        border: none;
+        border-radius: 0;
+        font-family: FiraCode Nerd Font;
+        font-weight: bold;
+        font-size: 14px;
+        min-height: 0;
+      }
+
+      window#waybar {
+        background: rgba(0, 0, 0, 0);
+        color: #${config.lib.stylix.colors.base05};
+      }
+
+      tooltip {}
+
+      #workspaces button {}
+
+      #workspaces button.active {
+        color: #${config.lib.stylix.colors.base0D};
+      }
+
+      #workspaces button.focused {
+        color: #${config.lib.stylix.colors.base0D};
+      }
+
+      #workspaces button.urgent {}
+
+      #workspaces button:hover {}
+
+      #custom-language,
+      #custom-updates,
+      #custom-caffeine,
+      #custom-weather,
+      #window,
+      #clock,
+      #battery,
+      #pulseaudio,
+      #network,
+      #workspaces,
+      #tray,
+      #backlight {}
+
+      #tray {}
+      #workspaces {}
+      #custom-caffeine {}
+      #custom-language {}
+      #custom-updates {}
+      #window {}
+      #clock {}
+      #network {}
+      #pulseaudio {}
+      #pulseaudio.microphone {}
+      #battery {}
+      #custom-weather {}
+      #custom-endright {}
+    '';
         settings = [
           {
             layer = "top";
