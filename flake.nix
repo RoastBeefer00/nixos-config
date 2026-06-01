@@ -3,23 +3,21 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     nix-darwin.url = "github:LnL7/nix-darwin";
-    nix-darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
+    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     niri.url = "github:sodiboo/niri-flake";
     home-manager.url = "github:nix-community/home-manager";
     waybar-weather.url = "github:RoastBeefer00/waybar-weather-rust";
     rmatrix.url = "github:RoastBeefer00/rmatrix";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs-darwin";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
     tree-sitter-rstml.url = "github:rayliwell/tree-sitter-rstml/flake";
   };
 
   outputs =
     inputs@{
       nixpkgs,
-      nixpkgs-darwin,
       nix-darwin,
       home-manager,
       niri,
