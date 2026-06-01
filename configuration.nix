@@ -13,12 +13,14 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ./game-streaming.nix
     # <home-manager/nixos>
   ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelModules = [ "nvidia_uvm" ];
   boot.kernelParams = [
     "nvidia-drm.modeset=1"
     "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
@@ -147,6 +149,19 @@
     "flakes"
   ];
 
+  gaming.streaming = {
+    enable = true;
+    user = "roastbeefer";
+    sunshine = {
+      package = pkgs.sunshine.override {
+        cudaSupport = true;
+      };
+      settings = {
+        encoder = "nvenc";
+      };
+    };
+  };
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages =
@@ -176,8 +191,10 @@
       skim
       wayland-protocols
       wayland-utils
+      # wayland-virtual-display
       wl-clipboard
       wlroots
+      wlr-randr
       xdg-desktop-portal-wlr
       kdePackages.xdg-desktop-portal-kde
       xdg-desktop-portal-gtk
