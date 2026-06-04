@@ -21,20 +21,23 @@ in
   ];
 
   # Shared packages that work on both systems
-  home.packages = (with pkgs; [
-    # Add other cross-platform packages
-    bat
-    claude-code
-    devenv
-
-    fastfetch
-    fd
-    flutter_rust_bridge_codegen
-    fzf
-    git
-    ripgrep
-    skim
-  ]) ++ [ rtk ];
+  home.packages =
+    (with pkgs; [
+      # Add other cross-platform packages
+      bat
+      claude-code
+      devenv
+      fastfetch
+      fd
+      flutter_rust_bridge_codegen
+      fzf
+      gh
+      git
+      just
+      ripgrep
+      skim
+    ])
+    ++ [ rtk ];
 
   home.file = {
     ".local/scripts/tmux-sessionizer" = {
