@@ -145,6 +145,11 @@
     options = "--delete-older-than 30d";
   };
 
+  nix.optimise = {
+    automatic = true;
+    dates = [ "weekly" ];
+  };
+
   # Install firefox.
   programs.firefox.enable = true;
 
