@@ -51,6 +51,12 @@
     screencapture.location = "~/Pictures/screenshots";
   };
 
+  nix.gc = {
+    automatic = true;
+    interval.Day = 7;
+    options = "--delete-older-than 30d";
+  };
+
   nix.settings = {
     experimental-features = "nix-command flakes";
     trusted-users = [
