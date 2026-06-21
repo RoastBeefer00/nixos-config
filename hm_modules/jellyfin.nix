@@ -2,7 +2,7 @@
 
 let
   # Configuration variables - adjust these to your needs
-  mediaDir = "/srv/media";
+  mediaDir = (import ../vars.nix).mediaDir;
   configDir = "${config.home.homeDirectory}/.config/media-server";
   
   # User/Group IDs - use your actual user IDs

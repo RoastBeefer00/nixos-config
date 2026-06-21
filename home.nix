@@ -2,20 +2,13 @@
 {
   imports = [
     ./hm_modules/common.nix
-    # ./nixvim
-    ./hm_modules/btop.nix
     ./hm_modules/hyprland.nix
     ./hm_modules/mako.nix
     ./hm_modules/niri.nix
-    ./hm_modules/fish.nix
-    ./hm_modules/ghostty.nix
     ./hm_modules/rofi.nix
-    ./hm_modules/tmux.nix
     ./hm_modules/jellyfin.nix
-    # ./hm_modules/nixvim.nix
     ./hm_modules/waybar.nix
     ./hm_modules/wezterm.nix
-    # ./hm_modules/zsh.nix
 
     # Desktop-only modules
     ./hm_modules/moondeck-buddy.nix

@@ -9,12 +9,15 @@
   ...
 }:
 
+let
+  vars = import ./vars.nix;
+in
 {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./game-streaming.nix
-    # <home-manager/nixos>
+    ./nix-common.nix
   ];
 
   # Bootloader.
@@ -111,9 +114,9 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.roastbeefer = {
+  users.users.${vars.username} = {
     isNormalUser = true;
-    description = "roastbeefer";
+    description = vars.username;
     extraGroups = [
       "networkmanager"
       "wheel"
@@ -123,46 +126,26 @@
   };
 
   systemd.tmpfiles.rules = [
-    "d /srv/media 0775 roastbeefer users - -"
-    "d /srv/media/movies 0775 roastbeefer users - -"
-    "d /srv/media/tvshows 0775 roastbeefer users - -"
-    "d /srv/media/downloads 0775 roastbeefer users - -"
-    "d /srv/media/downloads/incomplete 0775 roastbeefer users - -"
-    "d /srv/media/downloads/complete 0775 roastbeefer users - -"
+    "d ${vars.mediaDir} 0775 ${vars.username} users - -"
+    "d ${vars.mediaDir}/movies 0775 ${vars.username} users - -"
+    "d ${vars.mediaDir}/tvshows 0775 ${vars.username} users - -"
+    "d ${vars.mediaDir}/downloads 0775 ${vars.username} users - -"
+    "d ${vars.mediaDir}/downloads/incomplete 0775 ${vars.username} users - -"
+    "d ${vars.mediaDir}/downloads/complete 0775 ${vars.username} users - -"
   ];
 
   virtualisation.docker.enable = true;
 
-  nix.settings.trusted-users = [
-    "root"
-    "@wheel"
-    "roastbeefer"
-  ];
-
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 30d";
-  };
-
-  nix.optimise = {
-    automatic = true;
-    dates = [ "weekly" ];
-  };
+  nix.settings.trusted-users = [ "@wheel" ];
+  nix.gc.dates = "weekly";
+  nix.optimise.dates = [ "weekly" ];
 
   # Install firefox.
   programs.firefox.enable = true;
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-
   gaming.streaming = {
     enable = true;
-    user = "roastbeefer";
+    user = vars.username;
     sunshine = {
       package = pkgs.sunshine.override {
         cudaSupport = true;

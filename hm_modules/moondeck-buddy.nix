@@ -197,7 +197,7 @@ in
           "NO_GUI=1"
           "XDG_CONFIG_HOME=%h/.config"
           "XDG_DATA_HOME=%h/.local/share"
-          "PATH=/run/current-system/sw/bin:/home/roastbeefer/.nix-profile/bin"
+          "PATH=/run/current-system/sw/bin:${config.home.homeDirectory}/.nix-profile/bin"
         ];
       };
 

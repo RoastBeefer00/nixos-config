@@ -5,9 +5,11 @@
   ...
 }:
 
+let
+  vars = import ./vars.nix;
+in
 {
-  # Allow unfree packages system-wide
-  nixpkgs.config.allowUnfree = true;
+  imports = [ ./nix-common.nix ];
 
   # System packages (available to all users)
   environment.systemPackages = with pkgs; [
@@ -51,30 +53,14 @@
     screencapture.location = "~/Pictures/screenshots";
   };
 
-  nix.gc = {
-    automatic = true;
-    interval.Day = 7;
-    options = "--delete-older-than 30d";
-  };
+  nix.gc.interval.Day = 7;
+  nix.optimise.interval = [{ Day = 7; }];
+  nix.settings.trusted-users = [ "@admin" ];
 
-  nix.optimise = {
-    automatic = true;
-    interval = [{ Day = 7; }];
-  };
-
-  nix.settings = {
-    experimental-features = "nix-command flakes";
-    trusted-users = [
-      "root"
-      "@admin"
-      "roastbeefer"
-    ];
-  };
-
-  system.primaryUser = "roastbeefer";
-  users.users.roastbeefer = {
-    name = "roastbeefer";
-    home = "/Users/roastbeefer";
+  system.primaryUser = vars.username;
+  users.users.${vars.username} = {
+    name = vars.username;
+    home = vars.darwinHome;
     shell = pkgs.fish;
   };
 

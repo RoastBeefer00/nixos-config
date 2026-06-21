@@ -9,6 +9,7 @@
 
 let
   rtk = pkgs.callPackage ./rtk.nix { };
+  vars = import ../vars.nix;
 in
 {
   imports = [
@@ -16,7 +17,6 @@ in
     ./fish.nix
     ./ghostty.nix
     ./tmux.nix
-    # ./zsh.nix
     # Add other cross-platform modules here
   ];
 
@@ -71,8 +71,8 @@ in
 
     settings = {
       user = {
-        name = "Jake Jasmin";
-        email = "roastbeefer000@gmail.com";
+        name = vars.fullName;
+        email = vars.email;
       };
       init.defaultBranch = "main";
       pull.rebase = false;

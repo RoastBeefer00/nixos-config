@@ -86,7 +86,7 @@ in
           {
             name = "MoonDeckStream";
             # home-manager puts the wrapper at ~/.local/bin/MoonDeckStream
-            cmd = "${pkgs.gamescope}/bin/gamescope -W 1280 -H 800 -f -- /home/roastbeefer/.local/bin/MoonDeckStream";
+            cmd = "${pkgs.gamescope}/bin/gamescope -W 1280 -H 800 -f -- /home/${cfg.user}/.local/bin/MoonDeckStream";
             auto-detach = "false";
             # No prep-cmd here — MoonDeckBuddy handles Steam state itself.
             # prep-cmd = [

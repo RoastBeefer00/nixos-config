@@ -1,8 +1,6 @@
 { config, pkgs, ... }:
 
 {
-  # home.username = "roastbeefer";
-  # home.homeDirectory = "/Users/roastbeefer";
   home.stateVersion = "25.11"; # Match your home-manager version
 
   # Import shared config if desired

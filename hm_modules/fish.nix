@@ -91,6 +91,11 @@
         git push --set-upstream origin $argv
       '';
 
+      kdev = ''
+        ssh -t desktop 'tmux new-session -A -s kernel -c ~/src/rfl-env \
+          "nix develop --command fish -C \"cd ~/src/linux-rfl; nvim .\""'
+      '';
+
       fish_greeting = "";
     };
 

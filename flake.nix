@@ -26,6 +26,9 @@
       rmatrix,
       ...
     }:
+    let
+      vars = import ./vars.nix;
+    in
     {
       # NixOS configuration
       nixosConfigurations = {
@@ -51,7 +54,7 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "backup";
-              home-manager.users.roastbeefer = import ./home.nix;
+              home-manager.users.${vars.username} = import ./home.nix;
               home-manager.extraSpecialArgs = {
                 inherit niri;
                 isNixOS = true;
@@ -77,7 +80,7 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.users.roastbeefer = import ./home-darwin.nix;
+              home-manager.users.${vars.username} = import ./home-darwin.nix;
               home-manager.extraSpecialArgs = {
                 inherit tree-sitter-rstml;
                 isNixOS = false;
