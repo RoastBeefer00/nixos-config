@@ -64,6 +64,17 @@
          "run 'git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins'"
       # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
       run '~/.tmux/plugins/tpm/tpm'
+
+      # Smart split navigation — helix-aware (must be after tpm to override vim-tmux-navigator).
+      # When hx/vim/nvim is focused: forward C-h/j/k/l to the editor.
+      # Helix's Steel smart-window-* functions navigate splits first; at the edge they
+      # call `tmux select-pane` to continue into the next tmux pane.
+      # When any other program is focused: navigate tmux panes directly.
+      is_hx_or_vim="ps -o state= -o comm= -t '#{pane_tty}' | grep -iqE '^[^TXZ ]+ +(\S+\/)?g?(view|l?n?vim?x?|hx)(diff)?$'"
+      bind-key -n 'C-h' if-shell "$is_hx_or_vim" 'send-keys C-h' 'select-pane -L'
+      bind-key -n 'C-j' if-shell "$is_hx_or_vim" 'send-keys C-j' 'select-pane -D'
+      bind-key -n 'C-k' if-shell "$is_hx_or_vim" 'send-keys C-k' 'select-pane -U'
+      bind-key -n 'C-l' if-shell "$is_hx_or_vim" 'send-keys C-l' 'select-pane -R'
       		'';
   };
 }
