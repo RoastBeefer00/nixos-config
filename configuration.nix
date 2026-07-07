@@ -26,6 +26,7 @@ in
   boot.kernelModules = [ "nvidia_uvm" ];
   boot.kernelParams = [
     "nvidia-drm.modeset=1"
+    "nvidia-drm.fbdev=1"
     "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
   ];
 
@@ -72,6 +73,7 @@ in
 
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.wayland.enable = true;
   services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
@@ -109,6 +111,7 @@ in
   };
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.enableRedistributableFirmware = true;
+  hardware.graphics.extraPackages = [ pkgs.nvidia-vaapi-driver ];
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
@@ -189,10 +192,6 @@ in
       wl-clipboard
       wlroots
       wlr-randr
-      xdg-desktop-portal-wlr
-      kdePackages.xdg-desktop-portal-kde
-      xdg-desktop-portal-gtk
-      xdg-desktop-portal-hyprland
       xwayland
       xwayland-satellite
     ]
@@ -203,21 +202,23 @@ in
   xdg.portal = {
     enable = true;
     extraPortals = [
-      pkgs.xdg-desktop-portal-wlr
       pkgs.kdePackages.xdg-desktop-portal-kde
+      pkgs.xdg-desktop-portal-gtk
+      pkgs.xdg-desktop-portal-hyprland
     ];
-    # config = {
-    #   common = {
-    #     default = [ "kde" ];
-    #   };
-    #   kde = {
-    #     default = [
-    #       "kde"
-    #       # "gtk"
-    #     ];
-    #     "org.freedesktop.impl.portal.ScreenCast" = [ "kde" ];
-    #   };
-    # };
+    config = {
+      common.default = [ "gtk" ];
+      KDE = {
+        default = [ "kde" "gtk" ];
+        "org.freedesktop.impl.portal.ScreenCast" = [ "kde" ];
+        "org.freedesktop.impl.portal.Screenshot" = [ "kde" ];
+      };
+      Hyprland = {
+        default = [ "hyprland" "gtk" ];
+        "org.freedesktop.impl.portal.ScreenCast" = [ "hyprland" ];
+        "org.freedesktop.impl.portal.Screenshot" = [ "hyprland" ];
+      };
+    };
   };
 
   systemd.user.services.gammastep = {
@@ -229,6 +230,9 @@ in
       Restart = "on-failure";
     };
   };
+
+  programs.gamescope.enable = true;
+  programs.gamemode.enable = true;
 
   programs.steam = {
     enable = true;
@@ -260,8 +264,7 @@ in
   environment.sessionVariables = {
     GBM_BACKEND = "nvidia-drm";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-    # LIBVA_DRIVER_NAME = "nvidia";
-    WLR_NO_HARDWARE_CURSORS = "1";
+    LIBVA_DRIVER_NAME = "nvidia";
   };
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -274,7 +277,10 @@ in
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    settings.PasswordAuthentication = true;
+  };
 
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [ 8080 ];
