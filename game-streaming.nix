@@ -104,10 +104,12 @@ in
             ];
           }
           {
-            # Desktop capture (no cmd) for streaming to the living room TV.
+            # Launches Steam Big Picture for streaming to the living room TV.
             # Streams at 2560x1440 rather than the TV's native 4K to keep
             # encode load reasonable; the TV upscales.
             name = "TV";
+            cmd = "${pkgs.steam}/bin/steam steam://open/bigpicture";
+            auto-detach = "false";
             prep-cmd = [
               {
                 do = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-2.mode.2560x1440@60";
