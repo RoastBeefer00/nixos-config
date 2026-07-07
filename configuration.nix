@@ -169,6 +169,7 @@ in
       gammastep
       gcc
       google-chrome
+      lsfg-vk
       nerd-fonts.fira-code
       meson
       # obs-studio

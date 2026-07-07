@@ -27,6 +27,7 @@
     htop
     hyprshot
     lazygit
+    lsfg-vk-ui
     mako
     ripgrep
     runelite
