@@ -105,14 +105,16 @@ in
           }
           {
             # Launches Steam Big Picture for streaming to the living room TV.
-            # Streams at 2560x1440 rather than the TV's native 4K to keep
-            # encode load reasonable; the TV upscales.
+            # Streams at 1920x1080 rather than the TV's native 4K to keep
+            # encode load reasonable; the TV upscales. (2560x1440 isn't a
+            # mode DP-2 supports -- it jumps from native 3440x1440 straight
+            # to 1920x1080 -- so 1080p is the closest fit below native.)
             name = "TV";
             cmd = "${pkgs.steam}/bin/steam steam://open/bigpicture";
             auto-detach = "false";
             prep-cmd = [
               {
-                do = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-2.mode.2560x1440@60";
+                do = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-2.mode.1920x1080@60";
                 undo = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-2.mode.3440x1440@144";
                 elevated = false;
               }
