@@ -104,18 +104,29 @@ in
             ];
           }
           {
-            # Launches Steam Big Picture for streaming to the living room TV.
-            # Streams at 1920x1080 rather than the TV's native 4K to keep
-            # encode load reasonable; the TV upscales. (2560x1440 isn't a
-            # mode DP-2 supports -- it jumps from native 3440x1440 straight
-            # to 1920x1080 -- so 1080p is the closest fit below native.)
+            # Desktop capture (no cmd -- see below) for streaming to the
+            # living room TV. Streams at 1920x1080 rather than the TV's
+            # native 4K to keep encode load reasonable; the TV upscales.
+            # (2560x1440 isn't a mode DP-2 supports -- it jumps from native
+            # 3440x1440 straight to 1920x1080 -- so 1080p is the closest
+            # fit below native.)
             name = "TV";
-            cmd = "${pkgs.steam}/bin/steam steam://open/bigpicture";
-            auto-detach = "false";
             prep-cmd = [
               {
                 do = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-2.mode.1920x1080@60";
                 undo = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-2.mode.3440x1440@144";
+                elevated = false;
+              }
+              {
+                # Fire-and-forget: opens Big Picture on the existing Steam
+                # client (or launches it) and returns almost instantly --
+                # NOT suitable as the top-level `cmd`, since Sunshine treats
+                # that process exiting as "the app closed" and immediately
+                # tears down the session. As a prep-cmd step it's just a
+                # one-shot action; session lifetime stays tied to the
+                # Moonlight connection instead.
+                do = "${pkgs.steam}/bin/steam steam://open/bigpicture";
+                undo = "true";
                 elevated = false;
               }
             ];
