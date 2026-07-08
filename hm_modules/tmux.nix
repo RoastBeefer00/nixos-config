@@ -6,6 +6,14 @@
       set -g default-terminal "tmux-256color"
       # set -ag terminal-overrides ",xterm-256color:RGB"
 
+      # Forward the CSI-u / kitty keyboard protocol so control keys that are
+      # byte-identical to legacy keys (Ctrl+H == Backspace, Ctrl+I == Tab,
+      # Ctrl+M == Enter) are disambiguated. Without this, helix's sidekick
+      # C-h "navigate back" is indistinguishable from Backspace and only works
+      # intermittently. Requires a terminal that supports it (Ghostty does).
+      set -s extended-keys on
+      set -as terminal-features '*:extkeys'
+
       set -g prefix C-e
       unbind C-b
       bind-key C-e send-prefix
