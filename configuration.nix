@@ -27,6 +27,14 @@ in
   boot.kernelParams = [
     "nvidia-drm.modeset=1"
     "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
+    # Inject a 2560x1440@60 mode into DP-2 (LG UltraGear) via a custom EDID so
+    # Sunshine can capture a clean 16:9 1440p signal for the TV. The panel only
+    # advertises 3440x1440 (native) and 1920x1080. See hardware.firmware below.
+    # NOTE: NVIDIA's DRM has historically ignored drm.edid_firmware; the open
+    # kernel modules (hardware.nvidia.open = true) give this a real chance. If
+    # 2560x1440 doesn't appear in `kscreen-doctor -o` after reboot, this override
+    # isn't being honored -- fall back to a 1440p dummy plug.
+    "drm.edid_firmware=DP-2:edid/lg-dp2.bin"
   ];
 
   networking.hostName = "nixos"; # Define your hostname.
@@ -109,6 +117,18 @@ in
   };
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.enableRedistributableFirmware = true;
+
+  # Custom merged EDID for DP-2. The stock LG UltraGear EDID only offers
+  # 3440x1440 (native, incl. 144Hz) and 1920x1080. This adds a single
+  # 2560x1440@60 detailed timing, injected into unused CTA-861 space so the
+  # native 144Hz/FreeSync/HDR data is left byte-for-byte untouched. Loaded via
+  # the drm.edid_firmware kernel param above; enables 16:9 1440p TV streaming.
+  hardware.firmware = [
+    (pkgs.runCommand "edid-dp2-1440p" { } ''
+      mkdir -p "$out/lib/firmware/edid"
+      cp ${./edid/lg-dp2.bin} "$out/lib/firmware/edid/lg-dp2.bin"
+    '')
+  ];
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
@@ -262,7 +282,13 @@ in
     GBM_BACKEND = "nvidia-drm";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
     # LIBVA_DRIVER_NAME = "nvidia";
-    WLR_NO_HARDWARE_CURSORS = "1";
+    # WLR_NO_HARDWARE_CURSORS dropped: it forced software cursors to dodge the
+    # old NVIDIA hardware-cursor bug on wlroots compositors (niri/Hyprland).
+    # Explicit sync (default since driver 555, active on 595) fixes that bug, so
+    # hardware cursors work again -> lower latency, less per-frame overhead.
+    # (No effect on KDE/KWin either way.) If the cursor misbehaves in niri or
+    # Hyprland, or goes missing when streaming from those sessions, restore:
+    #   WLR_NO_HARDWARE_CURSORS = "1";
   };
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

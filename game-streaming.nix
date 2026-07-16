@@ -105,14 +105,45 @@ in
           }
           {
             # Desktop capture (no cmd) for streaming to the living room TV.
-            # Streams at 1920x1080 rather than the TV's native 4K to keep
-            # encode load reasonable; the TV upscales. (2560x1440 isn't a
-            # mode DP-2 supports -- it jumps from native 3440x1440 straight
-            # to 1920x1080 -- so 1080p is the closest fit below native.)
+            # Streams 16:9 2560x1440 (fills the TV, upscaled to 4K) rather than
+            # native 4K to keep encode load reasonable. DP-2 has no native
+            # 2560x1440 mode, so one is injected via a custom EDID
+            # (drm.edid_firmware in configuration.nix). Set the Moonlight client
+            # on the TV to 1440p for a 1:1 capture. If kscreen-doctor errors that
+            # the mode is unknown, the EDID override didn't take -- check
+            # `kscreen-doctor -o` for a 2560x1440 line.
             name = "TV";
             prep-cmd = [
               {
-                do = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-2.mode.1920x1080@60";
+                do = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-2.mode.2560x1440@60";
+                undo = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-2.mode.3440x1440@144";
+                elevated = false;
+              }
+            ];
+          }
+          {
+            # Couch-friendly Steam launcher: boots straight into Big Picture /
+            # gamepad UI, navigable with a controller over Moonlight. Uses the
+            # same 1440p prep-cmd as the TV app. The steam:// URL opens Big
+            # Picture in the running Steam (or starts Steam into it), which
+            # sidesteps the single-instance conflict a gamescope wrapper hits
+            # when Steam is already running on the desktop. auto-detach = true
+            # keeps the stream alive after the launcher command returns.
+            #
+            # NOTE: for smooth UI, enable Steam > Settings > Interface >
+            # "Enable GPU accelerated rendering in web views" (Linux forces it
+            # off by default -> software-rendered, laggy Big Picture).
+            #
+            # If enabling that causes corruption on NVIDIA instead, swap the cmd
+            # below for a gamescope-wrapped launch (like MoonDeckStream above):
+            #   cmd = "${pkgs.gamescope}/bin/gamescope -W 2560 -H 1440 -f -- ${pkgs.steam}/bin/steam -gamepadui";
+            #   auto-detach = "false";
+            name = "Steam Big Picture";
+            cmd = "${pkgs.steam}/bin/steam steam://open/bigpicture";
+            auto-detach = "true";
+            prep-cmd = [
+              {
+                do = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-2.mode.2560x1440@60";
                 undo = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-2.mode.3440x1440@144";
                 elevated = false;
               }
