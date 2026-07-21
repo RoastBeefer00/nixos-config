@@ -192,14 +192,36 @@ in
       lsfg-vk
       nerd-fonts.fira-code
       meson
-      # obs-studio
-      (wrapOBS {
-        plugins = with obs-studio-plugins; [
-          wlrobs
-          obs-pipewire-audio-capture
-          obs-vaapi
-          obs-vkcapture
+      # OBS Studio. On Wayland, capture goes through the PipeWire ScreenCast
+      # portal ("Screen Capture (PipeWire)" / "Window Capture (PipeWire)"),
+      # which works on both KDE (kde portal) and niri (gnome portal). wlrobs was
+      # dropped: it needs wlr-screencopy/wlr-export-dmabuf, which niri and KWin
+      # don't expose -- it can't capture on either compositor. obs-vaapi dropped
+      # too: NVIDIA has no VAAPI encode path. vkcapture stays for game capture.
+      #
+      # wrapOBS doesn't expose the NVIDIA encode/CUDA libs, so obs-nvenc-test
+      # fails with "Cannot load libnvidia-encode.so.1" and NVENC is unavailable
+      # (only x264/AV1 software encoders show up). Append the driver lib dir so
+      # obs and the nvenc probe it spawns can dlopen libnvidia-encode/libcuda.
+      (symlinkJoin {
+        name = "obs-studio-nvenc";
+        paths = [
+          (wrapOBS {
+            plugins = with obs-studio-plugins; [
+              obs-pipewire-audio-capture
+              obs-vkcapture
+            ];
+          })
         ];
+        nativeBuildInputs = [ makeWrapper ];
+        postBuild = ''
+          for b in obs obs-nvenc-test; do
+            if [ -e "$out/bin/$b" ]; then
+              wrapProgram "$out/bin/$b" \
+                --suffix LD_LIBRARY_PATH : /run/opengl-driver/lib
+            fi
+          done
+        '';
       })
       pavucontrol
       vim

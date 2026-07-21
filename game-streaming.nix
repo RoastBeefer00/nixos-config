@@ -124,11 +124,16 @@ in
           {
             # Couch-friendly Steam launcher: boots straight into Big Picture /
             # gamepad UI, navigable with a controller over Moonlight. Uses the
-            # same 1440p prep-cmd as the TV app. The steam:// URL opens Big
-            # Picture in the running Steam (or starts Steam into it), which
-            # sidesteps the single-instance conflict a gamescope wrapper hits
-            # when Steam is already running on the desktop. auto-detach = true
-            # keeps the stream alive after the launcher command returns.
+            # same 1440p prep-cmd as the TV app. cmd points at the
+            # SteamBigPicture wrapper (home.nix) rather than invoking steam
+            # directly: that wrapper picks `-bigpicture` vs steam://open on
+            # whether Steam is already running (the URL form silently no-ops
+            # into desktop mode on a cold start), then blocks until Steam
+            # actually exits. auto-detach = false ties the stream to that
+            # block, so quitting Steam is what reverts the resolution --
+            # relying on Moonlight-disconnect detection instead (auto-detach
+            # = true) was observed to sometimes never fire the undo command
+            # on longer sessions with a few reconnects.
             #
             # NOTE: for smooth UI, enable Steam > Settings > Interface >
             # "Enable GPU accelerated rendering in web views" (Linux forces it
@@ -137,10 +142,9 @@ in
             # If enabling that causes corruption on NVIDIA instead, swap the cmd
             # below for a gamescope-wrapped launch (like MoonDeckStream above):
             #   cmd = "${pkgs.gamescope}/bin/gamescope -W 2560 -H 1440 -f -- ${pkgs.steam}/bin/steam -gamepadui";
-            #   auto-detach = "false";
             name = "Steam Big Picture";
-            cmd = "${pkgs.steam}/bin/steam steam://open/bigpicture";
-            auto-detach = "true";
+            cmd = "/home/${cfg.user}/.local/bin/SteamBigPicture";
+            auto-detach = "false";
             prep-cmd = [
               {
                 do = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-2.mode.2560x1440@60";
