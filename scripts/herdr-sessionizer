@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# herdr-sessionizer — herdr equivalent of tmux-sessionizer.
+# tmux session  -> herdr workspace
+# session name  -> workspace label (dir basename, dots -> underscores)
+# $TMUX         -> $HERDR_PANE_ID (set inside a herdr pane)
+
+set -euo pipefail
+
+if [[ $# -eq 1 ]]; then
+    selected=$1
+else
+    selected=$(find -L ~/ ~/mcs ~/projects ~/.config ~/dss -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sk || true)
+fi
+
+[[ -z ${selected:-} ]] && exit 0
+
+selected_name=$(basename "$selected" | tr . _)
+
+# Ensure the herdr server is running (equivalent of tmux auto-starting a server).
+if ! herdr status server >/dev/null 2>&1; then
+    herdr server >/dev/null 2>&1 &
+    for _ in $(seq 1 50); do
+        herdr status server >/dev/null 2>&1 && break
+        sleep 0.1
+    done
+fi
+
+# Find an existing workspace with this label (herdr's `has-session` equivalent).
+workspace_id=$(herdr workspace list 2>/dev/null \
+    | jq -r --arg name "$selected_name" \
+        '.result.workspaces[] | select(.label == $name) | .workspace_id' \
+    | head -n1)
+
+# Create it if missing, with two tabs: vim (focused) and term.
+if [[ -z ${workspace_id:-} ]]; then
+    create_out=$(herdr workspace create --cwd "$selected" --label "$selected_name" --no-focus 2>/dev/null)
+    workspace_id=$(printf '%s' "$create_out" | jq -r '.result.workspace.workspace_id')
+    default_tab_id=$(printf '%s' "$create_out" | jq -r '.result.tab.tab_id')
+    default_pane_id=$(printf '%s' "$create_out" | jq -r '.result.root_pane.pane_id')
+
+    # Rename default tab to 'vim' and start nvim.
+    herdr tab rename "$default_tab_id" vim >/dev/null 2>&1 || true
+    herdr pane run "$default_pane_id" nvim . >/dev/null 2>&1 || true
+
+    # Create 'term' tab (no focus — vim stays active).
+    herdr tab create --workspace "$workspace_id" --cwd "$selected" --label term --no-focus >/dev/null 2>&1 || true
+fi
+
+# Focus the target workspace.
+herdr workspace focus "$workspace_id" >/dev/null 2>&1 || true
+
+# If we're not already inside a herdr pane, attach the client (like tmux new/attach).
+if [[ -z ${HERDR_PANE_ID:-} ]]; then
+    exec herdr
+fi

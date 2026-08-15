@@ -1,0 +1,86 @@
+# herdr configuration — modeled on ~/.config/nix-darwin/configs/tmux.conf
+# herdr is an AI-agent multiplexer, so only the terminal-multiplexer-style
+# bits of the tmux config translate (prefix, splits, vi pane navigation,
+# reload, zoom). tmux plugins / copy-mode / terminal-overrides have no
+# equivalent — herdr handles session persistence and mouse copy natively.
+
+[theme]
+name = "tokyo-night"
+
+[keys]
+# tmux: set -g prefix C-e
+prefix = "ctrl+e"
+
+# tmux: bind r source-file ~/.tmux.conf
+reload_config = "prefix+r"
+
+# tmux: bind | split-window -h  /  bind - split-window -v
+split_vertical = "prefix+|"
+split_horizontal = "prefix+minus"
+
+# tmux: set -wg mode-keys vi + bind -r h/j/k/l (vi pane navigation)
+focus_pane_left = "prefix+h"
+focus_pane_down = "prefix+j"
+focus_pane_up = "prefix+k"
+focus_pane_right = "prefix+l"
+
+# tmux: bind -r m resize-pane -Z (zoom/maximize)
+zoom = "prefix+m"
+
+# herdr enters an interactive resize mode (analogous to tmux resize-pane)
+resize_mode = "prefix+shift+r"
+
+close_pane = "prefix+x"
+
+# vim-herdr-navigation plugin (christoomey/vim-tmux-navigator port).
+# Direct ctrl+h/j/k/l chords: forward to Vim/Neovim when the focused pane runs
+# it, otherwise move herdr pane focus. Requires `herdr plugin link` of the
+# vendored plugin at configs/herdr/plugins/vim-herdr-navigation.
+[[keys.command]]
+key = "ctrl+h"
+type = "plugin_action"
+command = "vim-herdr-navigation.left"
+description = "navigate left (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+j"
+type = "plugin_action"
+command = "vim-herdr-navigation.down"
+description = "navigate down (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+k"
+type = "plugin_action"
+command = "vim-herdr-navigation.up"
+description = "navigate up (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+l"
+type = "plugin_action"
+command = "vim-herdr-navigation.right"
+description = "navigate right (vim/herdr)"
+
+# herdr-lazygit — lazygit in a split pane (you use `lg` constantly).
+# Requires `herdr plugin install Crokily/herdr-lazygit` (see post-switch steps).
+[[keys.command]]
+key = "prefix+ctrl+g"
+type = "plugin_action"
+command = "herdr-lazygit.open"
+description = "open lazygit in a split pane"
+
+# herdr-file-viewer — git-aware read-only file/diff viewer, great for reviewing
+# agent edits. Requires `herdr plugin install smarzban/herdr-file-viewer`.
+[[keys.command]]
+key = "prefix+f"
+type = "plugin_action"
+command = "herdr-file-viewer.open-file-viewer"
+description = "open git-aware file viewer in a split pane"
+
+[ui]
+# tmux: set -g mouse on
+mouse_capture = true
+copy_on_select = true
+
+[session]
+# tmux-resurrect / tmux-continuum equivalent: restore agent sessions on restart
+resume_agents_on_restore = true

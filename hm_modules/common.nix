@@ -16,6 +16,7 @@ in
     ./btop.nix
     ./fish.nix
     ./ghostty.nix
+    ./herdr.nix
     ./tmux.nix
     # Add other cross-platform modules here
   ];

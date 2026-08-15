@@ -111,6 +111,14 @@
       set fish_cursor_replace_one underscore
       set fish_cursor_visual block
 
+      # herdr freezes env into panes; ensure TUI agents (grok, claude, …) get color.
+      if not set -q TERM; or test -z "$TERM"
+          set -gx TERM xterm-256color
+      end
+      set -gx COLORTERM truecolor
+      set -e NO_COLOR
+      set -e CLICOLOR
+
       # Source external configurations if they exist
       if test -e "$WASMER_DIR/wasmer.fish"
           source "$WASMER_DIR/wasmer.fish"
@@ -125,8 +133,10 @@
       end
     '';
     interactiveShellInit = ''
-      bind -M insert \cf '$HOME/.local/scripts/tmux-sessionizer'
-      bind -M normal \cf '$HOME/.local/scripts/tmux-sessionizer'
+      bind -M insert \cf '$HOME/.local/scripts/tmux-sessionizer; commandline -f repaint'
+      bind -M normal \cf '$HOME/.local/scripts/tmux-sessionizer; commandline -f repaint'
+      bind -M insert \cg '$HOME/.local/scripts/herdr-sessionizer; commandline -f repaint'
+      bind -M normal \cg '$HOME/.local/scripts/herdr-sessionizer; commandline -f repaint'
       # Initialize external tools
       atuin init fish --disable-up-arrow | source
       starship init fish | source
