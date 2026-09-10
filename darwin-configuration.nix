@@ -13,6 +13,7 @@ in
 
   # System packages (available to all users)
   environment.systemPackages = with pkgs; [
+    caffeine
     cocoapods
     discord
     ghostty-bin
@@ -54,7 +55,7 @@ in
   };
 
   nix.gc.interval.Day = 7;
-  nix.optimise.interval = [{ Day = 7; }];
+  nix.optimise.interval = [ { Day = 7; } ];
   nix.settings.trusted-users = [ "@admin" ];
 
   system.primaryUser = vars.username;
