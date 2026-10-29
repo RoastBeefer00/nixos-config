@@ -29,6 +29,7 @@
     lazygit
     lsfg-vk-ui
     mako
+    mangohud
     ripgrep
     runelite
     rofi
@@ -36,6 +37,7 @@
     skim
     swaybg
     protonup-qt
+    vlc
     wezterm
     # pkgs.wl-clipboard
     # pkgs.yazi
@@ -46,9 +48,12 @@
     enable = true;
 
     package = {
-      version = "1.9.2";
-      hash = "sha256-GhZlmdI+oa5BjEzr9bkR2sY/nVpd1nuJlT2hYYv6zGU=";
+      version = "1.10.0";
+      hash = "sha256-kuU6bE/I3oyLUq2qFvMOzrqu5DceqxDDwP34iTLpIgI=";
     };
+
+    glazeVersion = "7.7.1";
+    glazeHash = "sha256-CfN2mv1s+yv2HvRLBZhHUHBNfsgRzTT7USNYkkahh8M=";
 
     # GUI service follows graphical-session.target (recommended).
     guiSession = true;
@@ -88,17 +93,20 @@
       # bug -- remove once resolved.
       log() { echo "$(date +%T.%N) $*" >> /tmp/steam-bp-debug.log; }
       log "start pid=$$ ppid=$PPID PATH=$PATH HOME=$HOME"
+      log "id: $(${pkgs.coreutils}/bin/id)"
+      log "capsh: $(${pkgs.libcap}/bin/capsh --print 2>&1 | ${pkgs.coreutils}/bin/tr '\n' ';')"
+      log "AT_SECURE/proc-status: $(grep -iE '^(NoNewPrivs|Seccomp|CapPrm|CapEff)' /proc/self/status | ${pkgs.coreutils}/bin/tr '\n' ';')"
 
       if ${pkgs.procps}/bin/pgrep -x steam >/dev/null 2>&1; then
         log "steam already running: $(${pkgs.procps}/bin/pgrep -x steam)"
-        ${pkgs.steam}/bin/steam steam://open/bigpicture
+        ${pkgs.steam}/bin/steam steam://open/bigpicture > /tmp/steam-bp-stdout.log 2> /tmp/steam-bp-stderr.log
         rc=$?
-        log "steam steam://open/bigpicture returned $rc"
+        log "steam steam://open/bigpicture returned $rc; stdout=$(${pkgs.coreutils}/bin/cat /tmp/steam-bp-stdout.log); stderr=$(${pkgs.coreutils}/bin/cat /tmp/steam-bp-stderr.log)"
       else
         log "steam not running, launching -bigpicture"
-        ${pkgs.steam}/bin/steam -bigpicture
+        ${pkgs.steam}/bin/steam -bigpicture > /tmp/steam-bp-stdout.log 2> /tmp/steam-bp-stderr.log
         rc=$?
-        log "steam -bigpicture returned $rc"
+        log "steam -bigpicture returned $rc; stdout=$(${pkgs.coreutils}/bin/cat /tmp/steam-bp-stdout.log); stderr=$(${pkgs.coreutils}/bin/cat /tmp/steam-bp-stderr.log)"
 
         # Cold start: steam's own launcher forks the real client and returns
         # almost instantly, well before that process registers -- racing

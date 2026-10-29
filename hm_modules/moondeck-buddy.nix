@@ -14,6 +14,17 @@ let
   cfg = config.services.moondeckBuddy;
 
   # ── Package ────────────────────────────────────────────────────────────────
+  # src/lib/json/CMakeLists.txt pulls in glaze via CMake FetchContent, which
+  # needs network access unavailable in the Nix build sandbox. Pre-fetch the
+  # pinned tag ourselves and point FETCHCONTENT_SOURCE_DIR_GLAZE at it so
+  # CMake uses that copy instead of trying to clone it.
+  glazeSrc = pkgs.fetchFromGitHub {
+    owner = "stephenberry";
+    repo = "glaze";
+    rev = "v${cfg.glazeVersion}";
+    hash = cfg.glazeHash;
+  };
+
   defaultPackage = pkgs.stdenv.mkDerivation {
     pname = "moondeck-buddy";
     version = cfg.package.version;
@@ -41,7 +52,10 @@ let
       procps # provides libproc2
     ];
 
-    cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
+    cmakeFlags = [
+      "-DCMAKE_BUILD_TYPE=Release"
+      "-DFETCHCONTENT_SOURCE_DIR_GLAZE=${glazeSrc}"
+    ];
 
     meta = with lib; {
       description = "Server-side companion for the MoonDeck plugin on SteamDeck";
@@ -109,6 +123,22 @@ in
         default = null;
         description = "Override with a custom derivation. version and hash are ignored when set.";
       };
+    };
+
+    glazeVersion = lib.mkOption {
+      type = lib.types.str;
+      default = "7.7.1";
+      description = "glaze release tag pinned by src/lib/json/CMakeLists.txt's FetchContent_Declare.";
+    };
+
+    glazeHash = lib.mkOption {
+      type = lib.types.str;
+      default = lib.fakeHash;
+      description = ''
+        Hash of the glaze source tarball. Get with:
+          nix-prefetch-url --unpack \
+            https://github.com/stephenberry/glaze/archive/refs/tags/v<VERSION>.tar.gz
+      '';
     };
 
     guiSession = lib.mkOption {

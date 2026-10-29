@@ -35,6 +35,13 @@ in
     # 2560x1440 doesn't appear in `kscreen-doctor -o` after reboot, this override
     # isn't being honored -- fall back to a 1440p dummy plug.
     "drm.edid_firmware=DP-2:edid/lg-dp2.bin"
+    # Force DP-2 to stay "connected" even when the monitor is powered off, so
+    # the compositor keeps a live output (using the EDID above) for Sunshine to
+    # capture headlessly. The EDID override is confirmed honored on this
+    # driver; whether the force flag is too is untested -- after reboot, power
+    # the monitor off and check `kscreen-doctor -o` still lists DP-2. If not,
+    # use a DP dummy plug.
+    "video=DP-2:e"
   ];
 
   networking.hostName = "nixos"; # Define your hostname.
@@ -46,6 +53,13 @@ in
 
   # Enable networking
   networking.networkmanager.enable = true;
+
+  # Wake-on-LAN on the wired NIC, so the box can be woken remotely instead of
+  # staying powered on 24/7. Also needs "Wake on LAN" (sometimes "Power On By
+  # PCI-E/PCIE") enabled in the motherboard's BIOS/UEFI -- this setting alone
+  # only re-arms it on every boot, it can't turn it on from a fully powered
+  # off state if the firmware itself has it disabled.
+  networking.interfaces.enp34s0.wakeOnLan.enable = true;
 
   # Set your time zone.
   time.timeZone = "America/Denver";
@@ -81,6 +95,23 @@ in
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
+
+  # Auto-login straight into the Plasma Wayland session ("plasma" is the
+  # Wayland session id registered by plasma-workspace; "plasmax11" is X11).
+  services.displayManager.defaultSession = "plasma";
+  services.displayManager.autoLogin = {
+    enable = true;
+    user = vars.username;
+  };
+
+  # Never sleep/suspend/hibernate -- this is a streaming host that needs to
+  # stay reachable. Masking the targets makes systemctl suspend/hibernate (and
+  # anything that calls into them, including Plasma's own power management) a
+  # no-op, regardless of idle timers or lid/power-button handling.
+  systemd.targets.sleep.enable = false;
+  systemd.targets.suspend.enable = false;
+  systemd.targets.hibernate.enable = false;
+  systemd.targets.hybrid-sleep.enable = false;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -119,10 +150,15 @@ in
   hardware.enableRedistributableFirmware = true;
 
   # Custom merged EDID for DP-2. The stock LG UltraGear EDID only offers
-  # 3440x1440 (native, incl. 144Hz) and 1920x1080. This adds a single
-  # 2560x1440@60 detailed timing, injected into unused CTA-861 space so the
-  # native 144Hz/FreeSync/HDR data is left byte-for-byte untouched. Loaded via
-  # the drm.edid_firmware kernel param above; enables 16:9 1440p TV streaming.
+  # 3440x1440 (native, incl. 144Hz) and 1920x1080. This adds extra detailed
+  # timings (CVT-RB) injected into unused CTA-861 space so the native
+  # 144Hz/FreeSync/HDR data is left byte-for-byte untouched:
+  #   - 2560x1440@60 (actually 59.95) for 16:9 1440p TV streaming.
+  #   - 1280x800@90 (actually 89.82) so MoonDeckStream can run the Steam
+  #     Deck OLED's max refresh rate instead of being stuck at 60.
+  # 1280x800@60 itself needs no custom timing -- it's already a standard DMT
+  # timing in the base EDID -- but there's no stock 90Hz equivalent.
+  # Loaded via the drm.edid_firmware kernel param above.
   hardware.firmware = [
     (pkgs.runCommand "edid-dp2-1440p" { } ''
       mkdir -p "$out/lib/firmware/edid"
@@ -166,6 +202,9 @@ in
   gaming.streaming = {
     enable = true;
     user = vars.username;
+    # Stream from a KWin virtual display sized per client, monitor off. To
+    # revert to switching the physical monitor's resolution, set false.
+    headless.enable = true;
     sunshine = {
       package = pkgs.sunshine.override {
         cudaSupport = true;
@@ -173,6 +212,71 @@ in
       settings = {
         encoder = "nvenc";
       };
+    };
+  };
+
+  # ── RustDesk (unattended remote desktop) ────────────────────────────────────
+  # Runs as root, same model as the official .deb/.rpm install: is_installed()
+  # recognizes /nix/store paths, so --service/--password/--get-id all work.
+  # The root service scans /proc for the logged-in user's session to borrow
+  # its DBUS_SESSION_BUS_ADDRESS/XDG_RUNTIME_DIR, then captures video via the
+  # xdg-desktop-portal ScreenCast+PipeWire path (KWin supports this, unlike
+  # the raw wlr-screencopy protocol dropped for OBS above) and injects input
+  # via uinput (already enabled in game-streaming.nix). No inbound firewall
+  # ports needed -- it connects outbound to RustDesk's public relay servers.
+  #
+  # NOTE: the very first ScreenCast request on Plasma Wayland may pop up an
+  # in-person "Share your screen?" consent dialog; KWin persists that choice
+  # afterward so it shouldn't prompt again. If that first-approval step turns
+  # out to be a blocker, "plasmax11" has no such portal/consent step.
+  #
+  # After rebuilding, set the unattended password once (not stored in nix):
+  #   sudo rustdesk --password 'yourpassword'
+  #   rustdesk --get-id
+  systemd.services.rustdesk = {
+    description = "RustDesk remote desktop (unattended service)";
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
+    # The service launches its per-user --server via `sudo`, which on NixOS is
+    # the setuid wrapper in /run/wrappers/bin -- not in a unit's default PATH.
+    path = [
+      "/run/wrappers"
+      pkgs.procps
+    ];
+    # Wayland capture builds a GStreamer pipeline (pipewiresrc ! videoconvert !
+    # appsink). nixpkgs' wrapper only exposes gstreamer core + base, so
+    # pipewiresrc (shipped by pipewire) is missing -> "no GStreamer". The
+    # per-user --server is the unwrapped binary spawned via `sudo -E`, so it
+    # inherits this from the service environment.
+    environment.GST_PLUGIN_SYSTEM_PATH_1_0 = pkgs.lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
+      pkgs.gst_all_1.gstreamer
+      pkgs.gst_all_1.gst-plugins-base
+      pkgs.pipewire
+    ];
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = "${pkgs.rustdesk}/bin/rustdesk --service";
+      ExecStop = "${pkgs.rustdesk}/bin/rustdesk --stop-service";
+      # Accept sessions via the permanent password only -- the default asks
+      # for an in-person click on the PC every time, which defeats unattended
+      # access. --option talks to the running service over IPC, so retry until
+      # it is up. The leading "-" means a failure here never fails the unit.
+      ExecStartPost = "-${pkgs.writeShellScript "rustdesk-unattended-options" ''
+        rd=${pkgs.rustdesk}/bin/rustdesk
+        # --option set never reports failure, so verify by reading it back.
+        for _ in $(seq 1 30); do
+          sleep 2
+          $rd --option approve-mode password >/dev/null 2>&1
+          $rd --option verification-method use-permanent-password >/dev/null 2>&1
+          if [ "$($rd --option approve-mode 2>/dev/null)" = password ] \
+            && [ "$($rd --option verification-method 2>/dev/null)" = use-permanent-password ]; then
+            exit 0
+          fi
+        done
+        exit 1
+      ''}";
+      Restart = "on-failure";
+      RestartSec = "5s";
     };
   };
 
@@ -187,6 +291,7 @@ in
       devenv
       discord
       gammastep
+      rustdesk
       gcc
       google-chrome
       lsfg-vk
