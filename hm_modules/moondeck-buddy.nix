@@ -104,7 +104,7 @@ in
     package = {
       version = lib.mkOption {
         type = lib.types.str;
-        default = "1.9.2";
+        default = "1.11.0";
         description = "MoonDeck Buddy release tag to build from source.";
       };
 

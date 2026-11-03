@@ -293,7 +293,13 @@ in
       gammastep
       rustdesk
       gcc
-      google-chrome
+      (google-chrome.override {
+        commandLineArgs = [
+          "--ozone-platform=wayland"
+          "--enable-features=WaylandWindowDecorations"
+          "--password-store=basic"
+        ];
+      })
       lsfg-vk
       nerd-fonts.fira-code
       meson

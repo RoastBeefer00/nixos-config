@@ -48,8 +48,8 @@
     enable = true;
 
     package = {
-      version = "1.10.0";
-      hash = "sha256-kuU6bE/I3oyLUq2qFvMOzrqu5DceqxDDwP34iTLpIgI=";
+      version = "1.11.0";
+      hash = "sha256-/zS1Rl8slZndQaEK8TN/rBg9STsMjsUIzS9ci72cBCk=";
     };
 
     glazeVersion = "7.7.1";
