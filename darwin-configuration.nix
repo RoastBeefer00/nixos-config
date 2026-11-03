@@ -54,6 +54,11 @@ in
     screencapture.location = "~/Pictures/screenshots";
   };
 
+  security.pam.services.sudo_local = {
+    touchIdAuth = true;
+    reattach = true; # pam-reattach, so Touch ID works inside tmux/herdr
+  };
+
   nix.gc.interval.Day = 7;
   nix.optimise.interval = [ { Day = 7; } ];
   nix.settings.trusted-users = [ "@admin" ];

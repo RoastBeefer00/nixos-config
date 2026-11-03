@@ -10,6 +10,17 @@
 let
   rtk = pkgs.callPackage ./rtk.nix { };
   vars = import ../vars.nix;
+
+  # Plugin hooks (e.g. ponytail) shell out to node; expose it only to claude.
+  # Suffix so a project's own node (devenv) still wins.
+  claude-code = pkgs.symlinkJoin {
+    name = "claude-code-wrapped";
+    paths = [ pkgs.claude-code ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      wrapProgram $out/bin/claude --suffix PATH : ${lib.makeBinPath [ pkgs.nodejs ]}
+    '';
+  };
 in
 {
   imports = [
@@ -26,7 +37,6 @@ in
     (with pkgs; [
       # Add other cross-platform packages
       bat
-      claude-code
       devenv
       fastfetch
       fd
@@ -38,7 +48,10 @@ in
       ripgrep
       skim
     ])
-    ++ [ rtk ];
+    ++ [
+      claude-code
+      rtk
+    ];
 
   home.file = {
     ".local/scripts/tmux-sessionizer" = {

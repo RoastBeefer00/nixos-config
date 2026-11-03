@@ -124,6 +124,7 @@ in
       "networkmanager"
       "wheel"
       "docker"
+      "dialout" # /dev/ttyACM* for m1n1 proxy (Gravity tethered boot)
     ];
     packages = with pkgs; [ ];
   };
@@ -280,6 +281,11 @@ in
   services.openssh = {
     enable = true;
     settings.PasswordAuthentication = true;
+  };
+
+  services.ollama = {
+    enable = true;
+    package = pkgs.ollama-cuda;
   };
 
   # Open ports in the firewall.
