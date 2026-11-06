@@ -69,6 +69,19 @@ in
     fi
   '';
 
+  # Tell Claude Code to get tools from Nix. Appended, not linked, because rtk also edits this file.
+  home.activation.claudeNixRule = lib.hm.dag.entryAfter [ "rtkInit" ] ''
+    rules="$HOME/.claude/CLAUDE.md"
+    if [ ! -f "$rules" ] || ! ${pkgs.gnugrep}/bin/grep -qxF '# Packages' "$rules"; then
+      run mkdir -p "$HOME/.claude"
+      run ${pkgs.bash}/bin/bash -c 'printf "%s\n" "$1" >> "$2"' _ ${lib.escapeShellArg ''
+
+        # Packages
+
+        If `nix` is on the system and a task needs a tool that isn't installed, get it from Nix instead of building it, downloading a binary, or using another package manager. Use `nix shell nixpkgs#<pkg>` for one-off use, including versioned attributes such as `wasm-bindgen-cli_0_2_118`. If the project has a devenv or flake, use its environment first, and add the tool there when the project needs it long term. Only fall back to other sources when nixpkgs doesn't have what's needed, and say so.''} "$rules"
+    fi
+  '';
+
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
