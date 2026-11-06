@@ -1,5 +1,5 @@
 # Hyprland on the Air, with its own Lua config (the classic .conf format is on its way out).
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 let
   # Centres the Wi-Fi menu under the click. networkmanager_dmenu picks its password flags by this file's name, so it must be "rofi".
   wifiRofi = pkgs.writeShellScriptBin "rofi" ''
@@ -13,20 +13,34 @@ let
   '';
 in
 {
-  imports = [ ../hm_modules/rofi.nix ./swaync.nix ./waybar.nix ];
+  imports = [ ../hm_modules/rofi.nix ./swaync.nix ./theme.nix ./waybar.nix ];
 
   home.packages = with pkgs; [
+    bluetui
     brightnessctl
+    cliphist
     (google-chrome.override { commandLineArgs = "--ozone-platform-hint=auto"; })
     hypridle
+    hyprpolkitagent
     hyprshot
     networkmanager_dmenu
     pamixer
     rofi
     rofi-power-menu
+    satty
     swaybg
+    swayosd
+    wiremix
     wl-clipboard
+    yazi
   ];
+
+  # Translucent so the blur behind the menus shows.
+  home.file.".local/share/rofi/themes/catppuccin-mocha.rasi".text = lib.mkForce (
+    builtins.replaceStrings [ "bg-col:  #1e1e2e;" ] [ "bg-col:  #1e1e2ed9;" ] (builtins.readFile ../rofi/catppuccin-mocha.rasi)
+  );
+
+  xdg.configFile."swayosd/style.css".source = ./swayosd.css;
 
   # The Wi-Fi menu that drops down from the bar's network pill.
   xdg.configFile."networkmanager-dmenu/config.ini".text = ''
@@ -45,6 +59,29 @@ in
     general {
       lock_cmd = pidof hyprlock || hyprlock
       before_sleep_cmd = loginctl lock-session
+    }
+
+    # Dim the screen and turn off the keyboard after 2 minutes, without going below 5% brightness.
+    listener {
+      timeout = 120
+      on-timeout = brightnessctl -s -n25 set 20%-
+      on-resume = brightnessctl -r
+    }
+    listener {
+      timeout = 120
+      on-timeout = brightnessctl -d kbd_backlight -s set 0
+      on-resume = brightnessctl -d kbd_backlight -r
+    }
+
+    listener {
+      timeout = 300
+      on-timeout = hyprctl dispatch 'hl.dsp.dpms({ action = "disable" })'
+      on-resume = hyprctl dispatch 'hl.dsp.dpms({ action = "enable" })'
+    }
+
+    listener {
+      timeout = 600
+      on-timeout = loginctl lock-session
     }
   '';
   xdg.configFile."hypr/hyprlock.conf".source = ./hyprlock.conf;

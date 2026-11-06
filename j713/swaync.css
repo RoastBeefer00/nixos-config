@@ -1,9 +1,9 @@
 /* Catppuccin Mocha, matching the bar. */
 :root {
-  --cc-bg: rgba(30, 30, 46, 0.96);
+  --cc-bg: rgba(30, 30, 46, 0.82);
   --noti-border-color: #45475a;
   --noti-bg: 30, 30, 46;
-  --noti-bg-alpha: 0.97;
+  --noti-bg-alpha: 0.88;
   --noti-bg-darker: #181825;
   --noti-bg-hover: #313244;
   --noti-bg-focus: rgba(69, 71, 90, 0.6);

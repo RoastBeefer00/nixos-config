@@ -14,6 +14,8 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     tree-sitter-rstml.url = "github:rayliwell/tree-sitter-rstml/flake";
     aurora.url = "github:aurora-silicon/nixos-aurora";
+    nix-index-database.url = "github:nix-community/nix-index-database";
+    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -57,6 +59,7 @@
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "backup";
               home-manager.users.${vars.username} = import ./home.nix;
+              home-manager.sharedModules = [ inputs.nix-index-database.homeModules.nix-index ];
               home-manager.extraSpecialArgs = {
                 inherit niri;
                 isNixOS = true;
@@ -86,6 +89,7 @@
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "backup";
               home-manager.users.${vars.username} = import ./j713/home.nix;
+              home-manager.sharedModules = [ inputs.nix-index-database.homeModules.nix-index ];
               home-manager.extraSpecialArgs = {
                 inherit tree-sitter-rstml;
                 isNixOS = true;
@@ -112,6 +116,7 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.users.${vars.username} = import ./home-darwin.nix;
+              home-manager.sharedModules = [ inputs.nix-index-database.homeModules.nix-index ];
               home-manager.extraSpecialArgs = {
                 inherit tree-sitter-rstml;
                 isNixOS = false;

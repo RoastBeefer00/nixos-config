@@ -38,6 +38,7 @@ in
       # Add other cross-platform packages
       bat
       devenv
+      dust
       fastfetch
       fd
       flutter_rust_bridge_codegen
@@ -90,6 +91,18 @@ in
         hide_env_diff = true;
       };
     };
+  };
+
+  # `, sometool` runs anything in nixpkgs, using a prebuilt index.
+  programs.nix-index.enable = true;
+  programs.nix-index-database.comma.enable = true;
+
+  programs.zoxide.enable = true;
+
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
+    options.navigate = true;
   };
 
   # Shared git config, etc.

@@ -9,9 +9,9 @@
   '';
 
   # This machine's rebuild.
-  programs.fish.shellAbbrs.rebuild = lib.mkForce "sudo nixos-rebuild switch --flake $HOME/projects/nixos-config#j713";
+  programs.fish.shellAbbrs.rebuild = lib.mkForce "nh os switch $HOME/projects/nixos-config -H j713";
 
-  home.packages = with pkgs; [ btop eza htop lazygit ];
+  home.packages = with pkgs; [ btop eza htop lazygit nh ];
 
   home.username = (import ../vars.nix).username;
   home.homeDirectory = (import ../vars.nix).linuxHome;

@@ -3,10 +3,16 @@
 -- 2560x1664 panel at 4/3 (1920x1248 logical). The top 64 rows (48 logical pixels) are the notch strip, which Waybar owns.
 hl.monitor({ output = "eDP-1", mode = "2560x1664@60", position = "0x0", scale = 1.333333 })
 
+hl.env("XCURSOR_THEME", "catppuccin-mocha-mauve-cursors")
+hl.env("XCURSOR_SIZE", "24")
+
 hl.on("hyprland.start", function()
+  hl.exec_cmd("systemctl --user start hyprpolkitagent")
   hl.exec_cmd("waybar")
   hl.exec_cmd("swaync")
+  hl.exec_cmd("swayosd-server")
   hl.exec_cmd("hypridle")
+  hl.exec_cmd("wl-paste --watch cliphist store")
   hl.exec_cmd("swaybg -m fill -i ~/Pictures/clearnight.jpg")
 end)
 
@@ -34,6 +40,7 @@ hl.config({
   },
   decoration = {
     rounding = 10,
+    blur = { enabled = true, size = 6, passes = 2 },
     shadow = {
       enabled = true,
       range = 4,
@@ -60,6 +67,14 @@ for _, class in ipairs({ "^(onboard)$", "^(.*.exe)$", "^(steam_app_.*)$", "^(ste
   hl.window_rule({ match = { class = class }, float = true })
 end
 
+-- The bar's Bluetooth and audio menus.
+hl.window_rule({ match = { class = "^(com.j713.popup)$" }, float = true, center = true, size = { 900, 600 } })
+
+-- Blur only behind the menus: windows are opaque and the wallpaper needn't be redrawn for them.
+for _, namespace in ipairs({ "rofi", "swaync-control-center", "swaync-notification-window" }) do
+  hl.layer_rule({ match = { namespace = namespace }, blur = true, ignore_alpha = 0.3 })
+end
+
 local mainMod = "ALT"
 local function bind(keys, dispatcher, opts)
   hl.bind(mainMod .. " + " .. keys, dispatcher, opts)
@@ -69,7 +84,8 @@ bind("Q", hl.dsp.window.close())
 bind("SHIFT + F", hl.dsp.window.fullscreen({ mode = "fullscreen" }))
 bind("M", hl.dsp.window.fullscreen({ mode = "maximized" }))
 bind("SHIFT + Q", hl.dsp.exit())
-bind("T", hl.dsp.exec_cmd("dolphin"))
+bind("T", hl.dsp.exec_cmd("ghostty -e yazi"))
+bind("C", hl.dsp.exec_cmd("cliphist list | rofi -dmenu -p Clipboard | cliphist decode | wl-copy"))
 bind("F", hl.dsp.exec_cmd("google-chrome-stable"))
 bind("V", hl.dsp.window.float({ action = "toggle" }))
 bind("Space", hl.dsp.exec_cmd("rofi -show drun"))
@@ -82,6 +98,7 @@ bind("comma", hl.dsp.layout("move -col"))
 bind("Return", hl.dsp.exec_cmd("ghostty"))
 bind("S", hl.dsp.exec_cmd("rofi -show power-menu -modi power-menu:rofi-power-menu"))
 bind("P", hl.dsp.exec_cmd("hyprshot -m region --clipboard-only"))
+bind("SHIFT + P", hl.dsp.exec_cmd("hyprshot -m region --raw | satty --filename - --early-exit --copy-command wl-copy"))
 
 for _, d in ipairs({
   { "left", "H", "left" }, { "right", "L", "right" }, { "up", "K", "up" }, { "down", "J", "down" },
@@ -107,10 +124,10 @@ bind("SHIFT + left", hl.dsp.window.resize({ x = -40, y = 0, relative = true }))
 bind("SHIFT + up", hl.dsp.window.resize({ x = 0, y = -40, relative = true }))
 bind("SHIFT + down", hl.dsp.window.resize({ x = 0, y = 40, relative = true }))
 
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"), { locked = true, repeating = true })
-hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), { locked = true })
-hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl set 5%+"), { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl set 5%-"), { locked = true, repeating = true })
-bind("equal", hl.dsp.exec_cmd("brightnessctl -d kbd_backlight set 10%+"), { locked = true, repeating = true })
-bind("minus", hl.dsp.exec_cmd("brightnessctl -d kbd_backlight set 10%-"), { locked = true, repeating = true })
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("swayosd-client --output-volume +5 --max-volume 100"), { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("swayosd-client --output-volume -5"), { locked = true, repeating = true })
+hl.bind("XF86AudioMute", hl.dsp.exec_cmd("swayosd-client --output-volume mute-toggle"), { locked = true })
+hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("swayosd-client --device apple-panel-bl --brightness +5"), { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("swayosd-client --device apple-panel-bl --brightness -5"), { locked = true, repeating = true })
+bind("equal", hl.dsp.exec_cmd("swayosd-client --device kbd_backlight --brightness +10"), { locked = true, repeating = true })
+bind("minus", hl.dsp.exec_cmd("swayosd-client --device kbd_backlight --brightness -10"), { locked = true, repeating = true })

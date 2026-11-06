@@ -110,6 +110,7 @@ in
           tooltip-format = "{status}";
           tooltip-format-connected = "{device_enumerate}";
           tooltip-format-enumerate-connected = "{device_alias}";
+          on-click = "ghostty --class=com.j713.popup -e bluetui";
         };
         network = {
           interval = 3;
@@ -136,6 +137,7 @@ in
           scroll-step = 5;
           max-volume = 100;
           on-click = "pamixer -t";
+          on-click-right = "ghostty --class=com.j713.popup -e wiremix";
           tooltip-format = "{desc}";
         };
         battery = {

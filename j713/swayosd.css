@@ -1,0 +1,25 @@
+/* Catppuccin Mocha, matching the bar. */
+window#osd {
+  background: rgba(30, 30, 46, 0.9);
+  border: 1px solid #45475a;
+  border-radius: 14px;
+}
+
+window#osd #container {
+  margin: 14px;
+}
+
+window#osd image,
+window#osd label {
+  color: #cdd6f4;
+}
+
+window#osd progressbar trough {
+  background: #45475a;
+  border-radius: 999px;
+}
+
+window#osd progressbar progress {
+  background: #cba6f7;
+  border-radius: 999px;
+}

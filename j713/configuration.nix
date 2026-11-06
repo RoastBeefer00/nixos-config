@@ -77,6 +77,7 @@ in
     hashedPasswordFile = "/var/lib/j713/user-password.hash";   # root-only, not in the store
   };
   programs.fish.enable = true;
+  zramSwap.enable = true;
   # This kernel has no J713 Touch ID yet, so asking fprintd only stalls the password prompt until it times out.
   security.pam.services.sudo.fprintAuth = lib.mkForce false;
   security.pam.services.polkit-1.fprintAuth = lib.mkForce false;
