@@ -1,0 +1,25 @@
+id = "herdr-space-numbers"
+name = "Herdr Space Numbers"
+version = "0.1.0"
+min_herdr_version = "0.9.5"
+description = "Keeps each space's number in its $num sidebar token"
+platforms = ["linux", "macos"]
+
+[[startup]]
+command = ["bash", "number.sh"]
+
+[[events]]
+on = "workspace.created"
+command = ["bash", "number.sh"]
+
+[[events]]
+on = "workspace.closed"
+command = ["bash", "number.sh"]
+
+[[events]]
+on = "workspace.moved"
+command = ["bash", "number.sh"]
+
+[[events]]
+on = "workspace.reordered"
+command = ["bash", "number.sh"]

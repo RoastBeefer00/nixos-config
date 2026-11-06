@@ -4,6 +4,13 @@
 # reload, zoom). tmux plugins / copy-mode / terminal-overrides have no
 # equivalent — herdr handles session persistence and mouse copy natively.
 
+# The first-run screen saves its answer here, which it can't do in the Nix store, so it would never go away.
+onboarding = false
+
+[update]
+# Nix installs herdr, so don't offer to update it.
+version_check = false
+
 [theme]
 name = "tokyo-night"
 
@@ -82,6 +89,10 @@ mouse_capture = true
 copy_on_select = true
 # Shown by the window manager and Waybar. Follows the active space.
 window_title = "{workspace}"
+
+[ui.sidebar.spaces]
+# $num comes from the herdr-space-numbers plugin.
+rows = [["state_icon", "$num", "workspace"], ["branch", "git_status"]]
 
 [session]
 # tmux-resurrect / tmux-continuum equivalent: restore agent sessions on restart

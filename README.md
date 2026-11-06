@@ -8,6 +8,7 @@ be wired up purely through Nix. Run these once after `darwin-rebuild switch` / `
 ```bash
 # Register the vendored plugin (symlinked into ~/.config/herdr/plugins/ by home-manager)
 herdr plugin link ~/.config/herdr/plugins/vim-herdr-navigation
+herdr plugin link ~/.config/herdr/plugins/herdr-space-numbers
 
 # Plugins with a build step (cannot live in the read-only Nix store)
 herdr plugin install Crokily/herdr-lazygit        # lazygit split pane (prefix+ctrl+g)

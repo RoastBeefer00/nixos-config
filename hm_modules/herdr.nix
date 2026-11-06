@@ -13,6 +13,7 @@ in
   home.file = {
     ".config/herdr/config.toml".source = ../herdr/config.toml;
     ".config/herdr/plugins/vim-herdr-navigation".source = ../herdr/plugins/vim-herdr-navigation;
+    ".config/herdr/plugins/herdr-space-numbers".source = ../herdr/plugins/herdr-space-numbers;
     ".local/scripts/herdr-sessionizer" = {
       source = ../scripts/herdr-sessionizer;
       executable = true;
