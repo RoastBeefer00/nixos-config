@@ -78,7 +78,6 @@ in
     hashedPasswordFile = "/var/lib/j713/user-password.hash";   # root-only, not in the store
   };
   programs.fish.enable = true;
-  security.sudo.wheelNeedsPassword = false;   # bring-up convenience: I drive this machine over SSH with a key
 
   services.displayManager.autoLogin = { enable = true; user = vars.username; };
   services.displayManager.defaultSession = "hyprland";   # Plasma stays installed as the fallback session
