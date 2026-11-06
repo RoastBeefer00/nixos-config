@@ -5,6 +5,10 @@ let
     export PATH=${pkgs.coreutils}/bin:${pkgs.gawk}/bin
     ${builtins.readFile ./waybar-power.sh}
   '';
+  weather = pkgs.writeShellScript "waybar-weather" ''
+    export PATH=${pkgs.coreutils}/bin:${pkgs.curl}/bin
+    ${builtins.readFile ./waybar-weather.sh}
+  '';
   # One coloured bar per CPU core, quiet at idle and hot under load.
   coreBars = map (b: "<span color='${b.color}'>${b.bar}</span>") [
     { bar = "▁"; color = "#31748f"; }
@@ -56,7 +60,7 @@ in
         };
         "hyprland/window" = {
           format = "{title}";
-          max-length = 16;
+          max-length = 32;
           separate-outputs = true;
           icon = false;
         };
@@ -142,13 +146,13 @@ in
           format = "󱐋 {}";
         };
         "custom/weather" = {
-          exec = "weather";
+          exec = "${weather}";
+          return-type = "json";
           interval = 900;
-          tooltip = false;
         };
         clock = {
           interval = 1;
-          format = "{:%a %d  %I:%M %p}";
+          format = "{:%a %b %d  %I:%M %p}";
           tooltip-format = "<tt>{calendar}</tt>";
           calendar = {
             mode = "month";

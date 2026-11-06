@@ -1,6 +1,6 @@
 # M4 MacBook Air (J713). Hardware stack from github:aurora-silicon/nixos-aurora: aura, U-Boot, kernel, Mesa.
 # Stage 1 lives in the macOS stub and is never touched from here. Each rebuild refreshes m1n1/boot.bin on the ESP.
-{ config, lib, pkgs, waybar-weather, ... }:
+{ config, lib, pkgs, ... }:
 let
   vars = import ../vars.nix;
 in
@@ -86,5 +86,5 @@ in
 
   networking.firewall.enable = false;   # bring-up
   documentation.nixos.enable = false;
-  environment.systemPackages = [ pkgs.kdePackages.konsole pkgs.kdePackages.dolphin waybar-weather.packages.${pkgs.stdenv.hostPlatform.system}.default ];
+  environment.systemPackages = [ pkgs.kdePackages.konsole pkgs.kdePackages.dolphin ];
 }
