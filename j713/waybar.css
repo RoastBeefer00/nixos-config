@@ -1,4 +1,4 @@
-/* Rose Pine on true black, so the strip and the notch read as one piece of glass. */
+/* Rose Pine pills floating over the wallpaper. */
 @define-color base #191724;
 @define-color surface #1f1d2e;
 @define-color overlay #26233a;
@@ -22,7 +22,7 @@
 }
 
 window#waybar {
-  background: #000000;
+  background: transparent;
   color: @text;
 }
 
@@ -61,7 +61,7 @@ tooltip label {
   background: @surface;
   border-radius: 12px;
   margin: 7px 3px;
-  padding: 0 11px;
+  padding: 1px 11px 0;
   transition: all 200ms ease;
 }
 
@@ -88,7 +88,7 @@ tooltip label {
   background: transparent;
 }
 
-#custom-launcher { color: @foam; font-size: 21px; padding: 0 13px 0 10px; }
+#custom-launcher { color: @foam; font-size: 21px; padding: 1px 14px 0 9px; }
 #custom-launcher:hover { color: @iris; }
 
 #workspaces { padding: 0 4px; }
@@ -139,7 +139,7 @@ window#waybar.empty #window { background: transparent; }
 #bluetooth.connected { color: @foam; }
 #bluetooth.off { color: @muted; }
 
-#network { color: @foam; padding: 0 12px; }
+#network { color: @foam; padding: 1px 15px 0 10px; }
 #network.disconnected { color: @love; }
 
 #backlight { color: @gold; }
@@ -160,7 +160,7 @@ window#waybar.empty #window { background: transparent; }
 
 #custom-weather { color: @rose; }
 #clock { color: @text; }
-#custom-powermenu { color: @love; font-size: 19px; padding: 0 13px 0 10px; }
+#custom-powermenu { color: @love; font-size: 19px; padding: 1px 12px 0 11px; }
 #custom-powermenu:hover { color: @base; background: @love; }
 
 @keyframes pulse {

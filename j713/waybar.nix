@@ -1,4 +1,4 @@
-# Waybar for the Air: a true-black strip that melts into the notch, with Rose Pine pills on either side of it and nothing behind it.
+# Waybar for the Air: Rose Pine pills over the wallpaper, on either side of the notch and nothing behind it.
 { pkgs, ... }:
 let
   power = pkgs.writeShellScript "waybar-power" ''
@@ -24,6 +24,14 @@ in
 {
   programs.waybar = {
     enable = true;
+    # Waybar 0.15 clicks workspaces with a classic dispatch, which Hyprland's Lua mode rejects.
+    package = pkgs.waybar.overrideAttrs (old: {
+      postPatch = (old.postPatch or "") + ''
+        substituteInPlace src/modules/hyprland/workspace.cpp \
+          --replace-fail '"dispatch workspace " + std::to_string(id())' \
+                         '"dispatch hl.dsp.focus({ workspace = " + std::to_string(id()) + " })"'
+      '';
+    });
     settings = [
       {
         layer = "top";
