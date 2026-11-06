@@ -53,6 +53,7 @@ let cfg = config.j713.wifi; in
 
     services.openssh = {
       enable = true;
+      openFirewall = true;
       settings = { PasswordAuthentication = false; KbdInteractiveAuthentication = false; PermitRootLogin = "no"; };
     };
     users.users.jake.openssh.authorizedKeys.keys = cfg.sshAuthorizedKeys;
