@@ -3,6 +3,12 @@
 let
   kvantumTheme = "catppuccin-mocha-mauve";
   kvantum = pkgs.catppuccin-kvantum.override { variant = "mocha"; accent = "mauve"; };
+  kde = pkgs.catppuccin-kde.override { flavour = [ "mocha" ]; accents = [ "mauve" ]; };
+  # KDE apps like Dolphin take their colors and icons from this file, not from the Qt style.
+  kdeglobals = pkgs.runCommand "kdeglobals" { } ''
+    cat ${kde}/share/color-schemes/CatppuccinMochaMauve.colors > $out
+    printf '\n[Icons]\nTheme=Papirus-Dark\n\n[KDE]\nwidgetStyle=kvantum\n' >> $out
+  '';
 in
 {
   gtk = {
@@ -27,9 +33,10 @@ in
 
   qt = {
     enable = true;
-    platformTheme.name = "kvantum";
+    platformTheme.name = "kde";
     style.name = "kvantum";
   };
+  xdg.configFile."kdeglobals".source = kdeglobals;
   xdg.configFile."Kvantum/kvantum.kvconfig".text = "[General]\ntheme=${kvantumTheme}\n";
   xdg.configFile."Kvantum/${kvantumTheme}".source = "${kvantum}/share/Kvantum/${kvantumTheme}";
 }

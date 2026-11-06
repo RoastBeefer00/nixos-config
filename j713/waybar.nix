@@ -120,7 +120,7 @@ in
           format-icons = [ "󰤯" "󰤟" "󰤢" "󰤥" "󰤨" ];
           tooltip-format-wifi = "{essid} ({signalStrength}%)\n{ipaddr}\n↓ {bandwidthDownBytes}  ↑ {bandwidthUpBytes}";
           tooltip-format-disconnected = "Offline. Click to connect.";
-          on-click = "networkmanager_dmenu";
+          on-click = "ghostty --class=com.j713.popup -e wifitui";
         };
         backlight = {
           device = "apple-panel-bl";
@@ -128,6 +128,7 @@ in
           format-icons = [ "󰃞" "󰃟" "󰃠" ];
           on-scroll-up = "brightnessctl -q set 5%+";
           on-scroll-down = "brightnessctl -q set 5%-";
+          on-click = "swaync-client -t -sw";
           tooltip = false;
         };
         pulseaudio = {

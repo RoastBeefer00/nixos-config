@@ -5,6 +5,9 @@ hl.monitor({ output = "eDP-1", mode = "2560x1664@60", position = "0x0", scale = 
 
 hl.env("XCURSOR_THEME", "catppuccin-mocha-mauve-cursors")
 hl.env("XCURSOR_SIZE", "24")
+-- The session doesn't read Home Manager's variables, so the Qt theme has to be set here too.
+hl.env("QT_QPA_PLATFORMTHEME", "kde")
+hl.env("QT_STYLE_OVERRIDE", "kvantum")
 
 hl.on("hyprland.start", function()
   hl.exec_cmd("systemctl --user start hyprpolkitagent")
