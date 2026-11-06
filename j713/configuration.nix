@@ -78,6 +78,9 @@ in
     hashedPasswordFile = "/var/lib/j713/user-password.hash";   # root-only, not in the store
   };
   programs.fish.enable = true;
+  # This kernel has no J713 Touch ID yet, so asking fprintd only stalls the password prompt until it times out.
+  security.pam.services.sudo.fprintAuth = false;
+  security.pam.services.polkit-1.fprintAuth = false;
 
   services.displayManager.autoLogin = { enable = true; user = vars.username; };
   services.displayManager.defaultSession = "hyprland";   # Plasma stays installed as the fallback session
