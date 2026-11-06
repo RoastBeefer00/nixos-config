@@ -16,7 +16,8 @@ hl.config({
     follow_mouse = 1,
     sensitivity = 0,
     touchpad = {
-      natural_scroll = true,
+      natural_scroll = false,
+      scroll_factor = 0.5,
       tap_to_click = true,
       clickfinger_behavior = true,
     },
