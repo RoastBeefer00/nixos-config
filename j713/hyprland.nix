@@ -21,6 +21,7 @@
       "windowrule=float,class:^(steam_app_.*)$"
       "windowrule=float,class:^(steam_proton)$"
       "bind = $mainMod, X, togglesplit, # dwindle"
+      "swaybg -i ~/Pictures/waves.jpg"
     ]
     [
       ""
@@ -30,6 +31,7 @@
       "windowrule = float on, match:class ^(steam_app_.*)$"
       "windowrule = float on, match:class ^(steam_proton)$"
       "bind = $mainMod, X, layoutmsg, togglesplit"
+      "swaybg -m fill -i ~/Pictures/waves.jpg"
     ]
     (builtins.readFile ../hypr/hyprland.conf) + ''
 
