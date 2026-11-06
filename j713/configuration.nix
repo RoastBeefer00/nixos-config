@@ -84,7 +84,9 @@ in
   security.sudo.wheelNeedsPassword = false;   # bring-up convenience: I drive this machine over SSH with a key
 
   services.displayManager.autoLogin = { enable = true; user = vars.username; };
-  services.displayManager.defaultSession = "plasma";
+  services.displayManager.defaultSession = "hyprland";   # Plasma stays installed as the fallback session
+  programs.hyprland.enable = true;
+  fonts.packages = [ pkgs.nerd-fonts.fira-code ];
 
   networking.firewall.enable = false;   # bring-up
   documentation.nixos.enable = false;
