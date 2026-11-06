@@ -71,6 +71,7 @@
           system = "aarch64-linux";
           specialArgs = {
             inherit tree-sitter-rstml;
+            inherit waybar-weather;
           };
           modules = [
             aurora.inputs.apple-silicon.nixosModules.default

@@ -1,0 +1,168 @@
+/* Rose Pine on true black, so the strip and the notch read as one piece of glass. */
+@define-color base #191724;
+@define-color surface #1f1d2e;
+@define-color overlay #26233a;
+@define-color muted #6e6a86;
+@define-color subtle #908caa;
+@define-color text #e0def4;
+@define-color love #eb6f92;
+@define-color gold #f6c177;
+@define-color rose #ebbcba;
+@define-color pine #31748f;
+@define-color foam #9ccfd8;
+@define-color iris #c4a7e7;
+
+* {
+  border: none;
+  border-radius: 0;
+  font-family: "FiraCode Nerd Font";
+  font-weight: 600;
+  font-size: 17px;
+  min-height: 0;
+}
+
+window#waybar {
+  background: #000000;
+  color: @text;
+}
+
+tooltip {
+  background: @base;
+  border: 1px solid @overlay;
+  border-radius: 12px;
+}
+
+tooltip label {
+  color: @text;
+  padding: 4px 6px;
+}
+
+/* The panel's top corners are rounded: keep the outermost pills clear of them. */
+.modules-left { margin-left: 14px; }
+.modules-right { margin-right: 14px; }
+
+#custom-launcher,
+#workspaces,
+#cpu,
+#temperature,
+#memory,
+#window,
+#mpris,
+#tray,
+#bluetooth,
+#network,
+#backlight,
+#pulseaudio,
+#battery,
+#custom-power,
+#custom-weather,
+#clock,
+#custom-powermenu {
+  background: @surface;
+  border-radius: 12px;
+  margin: 7px 3px;
+  padding: 0 11px;
+  transition: all 200ms ease;
+}
+
+#custom-launcher:hover,
+#cpu:hover,
+#temperature:hover,
+#memory:hover,
+#mpris:hover,
+#bluetooth:hover,
+#network:hover,
+#backlight:hover,
+#pulseaudio:hover,
+#battery:hover,
+#custom-power:hover,
+#custom-weather:hover,
+#clock:hover,
+#custom-powermenu:hover {
+  background: @overlay;
+}
+
+/* Keep this equal to the notch's width in logical pixels. */
+#custom-notch {
+  min-width: 300px;
+  background: transparent;
+}
+
+#custom-launcher { color: @foam; font-size: 21px; padding: 0 13px 0 10px; }
+#custom-launcher:hover { color: @iris; }
+
+#workspaces { padding: 0 4px; }
+
+#workspaces button {
+  color: @muted;
+  background: transparent;
+  border-radius: 9px;
+  margin: 4px 1px;
+  padding: 0 8px;
+  transition: all 200ms ease;
+}
+
+#workspaces button.empty { color: @overlay; }
+
+#workspaces button:hover {
+  background: @overlay;
+  color: @text;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+#workspaces button.active {
+  background: linear-gradient(90deg, @foam, @iris);
+  color: @base;
+}
+
+#workspaces button.urgent {
+  background: @love;
+  color: @base;
+  animation: pulse 1s ease-in-out infinite alternate;
+}
+
+#cpu { letter-spacing: 1px; }
+#temperature { color: @gold; }
+#temperature.critical { color: @base; background: @love; animation: pulse 700ms ease-in-out infinite alternate; }
+#memory { color: @iris; }
+
+#window { color: @subtle; font-weight: 500; }
+window#waybar.empty #window { background: transparent; }
+
+#mpris { color: @rose; }
+#mpris.paused { color: @muted; }
+#tray { padding: 0 9px; }
+#tray > .needs-attention { background: @love; border-radius: 6px; }
+
+#bluetooth { color: @pine; }
+#bluetooth.connected { color: @foam; }
+#bluetooth.off { color: @muted; }
+
+#network { color: @foam; padding: 0 12px; }
+#network.disconnected { color: @love; }
+
+#backlight { color: @gold; }
+#pulseaudio { color: @iris; }
+#pulseaudio.muted { color: @muted; }
+
+#battery { color: @foam; }
+#battery.charging, #battery.plugged { color: @foam; background: @overlay; }
+#battery.warning:not(.charging) { color: @gold; }
+#battery.critical:not(.charging) {
+  color: @base;
+  background: @love;
+  animation: pulse 700ms ease-in-out infinite alternate;
+}
+
+#custom-power { color: @subtle; }
+#custom-power.charging { color: @foam; }
+
+#custom-weather { color: @rose; }
+#clock { color: @text; }
+#custom-powermenu { color: @love; font-size: 19px; padding: 0 13px 0 10px; }
+#custom-powermenu:hover { color: @base; background: @love; }
+
+@keyframes pulse {
+  to { opacity: 0.55; }
+}
