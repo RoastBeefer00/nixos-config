@@ -86,7 +86,7 @@ in
   programs.hyprlock.enable = true;   # also sets up its PAM service, which it needs to accept a password
   fonts.packages = [ pkgs.nerd-fonts.fira-code ];
 
-  networking.firewall.enable = false;   # bring-up
+  networking.firewall.enable = true;   # only SSH is open, through services.openssh
   documentation.nixos.enable = false;
   environment.systemPackages = [ pkgs.kdePackages.konsole pkgs.kdePackages.dolphin rmatrix.packages.${pkgs.stdenv.hostPlatform.system}.default ];
 }
