@@ -29,11 +29,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1793897819,
-        "narHash": "sha256-bl8Eaxm1ld5g8S46O9tOznXciUMTqIU1sfFbh6b8+X0=",
+        "lastModified": 1793983864,
+        "narHash": "sha256-h/zXwbnZymq9wsYdcsPGNGtzZaX2OILf7oTuK1ozSyY=",
         "owner": "aurora-silicon",
         "repo": "nixos-aurora",
-        "rev": "999fd1f2c389a9376440886b6fb8d79711dabf17",
+        "rev": "5a66548d060091f0c6c8ad8ee878fff7cb7c2e24",
         "type": "github"
       },
       "original": {
