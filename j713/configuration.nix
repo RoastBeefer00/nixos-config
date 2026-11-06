@@ -57,11 +57,7 @@ in
       echo "native display did not appear; not loading the GPU driver"
     '';
   };
-  # Display suspend/resume is not qualified on this firmware session yet.
-  systemd.targets.sleep.enable = false;
-  systemd.targets.suspend.enable = false;
   systemd.targets.hibernate.enable = false;
-  systemd.targets.hybrid-sleep.enable = false;
 
   # Bring-up: visible boot messages.
   boot.plymouth.enable = false;
