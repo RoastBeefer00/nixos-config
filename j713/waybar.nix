@@ -8,7 +8,7 @@
         layer = "top";
         position = "top";
         exclusive = true;
-        height = 40;
+        height = 48;
         modules-left = [ "hyprland/workspaces" "hyprland/window" ];
         modules-center = [ ];
         modules-right = [ "tray" "network" "backlight" "pulseaudio" "battery" "clock" ];
@@ -21,7 +21,7 @@
       }
     ];
     style = ''
-      * { border: none; border-radius: 0; font-family: "FiraCode Nerd Font"; font-weight: bold; font-size: 14px; min-height: 0; }
+      * { border: none; border-radius: 0; font-family: "FiraCode Nerd Font"; font-weight: bold; font-size: 17px; min-height: 0; }
       window#waybar { background: #000000; color: #cdd6f4; }
       #workspaces button { padding: 0 8px; color: #cdd6f4; }
       #workspaces button.active { color: #9ccfd8; }

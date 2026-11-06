@@ -1,7 +1,7 @@
 -- Hyprland on the Air. Same keys and look as the desktop's hypr/hyprland.conf, in the format Hyprland is moving to.
 
--- 2560x1664 panel at 1.6 (1600x1040 logical). The top 64 rows (40 logical pixels) are the notch strip, which Waybar owns.
-hl.monitor({ output = "eDP-1", mode = "2560x1664@60", position = "0x0", scale = 1.6 })
+-- 2560x1664 panel at 4/3 (1920x1248 logical). The top 64 rows (48 logical pixels) are the notch strip, which Waybar owns.
+hl.monitor({ output = "eDP-1", mode = "2560x1664@60", position = "0x0", scale = 1.333333 })
 
 hl.on("hyprland.start", function()
   hl.exec_cmd("waybar")
