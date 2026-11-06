@@ -5,6 +5,9 @@
 
   home.packages = with pkgs; [ brightnessctl hyprshot pamixer rofi rofi-power-menu swaybg wl-clipboard ];
 
+  # hypr/hyprland.conf is in the classic format; Home Manager would otherwise generate Lua around it.
+  wayland.windowManager.hyprland.configType = "hyprlang";
+
   wayland.windowManager.hyprland.extraConfig = lib.mkAfter ''
 
     # --- j713 overrides ---
