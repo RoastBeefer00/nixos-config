@@ -32,8 +32,6 @@
     };
   };
 
-  # A user style.css replaces the stock one, so build on it and only change the theme.
-  xdg.configFile."swaync/style.css".text = ''
-    @import url("${pkgs.swaynotificationcenter}/etc/xdg/swaync/style.css");
-  '' + builtins.readFile ./swaync.css;
+  # Loaded on top of the stock style, so this only has to change the theme.
+  xdg.configFile."swaync/style.css".source = ./swaync.css;
 }
