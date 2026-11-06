@@ -13,6 +13,7 @@
     rmatrix.url = "github:RoastBeefer00/rmatrix";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     tree-sitter-rstml.url = "github:rayliwell/tree-sitter-rstml/flake";
+    aurora.url = "github:aurora-silicon/nixos-aurora";
   };
 
   outputs =
@@ -24,6 +25,7 @@
       tree-sitter-rstml,
       waybar-weather,
       rmatrix,
+      aurora,
       ...
     }:
     let
@@ -57,6 +59,34 @@
               home-manager.users.${vars.username} = import ./home.nix;
               home-manager.extraSpecialArgs = {
                 inherit niri;
+                isNixOS = true;
+                isDarwin = false;
+              };
+            }
+          ];
+        };
+
+        # M4 MacBook Air. Kernel and boot chain live on the ESP (aura + U-Boot + aurora-silicon/linux), not here.
+        j713 = aurora.inputs.nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
+          specialArgs = {
+            inherit tree-sitter-rstml;
+          };
+          modules = [
+            aurora.inputs.apple-silicon.nixosModules.default
+            aurora.nixosModules.default
+            aurora.nixosModules.installed
+            { nixpkgs.overlays = [ aurora.inputs.apple-silicon.overlays.default aurora.overlays.default ]; }
+            ./j713/configuration.nix
+            ./j713/ssh-key.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.backupFileExtension = "backup";
+              home-manager.users.${vars.username} = import ./j713/home.nix;
+              home-manager.extraSpecialArgs = {
+                inherit tree-sitter-rstml;
                 isNixOS = true;
                 isDarwin = false;
               };

@@ -36,6 +36,8 @@ stdenv.mkDerivation {
   src = fetchurl { inherit (source) url sha256; };
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  # The aarch64-linux release is a gnu binary, unlike the static x86_64 one.
+  buildInputs = lib.optional (stdenv.hostPlatform.system == "aarch64-linux") stdenv.cc.cc.lib;
 
   sourceRoot = ".";
   dontBuild = true;
