@@ -87,7 +87,7 @@ tooltip label {
   background: transparent;
 }
 
-#custom-launcher { color: @teal; font-size: 21px; padding: 1px 14px 0 9px; }
+#custom-launcher { color: @teal; font-size: 21px; padding: 0 15px 0 8px; }
 #custom-launcher:hover { color: @mauve; }
 
 #workspaces { padding: 0 4px; }
