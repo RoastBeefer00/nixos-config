@@ -69,8 +69,6 @@ in
   # This kernel rejects NixOS's ASLR entropy values, which would mark every rebuild as failed.
   environment.etc."sysctl.d/55-nixos-aslr-entropy.conf".source = lib.mkForce (pkgs.writeText "no-aslr-override" "");
 
-  # jake is the bring-up account, kept as a way back in. Everything else follows vars.nix.
-  users.users.jake = { isNormalUser = true; extraGroups = [ "wheel" "video" "input" "render" ]; };
   users.users.${vars.username} = {
     isNormalUser = true;
     description = vars.username;

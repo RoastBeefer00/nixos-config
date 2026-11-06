@@ -56,7 +56,6 @@ let cfg = config.j713.wifi; in
       openFirewall = true;
       settings = { PasswordAuthentication = false; KbdInteractiveAuthentication = false; PermitRootLogin = "no"; };
     };
-    users.users.jake.openssh.authorizedKeys.keys = cfg.sshAuthorizedKeys;
     users.users.${(import ../vars.nix).username} = {
       extraGroups = [ "networkmanager" ];
       openssh.authorizedKeys.keys = cfg.sshAuthorizedKeys;
