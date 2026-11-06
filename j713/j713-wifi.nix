@@ -1,4 +1,4 @@
-# Wi-Fi + SSH on the J713. NetworkManager failed to associate on this driver; a plain supplicant + dhcpcd works.
+# Wi-Fi + SSH on the J713. NetworkManager with iwd; its wpa_supplicant backend failed to associate on this driver.
 { config, lib, pkgs, ... }:
 let cfg = config.j713.wifi; in
 {
@@ -9,19 +9,19 @@ let cfg = config.j713.wifi; in
   };
 
   config = {
-    networking.networkmanager.enable = lib.mkForce false;
-    networking.useDHCP = lib.mkForce true;
+    networking.networkmanager.enable = lib.mkForce true;
+    networking.networkmanager.wifi.backend = "iwd";
+    networking.useDHCP = lib.mkForce false;
 
-    # /var/lib/j713/wpa.conf is root-only and not in the store. brcmfmac and its firmware come from the kernel and ESP vendorfw.
-    systemd.services.j713-wifi-link = {
-      description = "J713 Wi-Fi link";
+    # The driver can bind before the firmware path is in place and then gives up for good: reload it once if so.
+    systemd.services.j713-wifi-driver = {
+      description = "Make sure the J713 Wi-Fi driver bound";
       wantedBy = [ "multi-user.target" ];
-      before = [ "network.target" ];
+      before = [ "iwd.service" "NetworkManager.service" ];
       after = [ "aurora-vendor-firmware.service" ];
-      unitConfig.ConditionPathExists = "/var/lib/j713/wpa.conf";
-      path = [ pkgs.wpa_supplicant pkgs.coreutils pkgs.kmod ];
-      preStart = ''
-        # The driver can bind before the firmware path is in place and then gives up for good: reload it once if so.
+      path = [ pkgs.coreutils pkgs.kmod ];
+      serviceConfig = { Type = "oneshot"; RemainAfterExit = true; };
+      script = ''
         modprobe brcmfmac || true
         for i in $(seq 1 15); do
           for n in /sys/class/net/*; do [ -d "$n/wireless" ] && exit 0; done
@@ -29,17 +29,7 @@ let cfg = config.j713.wifi; in
         done
         modprobe -r brcmfmac_wcc brcmfmac || true
         modprobe brcmfmac || true
-        for i in $(seq 1 45); do
-          for n in /sys/class/net/*; do [ -d "$n/wireless" ] && exit 0; done
-          sleep 1
-        done
-        exit 1
       '';
-      script = ''
-        for n in /sys/class/net/*; do [ -d "$n/wireless" ] && IF=$(basename "$n"); done
-        exec wpa_supplicant -i "$IF" -c /var/lib/j713/wpa.conf
-      '';
-      serviceConfig = { Restart = "always"; RestartSec = 5; };
     };
 
     services.openssh = {
@@ -47,7 +37,10 @@ let cfg = config.j713.wifi; in
       settings = { PasswordAuthentication = false; KbdInteractiveAuthentication = false; PermitRootLogin = "no"; };
     };
     users.users.jake.openssh.authorizedKeys.keys = cfg.sshAuthorizedKeys;
-    users.users.${(import ../vars.nix).username}.openssh.authorizedKeys.keys = cfg.sshAuthorizedKeys;
+    users.users.${(import ../vars.nix).username} = {
+      extraGroups = [ "networkmanager" ];
+      openssh.authorizedKeys.keys = cfg.sshAuthorizedKeys;
+    };
     environment.systemPackages = [ pkgs.iw pkgs.wpa_supplicant ];
   };
 }
