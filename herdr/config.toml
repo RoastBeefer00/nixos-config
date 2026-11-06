@@ -92,7 +92,7 @@ window_title = "{workspace}"
 
 [ui.sidebar.spaces]
 # $num comes from the herdr-space-numbers plugin.
-rows = [["state_icon", "$num", "workspace"], ["branch", "git_status"]]
+rows = [["$num", "workspace"], ["state_icon", "branch", "git_status"]]
 
 [session]
 # tmux-resurrect / tmux-continuum equivalent: restore agent sessions on restart
