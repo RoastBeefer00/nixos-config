@@ -26,7 +26,7 @@ in
   i18n.defaultLocale = "en_US.UTF-8";
 
   # GRUB on the ESP (installed as the removable loader U-Boot looks for); /boot itself is on the root filesystem.
-  fileSystems."/" = { device = "/dev/disk/by-label/gravity-root"; fsType = "ext4"; };
+  fileSystems."/" = { device = "/dev/disk/by-label/linux-root"; fsType = "ext4"; };
   fileSystems."/boot/efi" = { device = "/dev/nvme0n1p6"; fsType = "vfat"; options = [ "nofail" "umask=0077" ]; };
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
   boot.loader.grub.configurationLimit = 8;
