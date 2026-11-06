@@ -1,4 +1,4 @@
-# Waybar for the Air: Rose Pine pills over the wallpaper, on either side of the notch and nothing behind it.
+# Waybar for the Air: Catppuccin Mocha pills over the wallpaper, on either side of the notch and nothing behind it.
 { pkgs, ... }:
 let
   power = pkgs.writeShellScript "waybar-power" ''
@@ -11,14 +11,14 @@ let
   '';
   # One coloured bar per CPU core, quiet at idle and hot under load.
   coreBars = map (b: "<span color='${b.color}'>${b.bar}</span>") [
-    { bar = "▁"; color = "#31748f"; }
-    { bar = "▂"; color = "#31748f"; }
-    { bar = "▃"; color = "#9ccfd8"; }
-    { bar = "▄"; color = "#9ccfd8"; }
-    { bar = "▅"; color = "#f6c177"; }
-    { bar = "▆"; color = "#f6c177"; }
-    { bar = "▇"; color = "#eb6f92"; }
-    { bar = "█"; color = "#eb6f92"; }
+    { bar = "▁"; color = "#74c7ec"; }
+    { bar = "▂"; color = "#74c7ec"; }
+    { bar = "▃"; color = "#94e2d5"; }
+    { bar = "▄"; color = "#94e2d5"; }
+    { bar = "▅"; color = "#f9e2af"; }
+    { bar = "▆"; color = "#f9e2af"; }
+    { bar = "▇"; color = "#f38ba8"; }
+    { bar = "█"; color = "#f38ba8"; }
   ];
 in
 {
@@ -165,9 +165,9 @@ in
           calendar = {
             mode = "month";
             format = {
-              months = "<span color='#c4a7e7'><b>{}</b></span>";
-              weekdays = "<span color='#f6c177'><b>{}</b></span>";
-              today = "<span color='#9ccfd8'><b><u>{}</u></b></span>";
+              months = "<span color='#cba6f7'><b>{}</b></span>";
+              weekdays = "<span color='#f9e2af'><b>{}</b></span>";
+              today = "<span color='#94e2d5'><b><u>{}</u></b></span>";
             };
           };
           actions = { on-scroll-up = "shift_up"; on-scroll-down = "shift_down"; on-click-right = "shift_reset"; };

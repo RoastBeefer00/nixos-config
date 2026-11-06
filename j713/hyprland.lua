@@ -6,7 +6,7 @@ hl.monitor({ output = "eDP-1", mode = "2560x1664@60", position = "0x0", scale = 
 hl.on("hyprland.start", function()
   hl.exec_cmd("waybar")
   hl.exec_cmd("mako")
-  hl.exec_cmd("swaybg -m fill -i ~/Pictures/waves.jpg")
+  hl.exec_cmd("swaybg -m fill -i ~/Pictures/clearnight.jpg")
 end)
 
 hl.config({

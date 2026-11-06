@@ -1,16 +1,15 @@
-/* Rose Pine pills floating over the wallpaper. */
-@define-color base #191724;
-@define-color surface #1f1d2e;
-@define-color overlay #26233a;
-@define-color muted #6e6a86;
-@define-color subtle #908caa;
-@define-color text #e0def4;
-@define-color love #eb6f92;
-@define-color gold #f6c177;
-@define-color rose #ebbcba;
-@define-color pine #31748f;
-@define-color foam #9ccfd8;
-@define-color iris #c4a7e7;
+/* Catppuccin Mocha pills floating over the wallpaper. */
+@define-color base #1e1e2e;
+@define-color surface0 #313244;
+@define-color overlay0 #6c7086;
+@define-color subtext0 #a6adc8;
+@define-color text #cdd6f4;
+@define-color red #f38ba8;
+@define-color yellow #f9e2af;
+@define-color pink #f5c2e7;
+@define-color sapphire #74c7ec;
+@define-color teal #94e2d5;
+@define-color mauve #cba6f7;
 
 * {
   border: none;
@@ -28,7 +27,7 @@ window#waybar {
 
 tooltip {
   background: @base;
-  border: 1px solid @overlay;
+  border: 1px solid @surface0;
   border-radius: 12px;
 }
 
@@ -58,7 +57,7 @@ tooltip label {
 #custom-weather,
 #clock,
 #custom-powermenu {
-  background: @surface;
+  background: @base;
   border-radius: 12px;
   margin: 7px 3px;
   padding: 1px 11px 0;
@@ -79,7 +78,7 @@ tooltip label {
 #custom-weather:hover,
 #clock:hover,
 #custom-powermenu:hover {
-  background: @overlay;
+  background: @surface0;
 }
 
 /* Keep this equal to the notch's width in logical pixels. */
@@ -88,13 +87,13 @@ tooltip label {
   background: transparent;
 }
 
-#custom-launcher { color: @foam; font-size: 21px; padding: 1px 14px 0 9px; }
-#custom-launcher:hover { color: @iris; }
+#custom-launcher { color: @teal; font-size: 21px; padding: 1px 14px 0 9px; }
+#custom-launcher:hover { color: @mauve; }
 
 #workspaces { padding: 0 4px; }
 
 #workspaces button {
-  color: @muted;
+  color: @overlay0;
   background: transparent;
   border-radius: 9px;
   margin: 4px 1px;
@@ -102,66 +101,66 @@ tooltip label {
   transition: all 200ms ease;
 }
 
-#workspaces button.empty { color: @overlay; }
+#workspaces button.empty { color: @surface0; }
 
 #workspaces button:hover {
-  background: @overlay;
+  background: @surface0;
   color: @text;
   box-shadow: none;
   text-shadow: none;
 }
 
 #workspaces button.active {
-  background: linear-gradient(90deg, @foam, @iris);
+  background: linear-gradient(90deg, @teal, @mauve);
   color: @base;
 }
 
 #workspaces button.urgent {
-  background: @love;
+  background: @red;
   color: @base;
   animation: pulse 1s ease-in-out infinite alternate;
 }
 
 #cpu { letter-spacing: 1px; }
-#temperature { color: @gold; }
-#temperature.critical { color: @base; background: @love; animation: pulse 700ms ease-in-out infinite alternate; }
-#memory { color: @iris; }
+#temperature { color: @yellow; }
+#temperature.critical { color: @base; background: @red; animation: pulse 700ms ease-in-out infinite alternate; }
+#memory { color: @mauve; }
 
-#window { color: @subtle; font-weight: 500; }
+#window { color: @subtext0; font-weight: 500; }
 window#waybar.empty #window { background: transparent; }
 
-#mpris { color: @rose; }
-#mpris.paused { color: @muted; }
+#mpris { color: @pink; }
+#mpris.paused { color: @overlay0; }
 #tray { padding: 0 9px; }
-#tray > .needs-attention { background: @love; border-radius: 6px; }
+#tray > .needs-attention { background: @red; border-radius: 6px; }
 
-#bluetooth { color: @pine; }
-#bluetooth.connected { color: @foam; }
-#bluetooth.off { color: @muted; }
+#bluetooth { color: @sapphire; }
+#bluetooth.connected { color: @teal; }
+#bluetooth.off { color: @overlay0; }
 
-#network { color: @foam; padding: 1px 15px 0 10px; }
-#network.disconnected { color: @love; }
+#network { color: @teal; padding: 1px 15px 0 10px; }
+#network.disconnected { color: @red; }
 
-#backlight { color: @gold; }
-#pulseaudio { color: @iris; }
-#pulseaudio.muted { color: @muted; }
+#backlight { color: @yellow; }
+#pulseaudio { color: @mauve; }
+#pulseaudio.muted { color: @overlay0; }
 
-#battery { color: @foam; }
-#battery.charging, #battery.plugged { color: @foam; background: @overlay; }
-#battery.warning:not(.charging) { color: @gold; }
+#battery { color: @teal; }
+#battery.charging, #battery.plugged { color: @teal; background: @surface0; }
+#battery.warning:not(.charging) { color: @yellow; }
 #battery.critical:not(.charging) {
   color: @base;
-  background: @love;
+  background: @red;
   animation: pulse 700ms ease-in-out infinite alternate;
 }
 
-#custom-power { color: @subtle; }
-#custom-power.charging { color: @foam; }
+#custom-power { color: @subtext0; }
+#custom-power.charging { color: @teal; }
 
-#custom-weather { color: @rose; }
+#custom-weather { color: @pink; }
 #clock { color: @text; }
-#custom-powermenu { color: @love; font-size: 19px; padding: 1px 12px 0 11px; }
-#custom-powermenu:hover { color: @base; background: @love; }
+#custom-powermenu { color: @red; font-size: 19px; padding: 1px 12px 0 11px; }
+#custom-powermenu:hover { color: @base; background: @red; }
 
 @keyframes pulse {
   to { opacity: 0.55; }
