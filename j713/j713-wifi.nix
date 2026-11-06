@@ -32,6 +32,25 @@ let cfg = config.j713.wifi; in
       '';
     };
 
+    # Bluetooth firmware comes from macOS and isn't in the ESP's bundle. Add it to the live firmware tree,
+    # and retry the driver in case it already gave up. The Wi-Fi function has to bind first.
+    systemd.services.j713-bluetooth-firmware = {
+      description = "Install the J713 Bluetooth firmware";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "aurora-vendor-firmware.service" "j713-wifi-driver.service" ];
+      path = [ pkgs.coreutils ];
+      serviceConfig = { Type = "oneshot"; RemainAfterExit = true; };
+      script = ''
+        cp /var/lib/j713/firmware/brcm/brcmbt* /run/aurora-firmware/vendorfw/brcm/
+        for i in $(seq 1 30); do
+          [ -e /sys/class/bluetooth/hci0 ] && exit 0
+          [ -e /sys/bus/pci/drivers/brcmfmac/0000:01:00.0 ] && [ ! -e /sys/bus/pci/devices/0000:01:00.1/driver ] &&
+            { echo 0000:01:00.1 > /sys/bus/pci/drivers/hci_bcm4377/bind || true; }
+          sleep 1
+        done
+      '';
+    };
+
     services.openssh = {
       enable = true;
       settings = { PasswordAuthentication = false; KbdInteractiveAuthentication = false; PermitRootLogin = "no"; };

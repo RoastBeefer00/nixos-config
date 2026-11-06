@@ -83,6 +83,7 @@ in
   services.displayManager.autoLogin = { enable = true; user = vars.username; };
   services.displayManager.defaultSession = "hyprland";   # Plasma stays installed as the fallback session
   programs.hyprland.enable = true;
+  programs.hyprlock.enable = true;   # also sets up its PAM service, which it needs to accept a password
   fonts.packages = [ pkgs.nerd-fonts.fira-code ];
 
   networking.firewall.enable = false;   # bring-up

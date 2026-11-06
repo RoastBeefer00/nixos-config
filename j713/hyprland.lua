@@ -5,7 +5,8 @@ hl.monitor({ output = "eDP-1", mode = "2560x1664@60", position = "0x0", scale = 
 
 hl.on("hyprland.start", function()
   hl.exec_cmd("waybar")
-  hl.exec_cmd("mako")
+  hl.exec_cmd("swaync")
+  hl.exec_cmd("hypridle")
   hl.exec_cmd("swaybg -m fill -i ~/Pictures/clearnight.jpg")
 end)
 
@@ -28,7 +29,7 @@ hl.config({
       active_border = "rgb(cba6f7)",
       inactive_border = "rgba(45475aaa)",
     },
-    layout = "dwindle",
+    layout = "scrolling",
   },
   decoration = {
     rounding = 10,
@@ -41,6 +42,8 @@ hl.config({
   },
   animations = { enabled = true },
   dwindle = { preserve_split = true },
+  -- If hyprlock ever dies, a new one can be started instead of the session staying stuck.
+  misc = { allow_session_lock_restore = true },
 })
 
 hl.curve("myBezier", { type = "bezier", points = { {0.05, 0.9}, {0.1, 1.05} } })
@@ -69,7 +72,12 @@ bind("T", hl.dsp.exec_cmd("dolphin"))
 bind("F", hl.dsp.exec_cmd("google-chrome-stable"))
 bind("V", hl.dsp.window.float({ action = "toggle" }))
 bind("Space", hl.dsp.exec_cmd("rofi -show drun"))
-bind("X", hl.dsp.layout("togglesplit"))
+bind("X", hl.dsp.layout("consume_or_expel prev"))
+bind("R", hl.dsp.layout("colresize +conf"))
+bind("N", hl.dsp.exec_cmd("swaync-client -t -sw"))
+bind("SHIFT + N", hl.dsp.exec_cmd("swaync-client -d -sw"))
+bind("period", hl.dsp.layout("move +col"))
+bind("comma", hl.dsp.layout("move -col"))
 bind("Return", hl.dsp.exec_cmd("ghostty"))
 bind("S", hl.dsp.exec_cmd("rofi -show power-menu -modi power-menu:rofi-power-menu"))
 bind("P", hl.dsp.exec_cmd("hyprshot -m region --clipboard-only"))

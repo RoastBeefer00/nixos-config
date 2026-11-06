@@ -41,7 +41,7 @@ in
         spacing = 0;
         modules-left = [ "custom/launcher" "hyprland/workspaces" "cpu" "temperature" "memory" "hyprland/window" ];
         modules-center = [ "custom/notch" ];
-        modules-right = [ "mpris" "tray" "bluetooth" "network" "backlight" "pulseaudio" "battery" "custom/power" "custom/weather" "clock" "custom/powermenu" ];
+        modules-right = [ "mpris" "tray" "bluetooth" "network" "backlight" "pulseaudio" "battery" "custom/power" "custom/weather" "clock" "custom/notification" "custom/powermenu" ];
 
         "custom/launcher" = {
           format = "";
@@ -171,6 +171,25 @@ in
             };
           };
           actions = { on-scroll-up = "shift_up"; on-scroll-down = "shift_down"; on-click-right = "shift_reset"; };
+        };
+        "custom/notification" = {
+          exec = "swaync-client -swb";
+          return-type = "json";
+          escape = true;
+          format = "{icon}";
+          format-icons = {
+            none = "󰂚";
+            notification = "󰂞";
+            dnd-none = "󰂛";
+            dnd-notification = "󰂛";
+            inhibited-none = "󰂚";
+            inhibited-notification = "󰂞";
+            dnd-inhibited-none = "󰂛";
+            dnd-inhibited-notification = "󰂛";
+          };
+          tooltip = false;
+          on-click = "swaync-client -t -sw";
+          on-click-right = "swaync-client -d -sw";
         };
         "custom/powermenu" = {
           format = "󰐥";

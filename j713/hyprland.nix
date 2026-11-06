@@ -13,11 +13,12 @@ let
   '';
 in
 {
-  imports = [ ../hm_modules/mako.nix ../hm_modules/rofi.nix ./waybar.nix ];
+  imports = [ ../hm_modules/rofi.nix ./swaync.nix ./waybar.nix ];
 
   home.packages = with pkgs; [
     brightnessctl
     (google-chrome.override { commandLineArgs = "--ozone-platform-hint=auto"; })
+    hypridle
     hyprshot
     networkmanager_dmenu
     pamixer
@@ -38,6 +39,15 @@ in
     terminal = ghostty
     gui_if_available = False
   '';
+
+  # Lock before suspend. hypridle holds the suspend until the lock is up, so the desktop never shows on wake.
+  xdg.configFile."hypr/hypridle.conf".text = ''
+    general {
+      lock_cmd = pidof hyprlock || hyprlock
+      before_sleep_cmd = loginctl lock-session
+    }
+  '';
+  xdg.configFile."hypr/hyprlock.conf".source = ./hyprlock.conf;
 
   wayland.windowManager.hyprland = {
     enable = true;

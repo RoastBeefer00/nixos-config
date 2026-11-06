@@ -56,6 +56,7 @@ tooltip label {
 #custom-power,
 #custom-weather,
 #clock,
+#custom-notification,
 #custom-powermenu {
   background: @base;
   border-radius: 12px;
@@ -77,6 +78,7 @@ tooltip label {
 #custom-power:hover,
 #custom-weather:hover,
 #clock:hover,
+#custom-notification:hover,
 #custom-powermenu:hover {
   background: @surface0;
 }
@@ -159,6 +161,13 @@ window#waybar.empty #window { background: transparent; }
 
 #custom-weather { color: @pink; }
 #clock { color: @text; }
+#custom-notification { color: @mauve; }
+#custom-notification.notification,
+#custom-notification.inhibited-notification { color: @yellow; }
+#custom-notification.dnd-none,
+#custom-notification.dnd-notification,
+#custom-notification.dnd-inhibited-none,
+#custom-notification.dnd-inhibited-notification { color: @overlay0; }
 #custom-powermenu { color: @red; font-size: 19px; padding: 1px 12px 0 11px; }
 #custom-powermenu:hover { color: @base; background: @red; }
 
