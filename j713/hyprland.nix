@@ -9,7 +9,7 @@ let
     max=$((1920 - width - 12))
     [ "$left" -gt "$max" ] && left=$max
     [ "$left" -lt 12 ] && left=12
-    exec ${pkgs.rofi}/bin/rofi -i -theme-str "window { location: northwest; anchor: northwest; x-offset: ''${left}px; y-offset: 54px; width: ''${width}px; } listview { columns: 1; lines: 10; }" "$@"
+    exec ${pkgs.rofi}/bin/rofi -i -theme-str "window { location: northwest; anchor: northwest; x-offset: ''${left}px; y-offset: 54px; width: ''${width}px; height: 0; } listview { columns: 1; lines: 18; dynamic: true; }" "$@"
   '';
 in
 {
