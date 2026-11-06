@@ -30,6 +30,7 @@ in
   fileSystems."/boot/efi" = { device = "/dev/nvme0n1p6"; fsType = "vfat"; options = [ "nofail" "umask=0077" ]; };
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
   boot.loader.grub.configurationLimit = 8;
+  nix.gc.options = lib.mkForce "--delete-older-than 7d";   # 91 GB root, far less room than the desktop
 
   # The 10-core Air's loaded GPU firmware hash, missing from the driver's table.
   # Given to the package directly: boot.kernelPatches would be applied twice (once by the Apple Silicon module, once by NixOS).
