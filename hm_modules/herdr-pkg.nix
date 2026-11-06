@@ -5,23 +5,23 @@
   autoPatchelfHook,
 }:
 let
-  version = "0.7.5";
+  version = "0.9.5";
   sources = {
     aarch64-darwin = {
-      url = "https://github.com/ogulcancelik/herdr/releases/download/v${version}/herdr-macos-aarch64";
-      hash = "sha256-NzUFRrABJVWUO5Lq+WJmXeTiZDlbrrRCJ7gBXo/1sNY=";
+      url = "https://github.com/herdrdev/herdr/releases/download/v${version}/herdr-macos-aarch64";
+      hash = "sha256-+3fCIyoFqANUITgsiUOS9BdOTjihjkivPdApAVfDp+I=";
     };
     x86_64-darwin = {
-      url = "https://github.com/ogulcancelik/herdr/releases/download/v${version}/herdr-macos-x86_64";
-      hash = "sha256-P+UMSmPcgQIwaxMiF4Yo3bNlXNOuVteE8JQVNAjWnmI=";
+      url = "https://github.com/herdrdev/herdr/releases/download/v${version}/herdr-macos-x86_64";
+      hash = "sha256-X7CpCOx/Z0Xj4kVziwa/rVbEY5HDkas8CVX76tAfE2k=";
     };
     x86_64-linux = {
-      url = "https://github.com/ogulcancelik/herdr/releases/download/v${version}/herdr-linux-x86_64";
-      hash = "sha256-PcgyiAc+TC08Z5ow576XvMqRQcb9F9u7khkULpXFklM=";
+      url = "https://github.com/herdrdev/herdr/releases/download/v${version}/herdr-linux-x86_64";
+      hash = "sha256-FNnovItKngEY13wyJm921GHwm0A0LrI3UpYL2J9Zkp0=";
     };
     aarch64-linux = {
-      url = "https://github.com/ogulcancelik/herdr/releases/download/v${version}/herdr-linux-aarch64";
-      hash = "sha256-MudjoUmaa2lLHXCOTwYrdDvh2p80/PpNIS1ttv4JqLk=";
+      url = "https://github.com/herdrdev/herdr/releases/download/v${version}/herdr-linux-aarch64";
+      hash = "sha256-F9dTby2lCFlSNoDvJ53/ysjkojX05G/o2mwuxEFBiXw=";
     };
   };
   source =

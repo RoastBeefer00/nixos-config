@@ -80,6 +80,8 @@ description = "open git-aware file viewer in a split pane"
 # tmux: set -g mouse on
 mouse_capture = true
 copy_on_select = true
+# Shown by the window manager and Waybar. Follows the active space.
+window_title = "{workspace}"
 
 [session]
 # tmux-resurrect / tmux-continuum equivalent: restore agent sessions on restart
