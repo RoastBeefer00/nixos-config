@@ -119,7 +119,7 @@ in
           format-icons = [ "󰤯" "󰤟" "󰤢" "󰤥" "󰤨" ];
           tooltip-format-wifi = "{essid} ({signalStrength}%)\n{ipaddr}\n↓ {bandwidthDownBytes}  ↑ {bandwidthUpBytes}";
           tooltip-format-disconnected = "Offline. Click to connect.";
-          on-click = "ghostty -e nmtui";
+          on-click = "networkmanager_dmenu";
         };
         backlight = {
           device = "apple-panel-bl";
