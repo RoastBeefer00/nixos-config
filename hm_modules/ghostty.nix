@@ -12,7 +12,7 @@
       window-padding-x = 4;
       window-padding-y = 4;
       font-family = "JetBrainsMono Nerd Font Propo";
-      font-size = 20;
+      font-size = 15;
       confirm-close-surface = false;
       # Pastes containing newlines (e.g. text sent from a phone via RustDesk)
       # are otherwise rejected until a confirm dialog is clicked, which you
