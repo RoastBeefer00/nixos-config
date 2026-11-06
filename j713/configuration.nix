@@ -63,9 +63,9 @@ in
   systemd.targets.hibernate.enable = false;
   systemd.targets.hybrid-sleep.enable = false;
 
-  # Bring-up: visible boot messages, and the conservative CPU idle arguments until they are tested without.
+  # Bring-up: visible boot messages.
   boot.plymouth.enable = false;
-  boot.kernelParams = lib.mkAfter [ "console=tty0" "nohlt" "idle=nop" "arm64.nowfxt" "apple_dart.j713_dcp=1" "apple_dart.j713_display=1" ];
+  boot.kernelParams = lib.mkAfter [ "console=tty0" "apple_dart.j713_dcp=1" "apple_dart.j713_display=1" ];
   boot.consoleLogLevel = 4;
 
   # This kernel rejects NixOS's ASLR entropy values, which would mark every rebuild as failed.
