@@ -1,4 +1,4 @@
-# Notify once for each new head of Aurora's main branch, with a button that starts the update.
+# Notify once for each new commit on Aurora's update channel, with a button that starts the update.
 repo=$HOME/projects/nixos-config
 aurora="aurora-silicon/nixos-aurora"
 seen=${XDG_STATE_HOME:-$HOME/.local/state}/aurora-update-check
@@ -8,12 +8,16 @@ fetch() { curl -fsS --retry 6 --retry-delay 20 --retry-all-errors "$1"; }
 raw() { fetch "https://raw.githubusercontent.com/$aurora/$1/$2"; }
 
 pin=$(jq -r .nodes.aurora.locked.rev "$repo/flake.lock")
-head=$(fetch "https://api.github.com/repos/$aurora/git/ref/heads/main" | jq -r .object.sha)
+head=$(fetch "https://api.github.com/repos/$aurora/git/ref/heads/channel-testing" | jq -r .object.sha)
 if [[ $head == "$pin" || $head == "$(cat "$seen" 2>/dev/null)" ]]; then
   exit 0
 fi
 
+# The pin can be ahead of the channel, and that isn't an update.
 count=$(fetch "https://api.github.com/repos/$aurora/compare/$pin...$head" | jq -r .ahead_by)
+if ((count == 0)); then
+  exit 0
+fi
 
 old_sources=$(raw "$pin" sources.json)
 new_sources=$(raw "$head" sources.json)

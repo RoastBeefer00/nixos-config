@@ -1,4 +1,4 @@
-# Checks Aurora's main branch every 6 hours and notifies when there's something new. Nothing updates by itself.
+# Checks Aurora's update channel every 6 hours and notifies when there's something new. Nothing updates by itself.
 { lib, pkgs, ... }:
 let
   check = pkgs.writeShellApplication {

@@ -81,6 +81,13 @@ in
   # This kernel has no J713 Touch ID yet, so asking fprintd only stalls the password prompt until it times out.
   security.pam.services.sudo.fprintAuth = lib.mkForce false;
   security.pam.services.polkit-1.fprintAuth = lib.mkForce false;
+  # Newer Aurora kernels can start the security chip macOS also uses, and Aurora's loader turns on writes to their shared storage.
+  # Keep it off until Touch ID is a deliberate choice. An install rule also beats the options on the loader's modprobe command.
+  boot.extraModprobeConfig = "install apple_sep ${pkgs.coreutils}/bin/false";
+  systemd.timers.aurora-sep.enable = false;
+  systemd.services.aurora-sep.enable = false;
+  systemd.services.aurora-sep-ready.enable = false;
+  systemd.services.aurora-touchid-setup.enable = false;
 
   services.displayManager.autoLogin = { enable = true; user = vars.username; };
   services.displayManager.defaultSession = "hyprland";   # Plasma stays installed as the fallback session

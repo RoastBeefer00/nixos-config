@@ -1,4 +1,4 @@
-# Take the newest commit of Aurora's main branch, rebuild, and record the new pin in the repo.
+# Take the newest commit of Aurora's channel, rebuild, and record the new pin in the repo.
 repo=$HOME/projects/nixos-config
 cd "$repo" || exit 1
 
@@ -14,7 +14,7 @@ fi
 git pull --ff-only || finish 1
 
 pin=$(jq -r .nodes.aurora.locked.rev flake.lock)
-compare=$(curl -fsS "https://api.github.com/repos/aurora-silicon/nixos-aurora/compare/$pin...main") || finish 1
+compare=$(curl -fsS "https://api.github.com/repos/aurora-silicon/nixos-aurora/compare/$pin...channel-testing") || finish 1
 if [[ $(jq -r .ahead_by <<<"$compare") == 0 ]]; then
   echo "Already up to date."
   finish 0

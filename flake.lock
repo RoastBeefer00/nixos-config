@@ -38,6 +38,7 @@
       },
       "original": {
         "owner": "aurora-silicon",
+        "ref": "channel-testing",
         "repo": "nixos-aurora",
         "type": "github"
       }

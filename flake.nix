@@ -13,7 +13,8 @@
     rmatrix.url = "github:RoastBeefer00/rmatrix";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     tree-sitter-rstml.url = "github:rayliwell/tree-sitter-rstml/flake";
-    aurora.url = "github:aurora-silicon/nixos-aurora";
+    # The channel only moves once the signed binary cache has its packages, so updates build far less on the Air.
+    aurora.url = "github:aurora-silicon/nixos-aurora/channel-testing";
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
   };
