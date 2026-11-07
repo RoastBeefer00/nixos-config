@@ -76,6 +76,7 @@
           specialArgs = {
             inherit tree-sitter-rstml;
             inherit rmatrix;
+            sharedNixpkgs = nixpkgs;   # see j713/fresh-packages.nix
           };
           modules = [
             aurora.inputs.apple-silicon.nixosModules.default

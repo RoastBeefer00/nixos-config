@@ -5,7 +5,7 @@ let
   vars = import ../vars.nix;
 in
 {
-  imports = [ ../nix-common.nix ./j713-wifi.nix ./agent-sudo.nix ];
+  imports = [ ../nix-common.nix ./j713-wifi.nix ./agent-sudo.nix ./fresh-packages.nix ];
 
   # Test suites that failed building natively, on hardware this Mac does not have:
   # libfprint on egis_etu905 (another vendor's reader), upower on test_wacom_bluetooth.
