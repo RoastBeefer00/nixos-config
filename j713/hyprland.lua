@@ -52,6 +52,8 @@ hl.config({
     },
   },
   animations = { enabled = true },
+  -- Out of the way while typing or reading; moving the mouse brings it back.
+  cursor = { hide_on_key_press = true, inactive_timeout = 3 },
   dwindle = { preserve_split = true },
   -- If hyprlock ever dies, a new one can be started instead of the session staying stuck.
   misc = { allow_session_lock_restore = true },
