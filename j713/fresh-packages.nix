@@ -3,8 +3,14 @@
 { lib, pkgs, sharedNixpkgs, ... }:
 let
   shared = import sharedNixpkgs { inherit (pkgs.stdenv.hostPlatform) system; config.allowUnfree = true; };
-  # Only apps that don't touch the graphics or audio stack.
-  fresh = [ "claude-code" ];
+  # Command-line and terminal apps only: nothing else in the system may depend on them (or it rebuilds without
+  # Aurora's cache), and none may touch the graphics, audio or other hardware. So not git, jq, Chrome or PipeWire tools.
+  # Also not just (the cursor theme builds with it), fzf or fd (zoxide, cliphist and yazi's wrapper use them).
+  fresh = [
+    "atuin" "bat" "bluetui" "btop" "claude-code" "cliphist" "delta" "devenv" "direnv" "dust" "eza"
+    "flutter_rust_bridge_codegen" "gh" "htop" "lazygit" "nh" "ripgrep" "skim" "starship"
+    "tmux" "wifitui" "yazi" "zoxide"
+  ];
 in
 {
   nixpkgs.overlays = [ (final: prev: lib.genAttrs fresh (name:
