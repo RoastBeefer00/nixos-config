@@ -30,9 +30,9 @@ in
   fileSystems."/boot/efi" = { device = "/dev/nvme0n1p6"; fsType = "vfat"; options = [ "nofail" "umask=0077" ]; };
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
   boot.loader.grub.configurationLimit = 8;
-  # Testing whether the keyboard works in GRUB, the only way to pick an older generation. It boots the newest on its own.
+  # The menu is the way back to an older generation (the keyboard works there). Any arrow key stops the countdown.
   boot.loader.grub.timeoutStyle = "menu";
-  boot.loader.timeout = 10;
+  boot.loader.timeout = 3;
   nix.gc.options = lib.mkForce "--delete-older-than 7d";   # 91 GB root, far less room than the desktop
 
   # The 10-core Air's loaded GPU firmware hash, missing from the driver's table.
