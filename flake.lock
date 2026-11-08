@@ -29,11 +29,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1793983864,
-        "narHash": "sha256-h/zXwbnZymq9wsYdcsPGNGtzZaX2OILf7oTuK1ozSyY=",
+        "lastModified": 1794143162,
+        "narHash": "sha256-5HG/3Q0wvhgHN6Uqho34Bo2FAtIHX1xBMWz+/tlRm/8=",
         "owner": "aurora-silicon",
         "repo": "nixos-aurora",
-        "rev": "5a66548d060091f0c6c8ad8ee878fff7cb7c2e24",
+        "rev": "4b025a0cfd35bede6bc87a50fcce6e2a95170f39",
         "type": "github"
       },
       "original": {
@@ -250,17 +250,17 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1791456040,
-        "narHash": "sha256-H83yz/do+hjOO0uujHyH8RgtIQP2v7Mw+cLwcZK/xKc=",
+        "lastModified": 1793726008,
+        "narHash": "sha256-jQp1wKvbwWdLBASTXkSi/VYmDJ5AbBi1WvcMt9HWJC8=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "e7439b6b14ad3cc35d05608ebca9bce01a25f5f8",
+        "rev": "1d060086d60cb76a40cf37109f979d88a5bd6396",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "e7439b6b14ad3cc35d05608ebca9bce01a25f5f8",
+        "rev": "1d060086d60cb76a40cf37109f979d88a5bd6396",
         "type": "github"
       }
     },
