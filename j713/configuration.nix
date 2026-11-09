@@ -75,11 +75,12 @@ in
   users.users.${vars.username} = {
     isNormalUser = true;
     description = vars.username;
-    extraGroups = [ "wheel" "video" "input" "render" ];
+    extraGroups = [ "wheel" "video" "input" "render" "docker" ];
     shell = pkgs.fish;
     hashedPasswordFile = "/var/lib/j713/user-password.hash";   # root-only, not in the store
   };
   programs.fish.enable = true;
+  virtualisation.docker.enable = true;
   zramSwap.enable = true;
   # This kernel has no J713 Touch ID yet, so asking fprintd only stalls the password prompt until it times out.
   security.pam.services.sudo.fprintAuth = lib.mkForce false;
