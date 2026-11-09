@@ -68,16 +68,20 @@ in
   systemd.targets.hibernate.enable = false;
 
   # Boot splash instead of kernel messages. It starts on simpledrm; j713-gpu switches the panel to appledrm mid-boot.
-  # To see boot messages again, set enable = false and drop "quiet" "splash" below.
   boot.plymouth = {
-    enable = true;
+    enable = lib.mkDefault true;
     theme = "catppuccin-mocha";
     themePackages = [ (pkgs.catppuccin-plymouth.override { variant = "mocha"; }) ];
   };
   # powersupersave lets the Wi-Fi link use PCIe L1.2: about 0.13 W less at idle, measured over 5 runs.
-  boot.kernelParams = lib.mkAfter [ "console=tty0" "apple_dart.j713_dcp=1" "apple_dart.j713_display=1" "pcie_aspm.policy=powersupersave"
-    "quiet" "splash" "udev.log_level=3" "systemd.show_status=false" "rd.systemd.show_status=false" "vt.global_cursor_default=0" ];
+  boot.kernelParams = lib.mkAfter ([ "console=tty0" "apple_dart.j713_dcp=1" "apple_dart.j713_display=1" "pcie_aspm.policy=powersupersave" ]
+    # With the splash, keep all text off the panel: fbcon only drives tty2-6, so tty1 (the boot console) never draws,
+    # and the screen holds the splash's last frame around it. Ctrl+Alt+F2 still gives a text login.
+    ++ lib.optionals config.boot.plymouth.enable [ "quiet" "splash" "udev.log_level=3" "systemd.show_status=false"
+      "rd.systemd.show_status=false" "vt.global_cursor_default=0" "fbcon=vc:2-6" ]);
   boot.consoleLogLevel = 3;
+  # A GRUB entry ("boot-messages", under the generation) that boots without the splash and shows boot text, for when a boot goes wrong.
+  specialisation.boot-messages.configuration = { boot.plymouth.enable = false; boot.consoleLogLevel = lib.mkForce 4; };
 
   # This kernel rejects NixOS's ASLR entropy values, which would mark every rebuild as failed.
   environment.etc."sysctl.d/55-nixos-aslr-entropy.conf".source = lib.mkForce (pkgs.writeText "no-aslr-override" "");
