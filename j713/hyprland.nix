@@ -7,7 +7,7 @@
     bluetui
     brightnessctl
     cliphist
-    (google-chrome.override { commandLineArgs = "--ozone-platform-hint=auto"; })
+    (google-chrome.override { commandLineArgs = "--ozone-platform-hint=auto --password-store=gnome-libsecret"; })
     hypridle
     hyprpolkitagent
     hyprshot
@@ -21,7 +21,7 @@
     wiremix
     wl-clipboard
     yazi
-  ];
+  ] ++ import ./scripts.nix { inherit pkgs; };
 
   # Translucent so the blur behind the menus shows.
   home.file.".local/share/rofi/themes/catppuccin-mocha.rasi".text = lib.mkForce (

@@ -10,6 +10,11 @@ hl.env("QT_QPA_PLATFORMTHEME", "kde")
 hl.env("QT_STYLE_OVERRIDE", "kvantum")
 
 hl.on("hyprland.start", function()
+  -- Autologin skips the password, so the session starts locked. Unlocking also unlocks the keyring (PAM).
+  hl.exec_cmd("hyprlock")
+  hl.exec_cmd("gnome-keyring-daemon --start --components=secrets")
+  hl.exec_cmd("j713-night-light")
+  hl.exec_cmd("j713-battery-warn")
   hl.exec_cmd("systemctl --user start hyprpolkitagent")
   hl.exec_cmd("waybar")
   hl.exec_cmd("swaync")
@@ -104,6 +109,8 @@ bind("Return", hl.dsp.exec_cmd("ghostty"))
 bind("S", hl.dsp.exec_cmd("rofi -show power-menu -modi power-menu:rofi-power-menu"))
 bind("P", hl.dsp.exec_cmd("hyprshot -m region --clipboard-only"))
 bind("SHIFT + P", hl.dsp.exec_cmd("hyprshot -m region --raw | satty --filename - --early-exit --copy-command wl-copy"))
+bind("SHIFT + C", hl.dsp.exec_cmd("j713-color-pick"))
+bind("SHIFT + R", hl.dsp.exec_cmd("j713-screen-record"))
 
 for _, d in ipairs({
   { "left", "H", "left" }, { "right", "L", "right" }, { "up", "K", "up" }, { "down", "J", "down" },

@@ -128,6 +128,7 @@ in
           format-icons = [ "󰃞" "󰃟" "󰃠" ];
           on-scroll-up = "brightnessctl -q set 5%+";
           on-scroll-down = "brightnessctl -q set 5%-";
+          smooth-scrolling-threshold = 5;   # a touchpad swipe sends many small scroll events
           on-click = "swaync-client -t -sw";
           tooltip = false;
         };
@@ -136,6 +137,7 @@ in
           format-muted = "󰝟";
           format-icons = { headphone = "󰋋"; default = [ "󰕿" "󰖀" "󰕾" ]; };
           scroll-step = 5;
+          smooth-scrolling-threshold = 5;
           max-volume = 100;
           on-click = "pamixer -t";
           on-click-right = "ghostty --class=com.j713.popup -e wiremix";
@@ -148,7 +150,8 @@ in
           format-charging = "󰂄 {capacity}%";
           format-plugged = "󰚥 {capacity}%";
           format-icons = [ "󰂎" "󰁺" "󰁼" "󰁾" "󰂀" "󰂂" "󰁹" ];
-          tooltip-format = "{timeTo}, {cycles} cycles, {health}% health";
+          tooltip-format = "{timeTo}, {cycles} cycles, {health}% health\nClick: switch between the 80% charge limit and 100%";
+          on-click = "j713-charge-limit";
         };
         "custom/power" = {
           exec = "${power}";

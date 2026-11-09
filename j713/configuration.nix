@@ -115,6 +115,16 @@ in
   programs.hyprlock.enable = true;   # also sets up its PAM service, which it needs to accept a password
   # hyprlock also turns on a hypridle service, but hyprland.lua already starts one. Two of them leave a stuck hyprlock that blocks every later lock.
   services.hypridle.enable = lib.mkForce false;
+  # Keyring for Chrome and other secrets. The login keyring takes the account password and unlocks with hyprlock.
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.hyprlock.enableGnomeKeyring = true;
+  # Charge to 80% by default; the bar's battery button switches to 100% until the next boot.
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="power_supply", KERNEL=="macsmc-battery", ATTR{charge_control_end_threshold}="80", \
+      RUN+="${pkgs.coreutils}/bin/chgrp wheel /sys%p/charge_control_end_threshold", RUN+="${pkgs.coreutils}/bin/chmod g+w /sys%p/charge_control_end_threshold"
+  '';
+  # Hibernation is off here, so the default HybridSleep would do nothing at critical battery.
+  services.upower = { percentageLow = 10; percentageCritical = 5; percentageAction = 3; criticalPowerAction = "PowerOff"; };
   fonts.packages = [ pkgs.nerd-fonts.fira-code ];
 
   networking.firewall.enable = true;   # only SSH is open, through services.openssh
