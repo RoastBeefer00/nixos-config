@@ -18,6 +18,9 @@
       # are otherwise rejected until a confirm dialog is clicked, which you
       # can't do remotely. Trade-off: no prompt before pasting multi-line text.
       clipboard-paste-protection = false;
+      # Ghostty binds ctrl+enter to toggle_fullscreen by default, which eats
+      # the key before apps (helix, tmux, claude) can see it.
+      keybind = [ "ctrl+enter=unbind" ];
     };
   };
   
