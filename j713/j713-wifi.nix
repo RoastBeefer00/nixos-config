@@ -14,6 +14,8 @@ let cfg = config.j713.wifi; in
     networking.useDHCP = lib.mkForce false;
 
     # The driver can bind before the firmware path is in place and then gives up for good: reload it once if so.
+    # udev's automatic load at boot always hit that (firmware -2) and cost the full 15 s wait below, so only this service loads it.
+    boot.blacklistedKernelModules = [ "brcmfmac" ];
     systemd.services.j713-wifi-driver = {
       description = "Make sure the J713 Wi-Fi driver bound";
       wantedBy = [ "multi-user.target" ];

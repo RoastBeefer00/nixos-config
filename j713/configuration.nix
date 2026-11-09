@@ -33,6 +33,10 @@ in
   # The menu is the way back to an older generation (the keyboard works there). Any arrow key stops the countdown.
   boot.loader.grub.timeoutStyle = "menu";
   boot.loader.timeout = 3;
+  boot.loader.grub.theme = pkgs.callPackage ./grub-theme.nix { };
+  # Text screens (the menu editor, "e") use this font; GRUB's default is tiny at this resolution.
+  boot.loader.grub.font = "${pkgs.dejavu_fonts}/share/fonts/truetype/DejaVuSansMono.ttf";
+  boot.loader.grub.fontSize = 32;
   nix.gc.options = lib.mkForce "--delete-older-than 7d";   # 91 GB root, far less room than the desktop
 
   # The 10-core Air's loaded GPU firmware hash, missing from the driver's table.
@@ -63,11 +67,17 @@ in
   };
   systemd.targets.hibernate.enable = false;
 
-  # Bring-up: visible boot messages.
-  boot.plymouth.enable = false;
+  # Boot splash instead of kernel messages. It starts on simpledrm; j713-gpu switches the panel to appledrm mid-boot.
+  # To see boot messages again, set enable = false and drop "quiet" "splash" below.
+  boot.plymouth = {
+    enable = true;
+    theme = "catppuccin-mocha";
+    themePackages = [ (pkgs.catppuccin-plymouth.override { variant = "mocha"; }) ];
+  };
   # powersupersave lets the Wi-Fi link use PCIe L1.2: about 0.13 W less at idle, measured over 5 runs.
-  boot.kernelParams = lib.mkAfter [ "console=tty0" "apple_dart.j713_dcp=1" "apple_dart.j713_display=1" "pcie_aspm.policy=powersupersave" ];
-  boot.consoleLogLevel = 4;
+  boot.kernelParams = lib.mkAfter [ "console=tty0" "apple_dart.j713_dcp=1" "apple_dart.j713_display=1" "pcie_aspm.policy=powersupersave"
+    "quiet" "splash" "udev.log_level=3" ];
+  boot.consoleLogLevel = 3;
 
   # This kernel rejects NixOS's ASLR entropy values, which would mark every rebuild as failed.
   environment.etc."sysctl.d/55-nixos-aslr-entropy.conf".source = lib.mkForce (pkgs.writeText "no-aslr-override" "");
@@ -92,6 +102,8 @@ in
   systemd.services.aurora-sep.enable = false;
   systemd.services.aurora-sep-ready.enable = false;
   systemd.services.aurora-touchid-setup.enable = false;
+  # Waits 30 s for a device only apple_sep creates, holding up the login on every boot.
+  systemd.services.aurora-touchid-boot.enable = false;
 
   services.displayManager.autoLogin = { enable = true; user = vars.username; };
   services.displayManager.defaultSession = "hyprland";   # Plasma stays installed as the fallback session
