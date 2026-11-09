@@ -76,7 +76,7 @@ in
   };
   # powersupersave lets the Wi-Fi link use PCIe L1.2: about 0.13 W less at idle, measured over 5 runs.
   boot.kernelParams = lib.mkAfter [ "console=tty0" "apple_dart.j713_dcp=1" "apple_dart.j713_display=1" "pcie_aspm.policy=powersupersave"
-    "quiet" "splash" "udev.log_level=3" ];
+    "quiet" "splash" "udev.log_level=3" "systemd.show_status=false" "rd.systemd.show_status=false" "vt.global_cursor_default=0" ];
   boot.consoleLogLevel = 3;
 
   # This kernel rejects NixOS's ASLR entropy values, which would mark every rebuild as failed.
