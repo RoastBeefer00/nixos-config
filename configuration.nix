@@ -24,6 +24,8 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelModules = [ "nvidia_uvm" ];
+  # Run aarch64 binaries via qemu-user so this machine can assemble the Apple M4 (Gravity J713) NixOS root.
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   boot.kernelParams = [
     "nvidia-drm.modeset=1"
     "nvidia-drm.fbdev=1"
