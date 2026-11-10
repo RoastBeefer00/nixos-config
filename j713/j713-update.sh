@@ -11,7 +11,16 @@ if ! git diff --quiet -- flake.lock; then
   echo "flake.lock has uncommitted changes. Commit or discard them first."
   finish 1
 fi
-git pull --ff-only || finish 1
+branch=$(git branch --show-current)
+if [[ $branch != j713-host ]]; then
+  echo "Note: on branch '$branch', not j713-host, so the update will be committed on '$branch'."
+  read -r -p "Continue anyway? [y/N] " answer
+  [[ $answer == [yY]* ]] || finish 0
+fi
+# A local-only branch (a feature branch not pushed yet) has nothing to pull.
+if git rev-parse --abbrev-ref '@{upstream}' > /dev/null 2>&1; then
+  git pull --ff-only || finish 1
+fi
 
 pin=$(jq -r .nodes.aurora.locked.rev flake.lock)
 compare=$(curl -fsS "https://api.github.com/repos/aurora-silicon/nixos-aurora/compare/$pin...channel-testing") || finish 1
