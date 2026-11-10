@@ -1,7 +1,7 @@
 # Hyprland on the Air, with its own Lua config (the classic .conf format is on its way out).
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 {
-  imports = [ ../hm_modules/rofi.nix ./swaync.nix ./theme.nix ./waybar.nix ];
+  imports = [ ../hm_modules/rofi.nix ./swaync.nix ./theme.nix ./themes.nix ./waybar.nix ];
 
   home.packages = with pkgs; [
     bluetui
@@ -15,7 +15,6 @@
     rofi
     rofi-power-menu
     satty
-    swaybg
     swayosd
     wifitui
     wiremix
@@ -23,12 +22,12 @@
     yazi
   ] ++ import ./scripts.nix { inherit pkgs; };
 
-  # Translucent so the blur behind the menus shows.
+  # The current theme preset sets the colours (with a translucent background, so the blur behind the menus shows).
   home.file.".local/share/rofi/themes/catppuccin-mocha.rasi".text = lib.mkForce (
-    builtins.replaceStrings [ "bg-col:  #1e1e2e;" ] [ "bg-col:  #1e1e2ed9;" ] (builtins.readFile ../rofi/catppuccin-mocha.rasi)
+    builtins.readFile ../rofi/catppuccin-mocha.rasi + "\n@import \"${config.home.homeDirectory}/.local/state/theme/current/rofi.rasi\"\n"
   );
 
-  xdg.configFile."swayosd/style.css".source = ./swayosd.css;
+  xdg.configFile."swayosd/style.css".text = builtins.replaceStrings [ "@THEME@" ] [ "${config.home.homeDirectory}/.local/state/theme/current" ] (builtins.readFile ./swayosd.css);
 
   # Lock before suspend. hypridle holds the suspend until the lock is up, so the desktop never shows on wake.
   xdg.configFile."hypr/hypridle.conf".text = ''

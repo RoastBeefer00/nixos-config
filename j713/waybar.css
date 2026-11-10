@@ -1,15 +1,5 @@
-/* Catppuccin Mocha pills floating over the wallpaper. */
-@define-color base #1e1e2e;
-@define-color surface0 #313244;
-@define-color overlay0 #6c7086;
-@define-color subtext0 #a6adc8;
-@define-color text #cdd6f4;
-@define-color red #f38ba8;
-@define-color yellow #f9e2af;
-@define-color pink #f5c2e7;
-@define-color sapphire #74c7ec;
-@define-color teal #94e2d5;
-@define-color mauve #cba6f7;
+/* Pills floating over the wallpaper, coloured by the current theme preset (j713/themes.nix). */
+@import url("file://@THEME@/colors.css");
 
 * {
   border: none;

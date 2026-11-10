@@ -1,5 +1,5 @@
 # Notifications with a history panel and Do Not Disturb, opened from the bar's bell or Alt+N.
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 {
   home.packages = [ pkgs.libnotify pkgs.swaynotificationcenter ];
 
@@ -33,5 +33,5 @@
   };
 
   # Loaded on top of the stock style, so this only has to change the theme.
-  xdg.configFile."swaync/style.css".source = ./swaync.css;
+  xdg.configFile."swaync/style.css".text = builtins.replaceStrings [ "@THEME@" ] [ "${config.home.homeDirectory}/.local/state/theme/current" ] (builtins.readFile ./swaync.css);
 }

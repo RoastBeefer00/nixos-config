@@ -1,17 +1,8 @@
-/* Catppuccin Mocha, matching the bar. */
+/* Colours come from the current theme preset (j713/themes.nix), which defines swaync's variables. */
+@import url("file://@THEME@/swaync.css");
+
 :root {
-  --cc-bg: rgba(30, 30, 46, 0.82);
-  --noti-border-color: #45475a;
-  --noti-bg: 30, 30, 46;
   --noti-bg-alpha: 0.88;
-  --noti-bg-darker: #181825;
-  --noti-bg-hover: #313244;
-  --noti-bg-focus: rgba(69, 71, 90, 0.6);
-  --noti-close-bg: #45475a;
-  --noti-close-bg-hover: #585b70;
-  --text-color: #cdd6f4;
-  --text-color-disabled: #6c7086;
-  --bg-selected: #cba6f7;
   --border-radius: 14px;
   --font-size-body: 15px;
   --font-size-summary: 16px;
@@ -23,19 +14,19 @@
 }
 
 .notification-row .notification-background .notification.critical {
-  border-color: #f38ba8;
+  border-color: var(--j713-red);
 }
 
 .control-center {
-  border: 1px solid #45475a;
+  border: 1px solid var(--j713-border);
 }
 
 .widget-title > button,
 .widget-dnd switch:checked {
-  background: #cba6f7;
-  color: #1e1e2e;
+  background: var(--j713-accent);
+  color: var(--j713-base);
 }
 
 .widget-title > button:hover {
-  background: #b4befe;
+  background: var(--j713-accent-hover);
 }

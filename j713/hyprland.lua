@@ -9,6 +9,10 @@ hl.env("XCURSOR_SIZE", "24")
 hl.env("QT_QPA_PLATFORMTHEME", "kde")
 hl.env("QT_STYLE_OVERRIDE", "kvantum")
 
+-- Border colours of the current theme preset; Catppuccin Mocha if none is set up yet.
+local ok, theme = pcall(dofile, os.getenv("HOME") .. "/.local/state/theme/current/hypr.lua")
+if not ok then theme = { active = "rgb(cba6f7)", inactive = "rgba(45475aaa)" } end
+
 hl.on("hyprland.start", function()
   -- Autologin skips the password, so the session starts locked. Unlocking also unlocks the keyring (PAM).
   hl.exec_cmd("hyprlock")
@@ -21,7 +25,9 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("swayosd-server")
   hl.exec_cmd("hypridle")
   hl.exec_cmd("wl-paste --watch cliphist store")
-  hl.exec_cmd("swaybg -m fill -i ~/Pictures/clearnight.jpg")
+  -- Wallpaper and colours of the current theme preset (j713/themes.nix; Super+Shift+T to change).
+  hl.exec_cmd("awww-daemon")
+  hl.exec_cmd("j713-theme --restore")
 end)
 
 hl.config({
@@ -41,8 +47,8 @@ hl.config({
     gaps_out = 10,
     border_size = 4,
     col = {
-      active_border = "rgb(cba6f7)",
-      inactive_border = "rgba(45475aaa)",
+      active_border = theme.active,
+      inactive_border = theme.inactive,
     },
     layout = "scrolling",
   },
@@ -111,6 +117,7 @@ bind("P", hl.dsp.exec_cmd("hyprshot -m region --clipboard-only"))
 bind("SHIFT + P", hl.dsp.exec_cmd("hyprshot -m region --raw | satty --filename - --early-exit --copy-command wl-copy"))
 bind("SHIFT + C", hl.dsp.exec_cmd("j713-color-pick"))
 bind("SHIFT + R", hl.dsp.exec_cmd("j713-screen-record"))
+bind("SHIFT + T", hl.dsp.exec_cmd("j713-theme"))
 
 for _, d in ipairs({
   { "left", "H", "left" }, { "right", "L", "right" }, { "up", "K", "up" }, { "down", "J", "down" },
