@@ -1,7 +1,9 @@
-/* Catppuccin Mocha, matching the bar. */
+/* Colours come from the current theme preset (j713/themes.nix). */
+@import url("file://@THEME@/colors.css");
+
 window#osd {
-  background: rgba(30, 30, 46, 0.9);
-  border: 1px solid #45475a;
+  background: alpha(@base, 0.9);
+  border: 1px solid @surface1;
   border-radius: 14px;
 }
 
@@ -11,15 +13,15 @@ window#osd #container {
 
 window#osd image,
 window#osd label {
-  color: #cdd6f4;
+  color: @text;
 }
 
 window#osd progressbar trough {
-  background: #45475a;
+  background: @surface1;
   border-radius: 999px;
 }
 
 window#osd progressbar progress {
-  background: #cba6f7;
+  background: @mauve;
   border-radius: 999px;
 }

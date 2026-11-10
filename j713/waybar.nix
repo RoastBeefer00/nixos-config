@@ -1,5 +1,5 @@
 # Waybar for the Air: Catppuccin Mocha pills over the wallpaper, on either side of the notch and nothing behind it.
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 let
   power = pkgs.writeShellScript "waybar-power" ''
     export PATH=${pkgs.coreutils}/bin:${pkgs.gawk}/bin
@@ -204,6 +204,6 @@ in
         };
       }
     ];
-    style = builtins.readFile ./waybar.css;
+    style = builtins.replaceStrings [ "@THEME@" ] [ "${config.home.homeDirectory}/.local/state/theme/current" ] (builtins.readFile ./waybar.css);
   };
 }
