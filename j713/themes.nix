@@ -12,15 +12,21 @@ let
     magick '${pkgs.fetchurl { inherit url hash; }}[0]' -resize 2560x1664^ -gravity center -extent 2560x1664 -quality 92 $out
   '';
 
+  tokyoNightAccents = {
+    red = "f7768e"; yellow = "e0af68"; pink = "bb9af7"; sapphire = "7dcfff"; teal = "73daca";
+    blue = "7aa2f7"; mauve = "7aa2f7"; lavender = "7dcfff";
+  };
+
   # Wallpapers are pinned to a commit and cropped to the panel at build time; none are stored in this repo.
   themes = {
     catppuccin-mocha = {
       name = "Catppuccin Mocha";
       ghostty = "Catppuccin Mocha";
       nvim = "catppuccin-mocha";
+      herdr = "catppuccin";
       wallpaper = wallpaper "catppuccin-mocha"
-        "https://raw.githubusercontent.com/zhichaoh/catppuccin-wallpapers/1023077979591cdeca76aae94e0359da1707a60e/landscapes/Clearnight.jpg"
-        "sha256-scfoYBzVdRH4NytizwI938JFbfayeIdsne0FYCdsnfk=";
+        "https://raw.githubusercontent.com/zhichaoh/catppuccin-wallpapers/1023077979591cdeca76aae94e0359da1707a60e/landscapes/Cloudsnight.jpg"
+        "sha256-jBv9iKBVQbgd1cmv+ubiJQH7qydRJZTShmwzEiJJcDA=";
       palette = {
         base = "1e1e2e"; mantle = "181825"; surface0 = "313244"; surface1 = "45475a"; surface2 = "585b70";
         overlay0 = "6c7086"; subtext0 = "a6adc8"; text = "cdd6f4";
@@ -32,23 +38,36 @@ let
       name = "Tokyo Night";
       ghostty = "TokyoNight Night";
       nvim = "tokyonight-night";
+      herdr = "tokyo-night";
       wallpaper = wallpaper "tokyo-night"
         "https://codeberg.org/juna-lab/TokyoNight-Wallpapers/raw/commit/55721989fe73ee22f98f27975eec83f2a1b4bfbd/wallpapers/Characters%20%26%20People/a_city_at_night_with_many_tall_buildings.jpg"
         "sha256-XjNiiwEups4svUuuPaNvGBbvq0hnIstoJ+ZkqkOJzvk=";
-      palette = {
+      palette = tokyoNightAccents // {
         base = "1a1b26"; mantle = "16161e"; surface0 = "292e42"; surface1 = "3b4261"; surface2 = "545c7e";
         overlay0 = "565f89"; subtext0 = "a9b1d6"; text = "c0caf5";
-        red = "f7768e"; yellow = "e0af68"; pink = "bb9af7"; sapphire = "7dcfff"; teal = "73daca";
-        blue = "7aa2f7"; mauve = "7aa2f7"; lavender = "7dcfff";
+      };
+    };
+    tokyo-night-storm = {
+      name = "Tokyo Night Storm";
+      ghostty = "TokyoNight Storm";
+      nvim = "tokyonight-storm";
+      herdr = "tokyo-night";
+      wallpaper = wallpaper "tokyo-night-storm"
+        "https://codeberg.org/juna-lab/TokyoNight-Wallpapers/raw/commit/55721989fe73ee22f98f27975eec83f2a1b4bfbd/wallpapers/Nature%20%26%20Landscapes/1-forest_dark_winter.jpg"
+        "sha256-UVa54Zpp+/es2/URNH/aBIvJrczHXRUwEA0yw+W20OE=";
+      palette = tokyoNightAccents // {
+        base = "24283b"; mantle = "1f2335"; surface0 = "292e42"; surface1 = "3b4261"; surface2 = "545c7e";
+        overlay0 = "565f89"; subtext0 = "a9b1d6"; text = "c0caf5";
       };
     };
     rose-pine = {
       name = "Rosé Pine";
       ghostty = "Rose Pine";
       nvim = "rose-pine-main";
+      herdr = "rose-pine";
       wallpaper = wallpaper "rose-pine"
-        "https://raw.githubusercontent.com/rose-pine/wallpapers/ee39a37b24ab7700cc4d52f50b01a5d13df6a865/photography/kainoa-kanter/bay.jpg"
-        "sha256-YLHsj9SKuJNwiYxCQ5zFDrdEfTSEH89ue95yBvQZ+MI=";
+        "https://raw.githubusercontent.com/rose-pine/wallpapers/ee39a37b24ab7700cc4d52f50b01a5d13df6a865/photography/ANVTM/ANVTM.jpg"
+        "sha256-05EK/Lg5Af59biSnGfxTlpSmN9hDG5xMQbd8sDGKrWo=";
       palette = {
         base = "191724"; mantle = "16141f"; surface0 = "26233a"; surface1 = "403d52"; surface2 = "524f67";
         overlay0 = "6e6a86"; subtext0 = "908caa"; text = "e0def4";
@@ -56,73 +75,40 @@ let
         blue = "9ccfd8"; mauve = "c4a7e7"; lavender = "ebbcba";
       };
     };
-    gruvbox = {
-      name = "Gruvbox Dark";
-      ghostty = "Gruvbox Dark";
-      nvim = "gruvbox";
-      wallpaper = wallpaper "gruvbox"
-        "https://raw.githubusercontent.com/AngelJumbo/gruvbox-wallpapers/293774acaa531ce106332f790c80301998066b25/wallpapers/photography/forest-3.jpg"
-        "sha256-3y6YzTxrtGO0DDcwEixEDo16Gwu/BKkQu8waFWk1hZI=";
-      palette = {
-        base = "282828"; mantle = "1d2021"; surface0 = "3c3836"; surface1 = "504945"; surface2 = "665c54";
-        overlay0 = "7c6f64"; subtext0 = "bdae93"; text = "ebdbb2";
-        red = "fb4934"; yellow = "fabd2f"; pink = "d3869b"; sapphire = "83a598"; teal = "8ec07c";
-        blue = "83a598"; mauve = "fe8019"; lavender = "fabd2f";
-      };
-    };
-    kanagawa = {
-      name = "Kanagawa Wave";
-      ghostty = "Kanagawa Wave";
-      nvim = "kanagawa-wave";
-      wallpaper = wallpaper "kanagawa"
-        "https://raw.githubusercontent.com/philikarus/Kanagawa-wallpapers/a8659f85a2f224619285025f29bc6a35fe21da1a/wallpapers/landscape/3895e.jpg"
-        "sha256-OJXjRLhDTExsMsSrbhxBowCyWzOc35MNZBSt3APnXj0=";
-      palette = {
-        base = "1f1f28"; mantle = "16161d"; surface0 = "2a2a37"; surface1 = "363646"; surface2 = "54546d";
-        overlay0 = "727169"; subtext0 = "c8c093"; text = "dcd7ba";
-        red = "e46876"; yellow = "e6c384"; pink = "d27e99"; sapphire = "7fb4ca"; teal = "7aa89f";
-        blue = "7e9cd8"; mauve = "957fb8"; lavender = "9cabca";
-      };
-    };
-    nord = {
-      name = "Nord";
-      ghostty = "Nord";
-      nvim = "nord";
-      wallpaper = wallpaper "nord"
-        "https://raw.githubusercontent.com/linuxdotexe/nordic-wallpapers/7a8e3bcabafbefd1c5b19229841b9bf377a4b765/wallpapers/misty_mountains.jpg"
-        "sha256-nry0g6kNHRS6PHwbE9YNg7UDmUxqiHTyTffKke/T0ls=";
-      palette = {
-        base = "2e3440"; mantle = "242933"; surface0 = "3b4252"; surface1 = "434c5e"; surface2 = "4c566a";
-        overlay0 = "616e88"; subtext0 = "d8dee9"; text = "eceff4";
-        red = "bf616a"; yellow = "ebcb8b"; pink = "b48ead"; sapphire = "81a1c1"; teal = "8fbcbb";
-        blue = "81a1c1"; mauve = "88c0d0"; lavender = "8fbcbb";
-      };
-    };
-    everforest = {
-      name = "Everforest";
-      ghostty = "Everforest Dark Med";
-      nvim = "everforest";
-      wallpaper = wallpaper "everforest"
-        "https://raw.githubusercontent.com/Apeiros-46B/everforest-walls/8f538b4e34a880748a471dc4c7aade6e29982417/nature/fog_forest_alt_1.png"
-        "sha256-IeQzvScaS107R+639JzH/Jaxo4Vp0G+wpAm3ufoYHbY=";
-      palette = {
-        base = "2d353b"; mantle = "232a2e"; surface0 = "343f44"; surface1 = "3d484d"; surface2 = "475258";
-        overlay0 = "7a8478"; subtext0 = "9da9a0"; text = "d3c6aa";
-        red = "e67e80"; yellow = "dbbc7f"; pink = "d699b6"; sapphire = "7fbbb3"; teal = "83c092";
-        blue = "7fbbb3"; mauve = "a7c080"; lavender = "83c092";
-      };
-    };
   };
-  order = [ "catppuccin-mocha" "tokyo-night" "rose-pine" "gruvbox" "kanagawa" "nord" "everforest" ];
+  order = [ "catppuccin-mocha" "tokyo-night" "tokyo-night-storm" "rose-pine" ];
   default = "catppuccin-mocha";
 
   rgb = hex: lib.concatMapStringsSep ", " (i: toString (lib.fromHexString (builtins.substring i 2 hex))) [ 0 2 4 ];
+
+  # herdr's shared config (hm_modules/herdr.nix), with this preset's built-in theme and its own accent and surfaces,
+  # so the tabs and sidebar change visibly between presets that share a herdr theme.
+  herdrConfig = t: let p = t.palette; in builtins.replaceStrings
+    [ "[theme]\nname = \"tokyo-night\"\n" ]
+    [ ''
+      [theme]
+      name = "${t.herdr}"
+
+      [theme.custom]
+      accent = "#${p.mauve}"
+      surface0 = "#${p.surface0}"
+      surface1 = "#${p.surface1}"
+      overlay0 = "#${p.overlay0}"
+      text = "#${p.text}"
+      subtext0 = "#${p.subtext0}"
+      red = "#${p.red}"
+      yellow = "#${p.yellow}"
+      blue = "#${p.blue}"
+      teal = "#${p.teal}"
+    '' ]
+    (builtins.readFile ../herdr/config.toml);
 
   themeDir = id: t: let p = t.palette; in pkgs.linkFarm "theme-${id}" {
     "name" = pkgs.writeText "name" t.name;
     "wallpaper.jpg" = t.wallpaper;
     "nvim" = pkgs.writeText "nvim" t.nvim;
     "ghostty" = pkgs.writeText "ghostty" "theme = ${t.ghostty}\n";
+    "herdr.toml" = pkgs.writeText "herdr.toml" (herdrConfig t);
     # Waybar and swayosd (GTK CSS).
     "colors.css" = pkgs.writeText "colors.css" (lib.concatStrings (lib.mapAttrsToList (n: v: "@define-color ${n} #${v};\n") p));
     # swaync (CSS variables on top of its stock style).
@@ -199,6 +185,7 @@ let
         pkill -USR2 -x '\.?waybar(-wrapped)?' || true             # reloads its style
         swaync-client --reload-css > /dev/null 2>&1 || true
         pkill -USR2 -x '\.?ghostty(-wrappe|-wrapped)?' || true    # reloads its config
+        if command -v herdr > /dev/null; then herdr server reload-config > /dev/null 2>&1 || true; fi
         if pkill -x '\.?swayosd-server' ; then setsid -f swayosd-server > /dev/null 2>&1; fi
       }
 
@@ -228,6 +215,9 @@ in
 
   # Ghostty reads the preset's theme after its own config ("?" = fine if missing).
   programs.ghostty.settings.config-file = "?${state}/current/ghostty";
+
+  # herdr's config is the shared one with the preset's colours; it follows the current preset.
+  home.file.".config/herdr/config.toml".source = lib.mkForce (config.lib.file.mkOutOfStoreSymlink "${state}/current/herdr.toml");
 
   # A rebuild makes new copies of the presets: keep the chosen one, pointed at the new copy.
   home.activation.j713Theme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
