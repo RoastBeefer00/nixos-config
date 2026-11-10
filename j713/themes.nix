@@ -12,6 +12,14 @@ let
     magick '${pkgs.fetchurl { inherit url hash; }}[0]' -resize 2560x1664^ -gravity center -extent 2560x1664 -quality 92 $out
   '';
 
+  # Calm the top edge under Waybar (all presets), and dim the whole picture where a preset sets `dim` (percent).
+  finish = id: t: let b = rgb t.palette.base; in pkgs.runCommand "wallpaper-${id}-final.jpg" { nativeBuildInputs = [ pkgs.imagemagick ]; } ''
+    magick ${t.wallpaper} \
+      \( -size 2560x1664 "xc:#${t.palette.base}" -alpha set -channel A -evaluate set ${toString (t.dim or 0)}% +channel \) -composite \
+      \( -size 2560x260 "gradient:rgba(${b},0.95)-rgba(${b},0)" \) -gravity north -composite \
+      -quality 92 $out
+  '';
+
   tokyoNightAccents = {
     red = "f7768e"; yellow = "e0af68"; pink = "bb9af7"; sapphire = "7dcfff"; teal = "73daca";
     blue = "7aa2f7"; mauve = "7aa2f7"; lavender = "7dcfff";
@@ -24,9 +32,10 @@ let
       ghostty = "Catppuccin Mocha";
       nvim = "catppuccin-mocha";
       herdr = "catppuccin";
+      dim = 35;
       wallpaper = wallpaper "catppuccin-mocha"
-        "https://raw.githubusercontent.com/zhichaoh/catppuccin-wallpapers/1023077979591cdeca76aae94e0359da1707a60e/landscapes/Cloudsnight.jpg"
-        "sha256-jBv9iKBVQbgd1cmv+ubiJQH7qydRJZTShmwzEiJJcDA=";
+        "https://raw.githubusercontent.com/orangci/walls-catppuccin-mocha/7bfdf10d16ad3a689f9f0cf3a0930da3d1a245a8/cloud-coffee.jpg"
+        "sha256-iG9Ar1KXiRBuzDWvveBPJx9Iq/HlmyKJ0Rv69rUiiGM=";
       palette = {
         base = "1e1e2e"; mantle = "181825"; surface0 = "313244"; surface1 = "45475a"; surface2 = "585b70";
         overlay0 = "6c7086"; subtext0 = "a6adc8"; text = "cdd6f4";
@@ -47,27 +56,15 @@ let
         overlay0 = "565f89"; subtext0 = "a9b1d6"; text = "c0caf5";
       };
     };
-    tokyo-night-storm = {
-      name = "Tokyo Night Storm";
-      ghostty = "TokyoNight Storm";
-      nvim = "tokyonight-storm";
-      herdr = "tokyo-night";
-      wallpaper = wallpaper "tokyo-night-storm"
-        "https://codeberg.org/juna-lab/TokyoNight-Wallpapers/raw/commit/55721989fe73ee22f98f27975eec83f2a1b4bfbd/wallpapers/Nature%20%26%20Landscapes/1-forest_dark_winter.jpg"
-        "sha256-UVa54Zpp+/es2/URNH/aBIvJrczHXRUwEA0yw+W20OE=";
-      palette = tokyoNightAccents // {
-        base = "24283b"; mantle = "1f2335"; surface0 = "292e42"; surface1 = "3b4261"; surface2 = "545c7e";
-        overlay0 = "565f89"; subtext0 = "a9b1d6"; text = "c0caf5";
-      };
-    };
     rose-pine = {
       name = "Rosé Pine";
       ghostty = "Rose Pine";
       nvim = "rose-pine-main";
       herdr = "rose-pine";
+      dim = 10;
       wallpaper = wallpaper "rose-pine"
-        "https://raw.githubusercontent.com/rose-pine/wallpapers/ee39a37b24ab7700cc4d52f50b01a5d13df6a865/photography/ANVTM/ANVTM.jpg"
-        "sha256-05EK/Lg5Af59biSnGfxTlpSmN9hDG5xMQbd8sDGKrWo=";
+        "https://raw.githubusercontent.com/archimedes64/rose-pine-wallpapers/e96012944f4fdc0c14800692d63af204d4f9e6b3/flowers.png"
+        "sha256-YY1oeA2WdVRAfV5lraaCIpEWIEYVgUElFbgoAVLtNKg=";
       palette = {
         base = "191724"; mantle = "16141f"; surface0 = "26233a"; surface1 = "403d52"; surface2 = "524f67";
         overlay0 = "6e6a86"; subtext0 = "908caa"; text = "e0def4";
@@ -76,7 +73,7 @@ let
       };
     };
   };
-  order = [ "catppuccin-mocha" "tokyo-night" "tokyo-night-storm" "rose-pine" ];
+  order = [ "catppuccin-mocha" "tokyo-night" "rose-pine" ];
   default = "catppuccin-mocha";
 
   rgb = hex: lib.concatMapStringsSep ", " (i: toString (lib.fromHexString (builtins.substring i 2 hex))) [ 0 2 4 ];
@@ -105,7 +102,7 @@ let
 
   themeDir = id: t: let p = t.palette; in pkgs.linkFarm "theme-${id}" {
     "name" = pkgs.writeText "name" t.name;
-    "wallpaper.jpg" = t.wallpaper;
+    "wallpaper.jpg" = finish id t;
     "nvim" = pkgs.writeText "nvim" t.nvim;
     "ghostty" = pkgs.writeText "ghostty" "theme = ${t.ghostty}\n";
     "herdr.toml" = pkgs.writeText "herdr.toml" (herdrConfig t);
@@ -146,7 +143,7 @@ let
       }
     '';
     "hyprlock.conf" = pkgs.writeText "hyprlock.conf" ''
-      $wallpaper = ${t.wallpaper}
+      $wallpaper = ${finish id t}
       $text = rgb(${p.text})
       $accent = rgb(${p.mauve})
       $base = rgb(${p.base})
