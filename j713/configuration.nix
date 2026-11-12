@@ -82,6 +82,14 @@ in
   boot.consoleLogLevel = 3;
   # A GRUB entry ("boot-messages", under the generation) that boots without the splash and shows boot text, for when a boot goes wrong.
   specialisation.boot-messages.configuration = { boot.plymouth.enable = false; boot.consoleLogLevel = lib.mkForce 4; };
+  # For a boot that hangs without a trace: every kernel message on screen and fsynced to the journal as it happens
+  # (a hard reset otherwise loses the last seconds of the journal, so the log can look like it stopped earlier than it did).
+  specialisation.boot-debug.configuration = {
+    boot.plymouth.enable = false;
+    boot.consoleLogLevel = lib.mkForce 7;
+    boot.kernelParams = [ "ignore_loglevel" "printk.time=1" "initcall_debug" "systemd.show_status=true" ];
+    services.journald.settings.Journal = { SyncIntervalSec = 0; RateLimitIntervalSec = 0; };
+  };
 
   # This kernel rejects NixOS's ASLR entropy values, which would mark every rebuild as failed.
   environment.etc."sysctl.d/55-nixos-aslr-entropy.conf".source = lib.mkForce (pkgs.writeText "no-aslr-override" "");

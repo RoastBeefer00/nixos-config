@@ -35,9 +35,9 @@ tooltip label {
 #cpu,
 #temperature,
 #memory,
-#window,
 #mpris,
 #tray,
+#idle_inhibitor,
 #bluetooth,
 #network,
 #backlight,
@@ -60,6 +60,7 @@ tooltip label {
 #temperature:hover,
 #memory:hover,
 #mpris:hover,
+#idle_inhibitor:hover,
 #bluetooth:hover,
 #network:hover,
 #backlight:hover,
@@ -118,8 +119,6 @@ tooltip label {
 #temperature.critical { color: @base; background: @red; animation: pulse 700ms ease-in-out infinite alternate; }
 #memory { color: @mauve; }
 
-#window { color: @subtext0; font-weight: 500; }
-window#waybar.empty #window { background: transparent; }
 
 #mpris { color: @pink; }
 #mpris.paused { color: @overlay0; }
@@ -134,6 +133,8 @@ window#waybar.empty #window { background: transparent; }
 #network.disconnected { color: @red; }
 
 #backlight { color: @yellow; }
+#idle_inhibitor { color: @subtext0; }
+#idle_inhibitor.activated { color: @base; background: @yellow; }
 #pulseaudio { color: @mauve; }
 #pulseaudio.muted { color: @overlay0; }
 

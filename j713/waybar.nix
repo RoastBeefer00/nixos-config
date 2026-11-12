@@ -39,7 +39,7 @@ in
         exclusive = true;
         height = 48;
         spacing = 0;
-        modules-left = [ "custom/launcher" "hyprland/workspaces" "cpu" "temperature" "memory" "hyprland/window" ];
+        modules-left = [ "custom/launcher" "hyprland/workspaces" "cpu" "temperature" "memory" "idle_inhibitor" ];
         modules-center = [ "custom/notch" ];
         modules-right = [ "mpris" "tray" "bluetooth" "network" "backlight" "pulseaudio" "battery" "custom/power" "custom/weather" "clock" "custom/notification" "custom/powermenu" ];
 
@@ -65,12 +65,6 @@ in
           };
           on-scroll-up = "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'";
           on-scroll-down = "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'";
-        };
-        "hyprland/window" = {
-          format = "{title}";
-          max-length = 32;
-          separate-outputs = true;
-          icon = false;
         };
 
         cpu = {
@@ -152,6 +146,13 @@ in
           format-icons = [ "󰂎" "󰁺" "󰁼" "󰁾" "󰂀" "󰂂" "󰁹" ];
           tooltip-format = "{timeTo}, {cycles} cycles, {health}% health\nClick: switch between the 80% charge limit and 100%";
           on-click = "j713-charge-limit";
+        };
+        # Click to keep the screen on and stop the auto-dim, lock and sleep timers (hypridle honours the Wayland inhibitor). Closing the lid still suspends.
+        idle_inhibitor = {
+          format = "{icon}";
+          format-icons = { activated = "󰅶"; deactivated = "󰾪"; };
+          tooltip-format-activated = "Staying awake: no dimming, locking or sleep. Click to undo";
+          tooltip-format-deactivated = "Click to keep the screen awake";
         };
         "custom/power" = {
           exec = "${power}";
