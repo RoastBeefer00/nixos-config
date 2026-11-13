@@ -11,7 +11,52 @@ let
   
   # Network configuration
   vpnProvider = "nordvpn";
-  
+
+  # File patterns qBittorrent must never download, even from an otherwise good torrent
+  excludedFileNames = [
+    "*.exe" "*.scr" "*.bat" "*.cmd" "*.com" "*.pif" "*.msi" "*.msp"
+    "*.vbs" "*.vbe" "*.jse" "*.wsf" "*.wsh" "*.ps1" "*.lnk" "*.jar"
+    "*.hta" "*.cpl" "*.dll" "*.reg" "*.apk"
+  ];
+
+  # Runs inside the qBittorrent container before it starts (linuxserver
+  # custom-cont-init.d), so the exclusion list is re-applied on every start.
+  # A real store file is bind-mounted because symlinks into the store would
+  # not resolve inside the container.
+  qbitExcludeScript = pkgs.writeTextFile {
+    name = "qbittorrent-exclude-files";
+    executable = true;
+    text = ''
+      #!/bin/sh
+      CONF=/config/qBittorrent/qBittorrent.conf
+      LIST="${builtins.concatStringsSep ", " excludedFileNames}"
+
+      mkdir -p "$(dirname "$CONF")"
+      touch "$CONF"
+      awk -v list="$LIST" '
+        /^\[BitTorrent\]/ {
+          print
+          print "Session\\ExcludedFileNamesEnabled=true"
+          print "Session\\ExcludedFileNames=" list
+          seen = 1
+          next
+        }
+        /^Session\\ExcludedFileNames(Enabled)?=/ { next }
+        { print }
+        END {
+          if (!seen) {
+            print "[BitTorrent]"
+            print "Session\\ExcludedFileNamesEnabled=true"
+            print "Session\\ExcludedFileNames=" list
+          }
+        }
+      ' "$CONF" > "$CONF.new"
+      cat "$CONF.new" > "$CONF"
+      rm "$CONF.new"
+      chown abc:abc "$CONF" 2>/dev/null || true
+    '';
+  };
+
 in {
   # Install required packages
   home.packages = with pkgs; [
@@ -67,6 +112,7 @@ in {
           - WEBUI_PORT=8080
         volumes:
           - ${configDir}/qbittorrent:/config
+          - ${qbitExcludeScript}:/custom-cont-init.d/10-exclude-files.sh:ro
           - ${mediaDir}:/data
         depends_on:
           - gluetun
