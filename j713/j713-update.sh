@@ -12,8 +12,8 @@ if ! git diff --quiet -- flake.lock; then
   finish 1
 fi
 branch=$(git branch --show-current)
-if [[ $branch != j713-host ]]; then
-  echo "Note: on branch '$branch', not j713-host, so the update will be committed on '$branch'."
+if [[ $branch != main ]]; then
+  echo "Note: on branch '$branch', not main, so the update will be committed on '$branch'."
   read -r -p "Continue anyway? [y/N] " answer
   [[ $answer == [yY]* ]] || finish 0
 fi
