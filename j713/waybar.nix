@@ -201,7 +201,7 @@ in
         "custom/powermenu" = {
           format = "󰐥";
           tooltip-format = "Power";
-          on-click = "rofi -show power-menu -modi power-menu:rofi-power-menu";
+          on-click = "pkill -x wlogout || wlogout -b 5";
         };
       }
     ];

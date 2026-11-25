@@ -87,7 +87,7 @@ end
 hl.window_rule({ match = { class = "^(com.j713.popup)$" }, float = true, center = true, size = { 900, 600 } })
 
 -- Blur only behind the menus: windows are opaque and the wallpaper needn't be redrawn for them.
-for _, namespace in ipairs({ "rofi", "swaync-control-center", "swaync-notification-window" }) do
+for _, namespace in ipairs({ "rofi", "logout_dialog", "swaync-control-center", "swaync-notification-window" }) do
   hl.layer_rule({ match = { namespace = namespace }, blur = true, ignore_alpha = 0.3 })
 end
 
@@ -112,7 +112,7 @@ bind("SHIFT + N", hl.dsp.exec_cmd("swaync-client -d -sw"))
 bind("period", hl.dsp.layout("move +col"))
 bind("comma", hl.dsp.layout("move -col"))
 bind("Return", hl.dsp.exec_cmd("ghostty"))
-bind("S", hl.dsp.exec_cmd("rofi -show power-menu -modi power-menu:rofi-power-menu"))
+bind("S", hl.dsp.exec_cmd("pkill -x wlogout || wlogout -b 5"))
 bind("P", hl.dsp.exec_cmd("hyprshot -m region --clipboard-only"))
 bind("SHIFT + P", hl.dsp.exec_cmd("hyprshot -m region --raw | satty --filename - --early-exit --copy-command wl-copy"))
 bind("SHIFT + C", hl.dsp.exec_cmd("j713-color-pick"))

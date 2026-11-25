@@ -13,7 +13,7 @@
     hyprshot
     pamixer
     rofi
-    rofi-power-menu
+    wlogout
     satty
     swayosd
     wifitui
@@ -26,6 +26,36 @@
   home.file.".local/share/rofi/themes/catppuccin-mocha.rasi".text = lib.mkForce (
     builtins.readFile ../rofi/catppuccin-mocha.rasi + "\n@import \"${config.home.homeDirectory}/.local/state/theme/current/rofi.rasi\"\n"
   );
+
+  # Power menu: big icon buttons for the mouse, and a key on each (l, e, s, r, p) for the keyboard. Esc closes it.
+  xdg.configFile."wlogout/layout".text = lib.concatMapStrings (b: builtins.toJSON b + "\n") [
+    { label = "lock"; action = "loginctl lock-session"; text = "Lock"; keybind = "l"; }
+    { label = "logout"; action = "hyprctl dispatch 'hl.dsp.exit()'"; text = "Log out"; keybind = "e"; }
+    { label = "suspend"; action = "systemctl suspend"; text = "Sleep"; keybind = "s"; }
+    { label = "reboot"; action = "systemctl reboot"; text = "Restart"; keybind = "r"; }
+    { label = "shutdown"; action = "systemctl poweroff"; text = "Shut down"; keybind = "p"; }
+  ];
+  xdg.configFile."wlogout/style.css".text = ''
+    @import url("file://${config.home.homeDirectory}/.local/state/theme/current/colors.css");
+    * { font-family: "FiraCode Nerd Font"; font-size: 18px; background-image: none; }
+    window { background-color: alpha(@base, 0.6); }
+    button {
+      color: @text;
+      background-color: alpha(@surface0, 0.85);
+      border: 2px solid @surface1;
+      border-radius: 24px;
+      margin: 24px;
+      background-repeat: no-repeat;
+      background-position: center 40%;
+      background-size: 25%;
+    }
+    button:focus, button:hover { background-color: @mauve; color: @base; border-color: @mauve; }
+    #lock { background-image: url("${pkgs.wlogout}/share/wlogout/icons/lock.png"); }
+    #logout { background-image: url("${pkgs.wlogout}/share/wlogout/icons/logout.png"); }
+    #suspend { background-image: url("${pkgs.wlogout}/share/wlogout/icons/suspend.png"); }
+    #reboot { background-image: url("${pkgs.wlogout}/share/wlogout/icons/reboot.png"); }
+    #shutdown { background-image: url("${pkgs.wlogout}/share/wlogout/icons/shutdown.png"); }
+  '';
 
   xdg.configFile."swayosd/style.css".text = builtins.replaceStrings [ "@THEME@" ] [ "${config.home.homeDirectory}/.local/state/theme/current" ] (builtins.readFile ./swayosd.css);
 

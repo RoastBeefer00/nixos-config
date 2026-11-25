@@ -70,8 +70,29 @@ in
   # Boot splash instead of kernel messages. It starts on simpledrm; j713-gpu switches the panel to appledrm mid-boot.
   boot.plymouth = {
     enable = lib.mkDefault true;
-    theme = "catppuccin-mocha";
-    themePackages = [ (pkgs.catppuccin-plymouth.override { variant = "mocha"; }) ];
+    theme = "black-nixos";
+    # A static NixOS snowflake centred on black: no animation, no progress bar.
+    themePackages = [ (pkgs.runCommand "plymouth-black-nixos" { } ''
+      d=$out/share/plymouth/themes/black-nixos
+      mkdir -p $d
+      cp ${pkgs.nixos-icons}/share/icons/hicolor/256x256/apps/nix-snowflake-white.png $d/logo.png
+      cat > $d/black-nixos.plymouth <<EOT
+      [Plymouth Theme]
+      Name=Black NixOS
+      ModuleName=script
+
+      [script]
+      ImageDir=$d
+      ScriptFile=$d/black-nixos.script
+      EOT
+      cat > $d/black-nixos.script <<'EOT'
+      Window.SetBackgroundTopColor(0, 0, 0);
+      Window.SetBackgroundBottomColor(0, 0, 0);
+      logo = Sprite(Image("logo.png"));
+      logo.SetX(Window.GetX() + Window.GetWidth() / 2 - logo.GetImage().GetWidth() / 2);
+      logo.SetY(Window.GetY() + Window.GetHeight() / 2 - logo.GetImage().GetHeight() / 2);
+      EOT
+    '') ];
   };
   # powersupersave lets the Wi-Fi link use PCIe L1.2: about 0.13 W less at idle, measured over 5 runs.
   boot.kernelParams = lib.mkAfter ([ "console=tty0" "apple_dart.j713_dcp=1" "apple_dart.j713_display=1" "pcie_aspm.policy=powersupersave" ]
